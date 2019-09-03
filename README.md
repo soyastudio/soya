@@ -1,3 +1,3 @@
-# Dovetails
+# dovetails
 
 Workflow engine based on yaml DSL configuration.

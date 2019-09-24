@@ -1,0 +1,129 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>soya.framework.dovetails</groupId>
+    <artifactId>dovetails</artifactId>
+    <packaging>pom</packaging>
+    <name>Dovetails</name>
+    <version>1.0-SNAPSHOT</version>
+    <url>https://github.com/</url>
+
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+
+        <springframework.boot.version>2.1.2.RELEASE</springframework.boot.version>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <common.beanutils.version></common.beanutils.version>
+        <google.guava.version>27.0.1-jre</google.guava.version>
+        <google.guice.version>4.2.2</google.guice.version>
+        <google.findbugs.version>3.0.0</google.findbugs.version>
+        <reflections.version>0.9.11</reflections.version>
+
+        <jolt.version>0.1.1</jolt.version>
+
+        <swagger-annotations-version>1.5.21</swagger-annotations-version>
+        <swagger-parser-version>1.0.33</swagger-parser-version>
+        <swagger-core-version>1.5.17</swagger-core-version>
+
+        <saxon.version>9.9.1-1</saxon.version>
+
+        <jersey-version>2.25.1</jersey-version>
+        <jackson-version>2.9.5</jackson-version>
+
+        <jodatime-version>2.7</jodatime-version>
+        <joda-money.version>1.0.1</joda-money.version>
+
+        <codesorcerer.version>2.4.4</codesorcerer.version>
+        <javapoet.version>1.9.0</javapoet.version>
+
+        <fuselet.version>0.0.8</fuselet.version>
+        <fuse-shared.version>0.0.8</fuse-shared.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${springframework.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${google.guice.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.joda</groupId>
+                <artifactId>joda-money</artifactId>
+                <version>${joda-money.version}</version>
+            </dependency>
+
+
+            <!-- jolt -->
+            <dependency>
+                <groupId>com.bazaarvoice.jolt</groupId>
+                <artifactId>jolt-core</artifactId>
+                <version>${jolt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bazaarvoice.jolt</groupId>
+                <artifactId>json-utils</artifactId>
+                <version>${jolt.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-compat-spec-parser</artifactId>
+                <version>${swagger-parser-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
+                <version>${swagger-core-version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
+            <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>dovetails-commons</module>
+    </modules>
+
+</project>

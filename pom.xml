@@ -10,37 +10,52 @@
     <url>https://github.com/</url>
 
     <properties>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- default bytecode version for src/test -->
         <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
-        <springframework.boot.version>2.1.2.RELEASE</springframework.boot.version>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <apache.maven.version>3.5.2</apache.maven.version>
+        <apache.ant.version>1.9.4</apache.ant.version>
+        <apache.camel.version>2.23.1</apache.camel.version>
+        <apache.tika.version>0.7</apache.tika.version>
 
-        <common.beanutils.version></common.beanutils.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-beanutils.version>1.9.3</commons-beanutils.version>
+
         <google.guava.version>27.0.1-jre</google.guava.version>
         <google.guice.version>4.2.2</google.guice.version>
+        <google.zxing.version>3.3.2</google.zxing.version>
+        <google.jimfs.version>1.1</google.jimfs.version>
         <google.findbugs.version>3.0.0</google.findbugs.version>
+
         <reflections.version>0.9.11</reflections.version>
+
+        <classgraph.version>4.8.28</classgraph.version>
+
+        <jackson.version>2.9.8</jackson.version>
+
+        <jersey-version>2.25.1</jersey-version>
+        <javapoet.version>1.11.1</javapoet.version>
+        <javaparser.version>3.13.1</javaparser.version>
 
         <jolt.version>0.1.1</jolt.version>
 
-        <swagger-annotations-version>1.5.21</swagger-annotations-version>
-        <swagger-parser-version>1.0.33</swagger-parser-version>
-        <swagger-core-version>1.5.17</swagger-core-version>
+        <httpcomponents.httpasyncclient.version>4.0.1</httpcomponents.httpasyncclient.version>
+        <httpcomponents.httpclient.version>4.4.1</httpcomponents.httpclient.version>
+        <httpcomponents.httpcore.version>4.4.1</httpcomponents.httpcore.version>
+        <httpcomponents.httpmime.version>4.3.4</httpcomponents.httpmime.version>
+        <httpcomponents.httpcore-nio.version>4.3.2</httpcomponents.httpcore-nio.version>
 
-        <saxon.version>9.9.1-1</saxon.version>
+        <okhttp.version>3.14.0</okhttp.version>
 
-        <jersey-version>2.25.1</jersey-version>
-        <jackson-version>2.9.5</jackson-version>
+        <swagger-models.version>1.5.22</swagger-models.version>
+        <swagger-core.version>1.5.22</swagger-core.version>
+        <swagger-parser.version>1.0.41</swagger-parser.version>
 
-        <jodatime-version>2.7</jodatime-version>
-        <joda-money.version>1.0.1</joda-money.version>
+        <raml-parser-2.version>1.0.28</raml-parser-2.version>
 
-        <codesorcerer.version>2.4.4</codesorcerer.version>
-        <javapoet.version>1.9.0</javapoet.version>
-
-        <fuselet.version>0.0.8</fuselet.version>
-        <fuse-shared.version>0.0.8</fuse-shared.version>
+        <!-- test -->
+        <jacoco.version>0.8.2</jacoco.version>
 
     </properties>
 
@@ -50,9 +65,35 @@
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${springframework.boot.version}</version>
+                <version>2.1.2.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-core</artifactId>
+                <version>${apache.tika.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.tika</groupId>
+                <artifactId>tika-parsers</artifactId>
+                <version>${apache.tika.version}</version>
             </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
@@ -69,6 +110,25 @@
                 <version>${google.guice.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/com.google.jimfs/jimfs -->
+            <dependency>
+                <groupId>com.google.jimfs</groupId>
+                <artifactId>jimfs</artifactId>
+                <version>${google.jimfs.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${google.zxing.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${google.zxing.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
             <dependency>
                 <groupId>org.reflections</groupId>
@@ -76,12 +136,27 @@
                 <version>${reflections.version}</version>
             </dependency>
 
+
+            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
             <dependency>
-                <groupId>org.joda</groupId>
-                <artifactId>joda-money</artifactId>
-                <version>${joda-money.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.raml/raml-parser-2 -->
+            <dependency>
+                <groupId>org.raml</groupId>
+                <artifactId>raml-parser-2</artifactId>
+                <version>${raml-parser-2.version}</version>
+            </dependency>
 
             <!-- jolt -->
             <dependency>
@@ -95,35 +170,125 @@
                 <version>${jolt.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+            <!-- swagger -->
             <dependency>
                 <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger-annotations-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-compat-spec-parser</artifactId>
-                <version>${swagger-parser-version}</version>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger-models.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-core</artifactId>
-                <version>${swagger-core-version}</version>
+                <version>${swagger-core.version}</version>
             </dependency>
-
-            <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
             <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>${saxon.version}</version>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-parser</artifactId>
+                <version>${swagger-parser.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-core -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-core</artifactId>
+                <version>${apache.camel.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-symbol-solver-core -->
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-symbol-solver-core</artifactId>
+                <version>${javaparser.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-core</artifactId>
+                <version>${javaparser.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core-serialization -->
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-core-serialization</artifactId>
+                <version>${javaparser.version}</version>
+            </dependency>
+
+            <!-- jmustache -->
+            <dependency>
+                <groupId>com.samskivert</groupId>
+                <artifactId>jmustache</artifactId>
+                <version>1.14</version>
+            </dependency>
+
+            <!-- httpcomponents -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpasyncclient</artifactId>
+                <version>${httpcomponents.httpasyncclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpcomponents.httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>${httpcomponents.httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpcomponents.httpmime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore-nio</artifactId>
+                <version>${httpcomponents.httpcore-nio.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.squareup/javapoet -->
+            <dependency>
+                <groupId>com.squareup</groupId>
+                <artifactId>javapoet</artifactId>
+                <version>${javapoet.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/io.github.classgraph/classgraph -->
+            <dependency>
+                <groupId>io.github.classgraph</groupId>
+                <artifactId>classgraph</artifactId>
+                <version>${classgraph.version}</version>
+            </dependency>
+
+
+            <!-- unit test -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>xmlunit</groupId>
+                <artifactId>xmlunit</artifactId>
+                <version>1.6</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>dovetails-commons</module>
+        <module>dovetails-core</module>
+        <module>zoya</module>
     </modules>
 
 </project>

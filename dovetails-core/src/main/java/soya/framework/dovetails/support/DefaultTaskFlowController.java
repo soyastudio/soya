@@ -143,7 +143,7 @@ public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRe
         }
     }
 
-    static class DefaultProcessContext implements ProcessContext {
+    static class DefaultProcessContext extends ProcessContextSupport {
 
         @Override
         public File getBaseDir() {
@@ -151,33 +151,8 @@ public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRe
         }
 
         @Override
-        public String getProperty(String propName) {
-            return null;
-        }
-
-        @Override
-        public TaskProcessor getBean(String name) {
-            return null;
-        }
-
-        @Override
         public DataObject get(String name) {
             return null;
-        }
-
-        @Override
-        public boolean containsBean(String name) {
-            return false;
-        }
-
-        @Override
-        public void registerBean(String name, Object bean) {
-
-        }
-
-        @Override
-        public void set(String name, DataObject dataObject) {
-
         }
     }
 

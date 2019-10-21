@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import soya.framework.util.ClasspathUtils;
 import soya.framework.dovetails.*;
-import soya.framework.dovetails.component.TaskBuilderSupport;
+import soya.framework.dovetails.support.TaskBuilderSupport;
 
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -30,9 +30,7 @@ public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcess
     }
 
     @Override
-    public BeanProcessTask create(String uri, ProcessContext context) {
-
-        BeanProcessTask task = new BeanProcessTask(uri);
+    protected void configure(BeanProcessTask task, ProcessContext context) {
         if (task.getPath() == null || task.getPath().trim().length() == 0) {
             throw new IllegalArgumentException("Register is not defined.");
         }
@@ -45,7 +43,11 @@ public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcess
             }
             bean = new Gson().fromJson(properties, predefineds.get(path));
 
-        } else if(context.containsBean(path)) {
+            if (bean instanceof ProcessContextAware) {
+                ((ProcessContextAware) bean).setProcessContext(context);
+            }
+
+        } else if(context.getBean(path) != null) {
             bean = context.getBean(path);
 
         } else {
@@ -68,7 +70,5 @@ public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcess
         }
 
         task.processor = bean;
-
-        return task;
     }
 }

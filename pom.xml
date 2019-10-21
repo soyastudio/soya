@@ -15,7 +15,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <apache.maven.version>3.5.2</apache.maven.version>
-        <apache.ant.version>1.9.4</apache.ant.version>
+        <apache.ant.version>1.10.7</apache.ant.version>
         <apache.camel.version>2.23.1</apache.camel.version>
         <apache.tika.version>0.7</apache.tika.version>
 
@@ -82,6 +82,13 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>${apache.ant.version}</version>
             </dependency>
 
             <dependency>

@@ -29,6 +29,8 @@ public final class ContextTask extends Task implements ProcessContextAware {
     public void process(TaskSession session) throws Exception {
         Map<String, PropertyDescriptor> propMap = new HashMap<>();
         properties.forEach(e -> {
+
+
             propMap.put(e.getName(), e);
         });
 

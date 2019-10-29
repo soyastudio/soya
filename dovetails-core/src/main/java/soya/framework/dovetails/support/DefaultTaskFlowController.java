@@ -173,6 +173,7 @@ public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRe
                     task.process(session);
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     if(!exceptionHandler.onException(e)) {
                         throw new UnhandledException(e, session);
                     }

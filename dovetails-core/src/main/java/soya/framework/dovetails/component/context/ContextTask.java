@@ -7,13 +7,14 @@ import soya.framework.dovetails.ProcessContextAware;
 import soya.framework.dovetails.Task;
 import soya.framework.dovetails.TaskSession;
 import soya.framework.dovetails.support.ProcessContextSupport;
+import soya.framework.util.PropertiesUtils;
 
 import java.util.*;
 
 public final class ContextTask extends Task implements ProcessContextAware {
     private ProcessContextSupport context;
 
-    List<PropertyDescriptor> properties;
+    Properties properties;
     Set<BeanDescriptor> beans;
 
     protected ContextTask(String uri) {
@@ -27,18 +28,21 @@ public final class ContextTask extends Task implements ProcessContextAware {
 
     @Override
     public void process(TaskSession session) throws Exception {
-        Map<String, PropertyDescriptor> propMap = new HashMap<>();
-        properties.forEach(e -> {
 
+        Properties values = new Properties(System.getProperties());
+        Properties configuration = PropertiesUtils.evaluate(properties, values);
 
-            propMap.put(e.getName(), e);
-        });
+        Enumeration<?> enumeration = configuration.propertyNames();
+        while (enumeration.hasMoreElements()) {
+            String key = (String) enumeration.nextElement();
+            String value = configuration.getProperty(key);
+            context.setProperty(key, value);
+        }
 
-
-
-
-        beans.forEach(c -> {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        for (BeanDescriptor c : beans) {
             System.out.println("------------------------ bean: " + c.getName());
-        });
+            System.out.println(gson.toJson(c.getConfiguration()));
+        }
     }
 }

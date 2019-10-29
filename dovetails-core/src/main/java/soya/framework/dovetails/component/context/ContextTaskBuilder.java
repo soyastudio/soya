@@ -8,7 +8,10 @@ import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
 import soya.framework.dovetails.support.TaskBuilderSupport;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 @TaskDef(schema = "context")
 public class ContextTaskBuilder extends TaskBuilderSupport<ContextTask> {
@@ -21,18 +24,17 @@ public class ContextTaskBuilder extends TaskBuilderSupport<ContextTask> {
         task.beans = toBeans(beans);
     }
 
-    private List<PropertyDescriptor> toProperties(JsonElement json) {
-        List<PropertyDescriptor> list = new ArrayList<>();
-
+    private Properties toProperties(JsonElement json) {
+        Properties properties = new Properties();
         if (json.isJsonObject()) {
             for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue().getAsString();
-                list.add(new PropertyDescriptor(key, value));
+                properties.setProperty(key, value);
             }
         }
 
-        return list;
+        return properties;
     }
 
     private Set<BeanDescriptor> toBeans(JsonElement json) {

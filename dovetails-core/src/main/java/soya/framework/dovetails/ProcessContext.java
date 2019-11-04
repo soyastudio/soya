@@ -9,7 +9,7 @@ public interface ProcessContext {
 
     String getProperty(String propName);
 
-    DataObject get(String name);
+    TaskProcessor getProcessor(String name);
 
-    TaskProcessor getBean(String name);
+    DataObject get(String name);
 }

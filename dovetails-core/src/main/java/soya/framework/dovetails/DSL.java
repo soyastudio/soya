@@ -42,6 +42,14 @@ public final class DSL {
         return builder.toString();
     }
 
+    public static DSL newInstance(String schema, String name, String path) {
+        if(schema == null || schema.trim().length() == 0) {
+            throw new IllegalArgumentException("Schema cannot be null or empty!");
+        }
+
+        return new DSL(schema, name, path);
+    }
+
     public static DSL fromURI(String uri) {
         if (uri == null || !uri.contains(URL_TOKEN)) {
             throw new IllegalArgumentException("Can not parse uri: " + uri);

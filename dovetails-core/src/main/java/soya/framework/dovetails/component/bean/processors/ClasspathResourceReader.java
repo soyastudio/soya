@@ -15,6 +15,10 @@ public class ClasspathResourceReader implements TaskProcessor {
 
     @Override
     public void process(TaskSession session) throws Exception {
+        System.out.println("--------------- path: " + path);
+    }
+
+    public void process2(TaskSession session) throws Exception {
         if (path == null) {
             throw new IllegalArgumentException("'path' is not set.");
         }

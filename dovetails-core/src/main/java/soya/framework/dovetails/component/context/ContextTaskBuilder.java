@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import soya.framework.dovetails.DSL;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
+import soya.framework.dovetails.support.BeanDescriptor;
+import soya.framework.dovetails.support.ProcessContextSupport;
 import soya.framework.dovetails.support.TaskBuilderSupport;
 
 import java.util.HashSet;
@@ -19,9 +21,13 @@ public class ContextTaskBuilder extends TaskBuilderSupport<ContextTask> {
     private JsonElement beans;
 
     @Override
-    protected void configure(ContextTask task, ProcessContext context) {
-        task.properties = toProperties(properties);
-        task.beans = toBeans(beans);
+    protected void configure(ContextTask task, ProcessContext ctx) throws Exception {
+        ProcessContextSupport context = (ProcessContextSupport) ctx;
+        Set<BeanDescriptor> set = toBeans(beans);
+
+        for (BeanDescriptor c : set) {
+            context.setProcessor(c.getName(), BeanDescriptor.newInstance(c, context));
+        }
     }
 
     private Properties toProperties(JsonElement json) {

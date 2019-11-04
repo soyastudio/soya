@@ -18,18 +18,20 @@ public class PropertiesUtils {
             for (PropertyEvaluator e : evaluators) {
                 if (result.getProperty(e.getKey()) != null) {
                     // do nothing:
-
                 } else if (!e.getValue().hasParameters()) {
                     result.setProperty(e.getKey(), e.getValue().toString());
                     changed = true;
-
                 } else {
                     e.evaluate(result);
-
                 }
             }
-
         }
+
+        evaluators.forEach(e -> {
+            if(result.getProperty(e.getKey()) == null) {
+                result.setProperty(e.getKey(), e.toString());
+            }
+        });
 
         return result;
     }

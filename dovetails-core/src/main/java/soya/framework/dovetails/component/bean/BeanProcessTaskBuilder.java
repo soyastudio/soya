@@ -4,23 +4,23 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import soya.framework.util.ClasspathUtils;
 import soya.framework.dovetails.*;
-import soya.framework.dovetails.support.TaskBuilderSupport;
+import soya.framework.dovetails.support.BeanDescriptor;
+import soya.framework.dovetails.support.GenericTaskBuilder;
+import soya.framework.util.ClasspathUtils;
 
 import java.lang.reflect.Type;
 import java.util.Set;
 
 @TaskDef(schema = "processor")
-public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcessTask> {
+public final class BeanProcessTaskBuilder extends GenericTaskBuilder<BeanProcessTask> {
     private static final ImmutableMap<String, Class<? extends TaskProcessor>> predefineds;
-    private JsonElement properties;
 
     static {
         ImmutableMap.Builder<String, Class<? extends TaskProcessor>> builder = ImmutableMap.<String, Class<? extends TaskProcessor>>builder();
         Set<Class<?>> results = ClasspathUtils.findByAnnotation(Predefined.class, BeanProcessTaskBuilder.class.getPackage().getName());
         results.forEach(c -> {
-            if(TaskProcessor.class.isAssignableFrom(c)) {
+            if (TaskProcessor.class.isAssignableFrom(c)) {
                 String name = c.getAnnotation(Predefined.class).value();
                 builder.put(name, (Class<? extends TaskProcessor>) c);
             }
@@ -30,15 +30,19 @@ public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcess
     }
 
     @Override
-    protected void configure(BeanProcessTask task, ProcessContext context) {
+    protected void configure(BeanProcessTask task, JsonElement taskDefinition, ProcessContext context) throws Exception {
         if (task.getPath() == null || task.getPath().trim().length() == 0) {
             throw new IllegalArgumentException("Register is not defined.");
         }
 
         String path = task.getPath();
         TaskProcessor bean;
-        if(predefineds.containsKey(path)) {
-            if(properties == null) {
+        JsonObject properties = taskDefinition == null? null: taskDefinition.getAsJsonObject();
+        if (context.getProcessor(path) != null) {
+            bean = BeanDescriptor.newInstance(context.getProcessor(path), properties, context);
+
+        } else if (predefineds.containsKey(path)) {
+            if (properties == null) {
                 properties = new JsonObject();
             }
             bean = new Gson().fromJson(properties, predefineds.get(path));
@@ -47,8 +51,8 @@ public final class BeanProcessTaskBuilder extends TaskBuilderSupport<BeanProcess
                 ((ProcessContextAware) bean).setProcessContext(context);
             }
 
-        } else if(context.getBean(path) != null) {
-            bean = context.getBean(path);
+        } else if (context.getProcessor(path) != null) {
+            bean = context.getProcessor(path);
 
         } else {
             try {

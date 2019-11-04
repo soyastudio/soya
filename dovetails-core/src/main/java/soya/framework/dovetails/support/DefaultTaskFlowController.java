@@ -15,8 +15,10 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRegistration {
+    private static Logger LOGGER = Logger.getLogger("FLOW CONTROLLER");
     private static DefaultTaskFlowController me;
 
     private final ImmutableMap<String, Class<? extends TaskBuilder>> taskBuilderTypes;
@@ -56,6 +58,7 @@ public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRe
 
     @Override
     public TaskSession process(TaskFlow chain) {
+        LOGGER.info("process flow '" + chain.uri() + "'...");
         TaskSession session = new TaskSession(context);
         return new TaskChainProcessor(session, chain, exceptionHandler).process();
     }
@@ -168,12 +171,12 @@ public class DefaultTaskFlowController implements TaskFlowController, TaskTypeRe
         }
 
         public TaskSession process() {
+            LOGGER.info("start processing flow '" + chain.uri() + "'...");
             for (Task task : chain.tasks()) {
                 try {
                     task.process(session);
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     if(!exceptionHandler.onException(e)) {
                         throw new UnhandledException(e, session);
                     }

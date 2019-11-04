@@ -93,12 +93,18 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
         }
 
         private TaskFlowBuilder fromJsonObject(JsonObject json) {
+
+            DovetailBuilder dovetailBuilder = new DovetailBuilder(json);
+
+
             Set<Map.Entry<String, JsonElement>> set = json.entrySet();
             for (Map.Entry<String, JsonElement> entry : set) {
                 String key = entry.getKey();
                 DSL dsl = DSL.fromURI(key);
                 if (Dovetails.SCHEMA.equals(dsl.getSchema())) {
                     JsonElement value = entry.getValue();
+                    TaskFlowBuilder builder = new TaskFlowBuilder(key, value);
+
                     return new TaskFlowBuilder(key, value);
                 }
             }
@@ -111,21 +117,21 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
                 throw new IllegalStateException("Instance already exists for singleton mode.");
             }
 
-            if(taskTypeRegistration == null) {
+            if (taskTypeRegistration == null) {
                 taskTypeRegistration = DefaultTaskFlowController.getInstance();
             }
 
-            if(taskTypeRegistration == null) {
+            if (taskTypeRegistration == null) {
                 throw new IllegalStateException("Cannot find TaskTypeRegistration.");
             }
 
-            if(context == null) {
+            if (context == null) {
                 context = DefaultTaskFlowController.getInstance().getContext();
             }
 
             Set<TaskFlow> flows = new HashSet<>();
             set.forEach(e -> {
-                flows.add( e.create(context, taskTypeRegistration));
+                flows.add(e.create(context, taskTypeRegistration));
             });
 
             DefaultTaskFlowRegistration registration = new DefaultTaskFlowRegistration(flows);
@@ -156,6 +162,49 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
         }
     }
 
+    public static class DovetailBuilder {
+        private String name;
+        private TaskFlowBuilder mainFlowBuilder;
+        private Map<String, TaskFlowBuilder> flowBuilders = new LinkedHashMap<>();
+
+        private DovetailBuilder(JsonObject json) {
+            Set<Map.Entry<String, JsonElement>> set = json.entrySet();
+            for (Map.Entry<String, JsonElement> entry : set) {
+                String key = entry.getKey();
+                JsonElement value = entry.getValue();
+                TaskFlowBuilder builder = new TaskFlowBuilder(key, value);
+
+                try {
+                    DSL dsl = DSL.fromURI(key);
+                    if (Dovetails.SCHEMA.equals(dsl.getSchema())) {
+                        if (dsl.getPath() == null && dsl.getPath().trim().length() == 0) {
+                            throw new IllegalArgumentException("....");
+
+                        } else if (Dovetails.MAIN_FLOW.equals(dsl.getPath())) {
+                            mainFlowBuilder = builder;
+                            name = dsl.getName();
+
+                        } else {
+                            flowBuilders.put(dsl.getPath(), builder);
+                        }
+
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    flowBuilders.put(key, builder);
+                }
+            }
+
+            System.out.println("------------- name: " + name);
+            System.out.println("------------- size: " + flowBuilders.size());
+
+        }
+
+        public DefaultDovetail create(ProcessContext context, TaskTypeRegistration registration) {
+            return null;
+        }
+    }
+
     public static class TaskFlowBuilder {
         private final String uri;
         private final JsonElement value;
@@ -175,12 +224,12 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
 
         public TaskFlow create(ProcessContext context, TaskTypeRegistration registration) {
             List<Task> tasks = new ArrayList<>();
-            if(value.isJsonObject()) {
+            if (value.isJsonObject()) {
                 tasks.add(fromJsonObject(value.getAsJsonObject(), context, registration));
 
-            } else if(value.isJsonArray()) {
+            } else if (value.isJsonArray()) {
                 JsonArray array = value.getAsJsonArray();
-                for(int i = 0; i < array.size(); i++) {
+                for (int i = 0; i < array.size(); i++) {
                     tasks.add(fromJsonObject(array.get(i).getAsJsonObject(), context, registration));
                 }
             }
@@ -189,25 +238,34 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
 
         private Task fromJsonObject(JsonObject jsonObject, ProcessContext context, TaskTypeRegistration registration) {
             Set<Map.Entry<String, JsonElement>> set = jsonObject.entrySet();
-            for(Map.Entry<String, JsonElement> entry: set) {
+            for (Map.Entry<String, JsonElement> entry : set) {
                 String uri = entry.getKey();
                 DSL dsl = DSL.fromURI(uri);
                 Class<? extends TaskBuilder> c = registration.getTaskBuilderType(dsl.getSchema());
-                if(c == null) {
+                if (c == null) {
                     throw new IllegalArgumentException("Cannot find TaskBuilder from schema: " + dsl.getSchema());
                 }
 
                 TaskBuilder taskBuilder = null;
-                if(null == entry.getValue() || entry.getValue().isJsonNull()) {
+                if (null == entry.getValue() || entry.getValue().isJsonNull()) {
                     try {
                         taskBuilder = c.newInstance();
 
                     } catch (InstantiationException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
+                } else if (GenericTaskBuilder.class.isAssignableFrom(c)) {
+                    try {
+                        taskBuilder = c.newInstance();
+                        ((GenericTaskBuilder) taskBuilder).taskDefinition = entry.getValue();
+
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
                 } else {
                     Gson gson = new Gson();
-                    taskBuilder = gson.fromJson(entry.getValue(), c);
+                    JsonElement jsonElement = entry.getValue();
+                    taskBuilder = gson.fromJson(jsonElement, c);
                 }
 
                 return taskBuilder.create(uri, context);

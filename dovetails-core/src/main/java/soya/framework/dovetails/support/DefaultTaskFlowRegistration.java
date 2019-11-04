@@ -94,9 +94,6 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
 
         private TaskFlowBuilder fromJsonObject(JsonObject json) {
 
-            DovetailBuilder dovetailBuilder = new DovetailBuilder(json);
-
-
             Set<Map.Entry<String, JsonElement>> set = json.entrySet();
             for (Map.Entry<String, JsonElement> entry : set) {
                 String key = entry.getKey();
@@ -159,49 +156,6 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
         @Override
         public List<Task> tasks() {
             return tasks;
-        }
-    }
-
-    public static class DovetailBuilder {
-        private String name;
-        private TaskFlowBuilder mainFlowBuilder;
-        private Map<String, TaskFlowBuilder> flowBuilders = new LinkedHashMap<>();
-
-        private DovetailBuilder(JsonObject json) {
-            Set<Map.Entry<String, JsonElement>> set = json.entrySet();
-            for (Map.Entry<String, JsonElement> entry : set) {
-                String key = entry.getKey();
-                JsonElement value = entry.getValue();
-                TaskFlowBuilder builder = new TaskFlowBuilder(key, value);
-
-                try {
-                    DSL dsl = DSL.fromURI(key);
-                    if (Dovetails.SCHEMA.equals(dsl.getSchema())) {
-                        if (dsl.getPath() == null && dsl.getPath().trim().length() == 0) {
-                            throw new IllegalArgumentException("....");
-
-                        } else if (Dovetails.MAIN_FLOW.equals(dsl.getPath())) {
-                            mainFlowBuilder = builder;
-                            name = dsl.getName();
-
-                        } else {
-                            flowBuilders.put(dsl.getPath(), builder);
-                        }
-
-                    }
-
-                } catch (IllegalArgumentException e) {
-                    flowBuilders.put(key, builder);
-                }
-            }
-
-            System.out.println("------------- name: " + name);
-            System.out.println("------------- size: " + flowBuilders.size());
-
-        }
-
-        public DefaultDovetail create(ProcessContext context, TaskTypeRegistration registration) {
-            return null;
         }
     }
 

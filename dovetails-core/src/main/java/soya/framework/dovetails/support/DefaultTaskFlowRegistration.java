@@ -11,20 +11,11 @@ import java.io.Reader;
 import java.util.*;
 
 public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
-    private static DefaultTaskFlowRegistration INSTANCE;
 
-    private final ImmutableMap<String, TaskFlow> flows;
+    private final Map<String, TaskFlow> flows;
 
-    private DefaultTaskFlowRegistration(Set<TaskFlow> flows) {
-        ImmutableMap.Builder<String, TaskFlow> builder = ImmutableMap.<String, TaskFlow>builder();
-        flows.forEach(e -> {
-            builder.put(e.uri(), e);
-        });
-        this.flows = builder.build();
-    }
-
-    public static DefaultTaskFlowRegistration getInstance() {
-        return INSTANCE;
+    private DefaultTaskFlowRegistration(Map<String, TaskFlow> flows) {
+        this.flows = flows;
     }
 
     @Override
@@ -42,10 +33,9 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
     }
 
     public static class TaskFlowRegistrationBuilder {
-        private boolean singleton = true;
         private TaskTypeRegistration taskTypeRegistration;
         private ProcessContext context;
-        private Set<TaskFlowBuilder> set = new HashSet<>();
+        private Map<String, TaskFlowBuilder> set = new HashMap<>();
 
         private TaskFlowRegistrationBuilder() {
         }
@@ -77,22 +67,13 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
 
         private void load(JsonElement jsonElement) {
             if (jsonElement.isJsonObject()) {
-                set.add(fromJsonObject(jsonElement.getAsJsonObject()));
+                set.putAll(fromJsonObject(jsonElement.getAsJsonObject()));
 
-            } else if (jsonElement.isJsonArray()) {
-                JsonArray array = jsonElement.getAsJsonArray();
-                for (int i = 0; i < array.size(); i++) {
-                    JsonElement element = array.get(i);
-                    if (element.isJsonObject()) {
-                        JsonObject object = element.getAsJsonObject();
-                        TaskFlowBuilder taskFlowBuilder = fromJsonObject(object);
-                        set.add(taskFlowBuilder);
-                    }
-                }
             }
         }
 
-        private TaskFlowBuilder fromJsonObject(JsonObject json) {
+        private Map<String, TaskFlowBuilder> fromJsonObject(JsonObject json) {
+            Map<String, TaskFlowBuilder> builders = new HashMap<>();
 
             Set<Map.Entry<String, JsonElement>> set = json.entrySet();
             for (Map.Entry<String, JsonElement> entry : set) {
@@ -102,18 +83,14 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
                     JsonElement value = entry.getValue();
                     TaskFlowBuilder builder = new TaskFlowBuilder(key, value);
 
-                    return new TaskFlowBuilder(key, value);
+                    builders.put(dsl.getPath(), builder);
                 }
             }
 
-            throw new IllegalArgumentException("Illegal json format: " + json.toString());
+            return builders;
         }
 
         public DefaultTaskFlowRegistration create() {
-            if (singleton && INSTANCE != null) {
-                throw new IllegalStateException("Instance already exists for singleton mode.");
-            }
-
             if (taskTypeRegistration == null) {
                 taskTypeRegistration = DefaultTaskFlowController.getInstance();
             }
@@ -126,16 +103,12 @@ public class DefaultTaskFlowRegistration implements TaskFlowRegistration {
                 context = DefaultTaskFlowController.getInstance().getContext();
             }
 
-            Set<TaskFlow> flows = new HashSet<>();
-            set.forEach(e -> {
-                flows.add(e.create(context, taskTypeRegistration));
+            Map<String, TaskFlow> flows = new HashMap<>();
+            set.entrySet().forEach(e -> {
+                flows.put(e.getKey(), e.getValue().create(context, taskTypeRegistration));
             });
 
-            DefaultTaskFlowRegistration registration = new DefaultTaskFlowRegistration(flows);
-            if (singleton) {
-                INSTANCE = registration;
-            }
-            return registration;
+            return new DefaultTaskFlowRegistration(flows);
         }
     }
 

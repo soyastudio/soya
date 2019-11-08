@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import soya.framework.dovetails.*;
 
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class DefaultDovetail implements Dovetail {
     private static DefaultDovetail me;
@@ -19,9 +21,18 @@ public class DefaultDovetail implements Dovetail {
         this.controller = controller;
         this.registration = registration;
 
-        this.name = name;
-        this.mainFlow = mainFlow;
-        this.flows = ImmutableMap.copyOf(flows);
+        ImmutableMap.Builder<String, TaskFlow> builder = ImmutableMap.<String, TaskFlow>builder();
+        for(String f: registration.taskFlows()) {
+            if(Dovetails.MAIN_FLOW.equals(f)) {
+                this.mainFlow = registration.getTaskFlow(f);
+                this.name = DSL.fromURI(mainFlow.uri()).getName();
+
+            } else {
+                builder.put(f, registration.getTaskFlow(f));
+            }
+        }
+
+        this.flows = builder.build();
     }
 
     public DefaultDovetail(InputStream yamlImput, ProcessContext context) {
@@ -39,14 +50,42 @@ public class DefaultDovetail implements Dovetail {
     }
 
     @Override
-    public void run() {
-        controller.submit(mainFlow);
+    public TaskSession run() {
+        Future<TaskSession> future = controller.submit(mainFlow);
+        while (!future.isDone()) {
+            try {
+                Thread.sleep(50L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        try {
+            return future.get();
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+
+        }
     }
 
     @Override
-    public void run(String flow) {
-        if (flows.containsKey(flow)) {
-            controller.submit(flows.get(flow));
+    public TaskSession run(String flow) {
+        Future<TaskSession> future = controller.submit(registration.getTaskFlow(flow));
+        while (!future.isDone()) {
+            try {
+                Thread.sleep(50L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+        try {
+            return future.get();
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+
         }
     }
 

@@ -19,4 +19,8 @@ public final class TaskSession extends SessionSupport {
         this.parentSession = parentSession;
         updateState(parentSession.getCurrentState());
     }
+
+    public ProcessContext getContext() {
+        return context;
+    }
 }

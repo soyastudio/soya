@@ -73,6 +73,12 @@ public class BeanDescriptor {
         return bean;
     }
 
+    public static TaskProcessor copyOf(TaskProcessor processor) {
+        Gson gson = new Gson();
+        TaskProcessor bean = gson.fromJson(gson.toJson(processor), processor.getClass());
+        return bean;
+    }
+
     private static Object evaluate(JsonElement exp, Class<?> type, ProcessContext context) {
         Object result = null;
         if (exp.isJsonPrimitive() && exp.getAsString().contains("${")) {

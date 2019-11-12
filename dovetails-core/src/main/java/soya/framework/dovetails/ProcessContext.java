@@ -11,5 +11,5 @@ public interface ProcessContext {
 
     TaskProcessor getProcessor(String name);
 
-    DataObject get(String name);
+    ProcessContext deepCopy();
 }

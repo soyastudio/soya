@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
 import soya.framework.dovetails.support.GenericTaskBuilder;
-import soya.framework.dovetails.support.ProcessContextSupport;
+import soya.framework.dovetails.support.DefaultProcessContext;
 import soya.framework.util.PropertiesUtils;
 
 import java.util.Enumeration;
@@ -19,10 +19,11 @@ public final class ConfigureTaskBuilder extends GenericTaskBuilder<ConfigureTask
     @Override
     protected void configure(ConfigureTask task, JsonElement taskDefinition, ProcessContext context) throws Exception {
 
-        ProcessContextSupport ctx = (ProcessContextSupport) context;
+        DefaultProcessContext ctx = (DefaultProcessContext) context;
         Properties values = new Properties(System.getProperties());
 
         Properties configuration = PropertiesUtils.evaluate(toProperties(taskDefinition), values);
+
         Enumeration<?> enumeration = configuration.propertyNames();
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();

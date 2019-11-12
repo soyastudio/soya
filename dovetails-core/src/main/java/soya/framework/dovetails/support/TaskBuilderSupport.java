@@ -8,8 +8,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 
 public abstract class TaskBuilderSupport<T extends Task> implements TaskBuilder<T> {
+    private Class<T> clazz;
+
+    public TaskBuilderSupport() {
+        clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    public Class<? extends Task> getTaskType() {
+        return clazz;
+    }
+
     public T create(String uri, ProcessContext context) {
-        Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         try {
             Constructor constructor = clazz.getDeclaredConstructor(new Class[]{String.class});
             constructor.setAccessible(true);

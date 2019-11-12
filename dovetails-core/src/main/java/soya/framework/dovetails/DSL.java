@@ -29,6 +29,14 @@ public final class DSL {
         return path;
     }
 
+    public boolean isCanonical() {
+        return !empty(schema) && !empty(name) && !empty(path);
+    }
+
+    private boolean empty(String s) {
+        return s == null || s.trim().length() == 0;
+    }
+
     public String toString() {
         StringBuilder builder = new StringBuilder(schema);
         if(name != null && name.trim().length() > 0) {

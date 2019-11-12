@@ -7,6 +7,8 @@ public interface Dovetail {
 
     String[] flows();
 
+    TaskFlow getTaskFlow(String name);
+
     TaskSession run();
 
     TaskSession run(String flow);

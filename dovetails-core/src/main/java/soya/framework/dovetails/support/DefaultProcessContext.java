@@ -1,14 +1,14 @@
 package soya.framework.dovetails.support;
 
-import soya.framework.DataObject;
-import soya.framework.JsonCompatible;
 import soya.framework.dovetails.ExternalContext;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskProcessor;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultProcessContext implements ProcessContext {
@@ -33,10 +33,10 @@ public class DefaultProcessContext implements ProcessContext {
     @Override
     public String getProperty(String propName) {
         String prop = properties.getProperty(propName);
-        if(prop == null) {
+        if (prop == null) {
             prop = externalContext.getProperty(propName);
         }
-        if(prop == null) {
+        if (prop == null) {
             prop = System.getProperty(propName);
         }
         return prop;

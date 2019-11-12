@@ -9,7 +9,7 @@ import soya.framework.dovetails.support.GenericTaskBuilder;
 import soya.framework.dovetails.support.DefaultProcessContext;
 
 @TaskDef(schema = "task")
-public class TaskDefTaskBuilder extends GenericTaskBuilder<TaskDefTask> {
+public final class TaskDefTaskBuilder extends GenericTaskBuilder<TaskDefTask> {
 
     @Override
     protected void configure(TaskDefTask task, JsonElement taskDefinition, ProcessContext context) throws Exception {

@@ -39,9 +39,8 @@ public class DefaultDovetail implements Dovetail {
             DSL dsl = DSL.fromURI(key);
             if (dsl.isCanonical() && Dovetails.SCHEMA.equals(dsl.getSchema())) {
                 if (Dovetails.MAIN_FLOW.equals(dsl.getPath())) {
-                    mainFlowBuilder = flowBuilder;
                     this.name = dsl.getName();
-
+                    mainFlowBuilder = flowBuilder;
                 } else {
                     otherFlowBuilders.put(dsl, flowBuilder);
                 }
@@ -54,6 +53,11 @@ public class DefaultDovetail implements Dovetail {
             throw new IllegalArgumentException("Cannot determine main flow");
         }
         this.mainFlow = mainFlowBuilder.create(context);
+        for(Task task: mainFlow.tasks()) {
+            if(task instanceof DovetailAware) {
+                ((DovetailAware) task).setDovetail(this);
+            }
+        }
 
         ImmutableMap.Builder<String, TaskFlow> builder = ImmutableMap.<String, TaskFlow>builder();
         otherFlowBuilders.entrySet().forEach(e -> {
@@ -65,7 +69,7 @@ public class DefaultDovetail implements Dovetail {
                 builder.put(key.getPath(), flowBuilder.create(ctx));
 
             } else {
-
+                // TODO:
             }
 
         });
@@ -96,6 +100,15 @@ public class DefaultDovetail implements Dovetail {
     @Override
     public String[] flows() {
         return flows.keySet().toArray(new String[flows.size()]);
+    }
+
+    @Override
+    public TaskFlow getTaskFlow(String name) {
+        if(Dovetails.MAIN_FLOW.equals(name)) {
+            return mainFlow;
+        }
+
+        return flows.get(name);
     }
 
     @Override

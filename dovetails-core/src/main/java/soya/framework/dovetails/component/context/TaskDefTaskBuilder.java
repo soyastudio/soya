@@ -1,24 +1,8 @@
 package soya.framework.dovetails.component.context;
 
-import com.google.gson.JsonElement;
-import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
-import soya.framework.dovetails.TaskProcessor;
-import soya.framework.dovetails.support.BeanDescriptor;
-import soya.framework.dovetails.support.GenericTaskBuilder;
-import soya.framework.dovetails.support.DefaultProcessContext;
 
 @TaskDef(schema = "task")
-public final class TaskDefTaskBuilder extends GenericTaskBuilder<TaskDefTask> {
+public final class TaskDefTaskBuilder extends ContextBuildTaskBuilder<TaskDefTask> {
 
-    @Override
-    protected void configure(TaskDefTask task, JsonElement taskDefinition, ProcessContext context) throws Exception {
-        DefaultProcessContext ctx = (DefaultProcessContext) context;
-        BeanDescriptor descriptor = new BeanDescriptor(task.getName(), task.getPath(), taskDefinition.getAsJsonObject());
-
-        TaskProcessor processor = BeanDescriptor.newInstance(descriptor, context);
-        ctx.setProcessor(descriptor.getName(), processor);
-
-        task.processor = processor;
-    }
 }

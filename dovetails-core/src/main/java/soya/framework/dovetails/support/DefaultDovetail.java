@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import soya.framework.Resource;
 import soya.framework.dovetails.*;
+import soya.framework.dovetails.component.context.ContextBuilder;
 import soya.framework.util.GsonUtils;
 
 import java.io.InputStream;
@@ -16,80 +17,56 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class DefaultDovetail implements Dovetail {
-    private ProcessContext context;
     private TaskFlowController controller;
+
+    private DefaultProcessContext context;
 
     private String name;
     private TaskFlow mainFlow;
-    private ImmutableMap<String, TaskFlow> flows;
+    private TaskFlowBuilder mainFlowBuilder;
 
-    public DefaultDovetail(InputStream yaml, ProcessContext context, TaskFlowController controller) {
-        this.context = context;
+    private ImmutableMap<String, TaskFlowBuilder> taskFlowBuilders;
+
+    public DefaultDovetail(InputStream yaml, DefaultProcessContext context, TaskFlowController controller) {
         this.controller = controller;
 
-        JsonObject jsonObject = GsonUtils.fromYaml(yaml).getAsJsonObject();
-        Map<String, TaskFlowBuilder> flowBuilders = fromJsonObject(jsonObject);
+        this.context = context;
 
-        TaskFlowBuilder mainFlowBuilder = null;
-        Map<DSL, TaskFlowBuilder> otherFlowBuilders = new HashMap<>();
-        for (Map.Entry<String, TaskFlowBuilder> stringTaskFlowBuilderEntry : flowBuilders.entrySet()) {
-            String key = stringTaskFlowBuilderEntry.getKey();
-            TaskFlowBuilder flowBuilder = stringTaskFlowBuilderEntry.getValue();
-
-            DSL dsl = DSL.fromURI(key);
-            if (dsl.isCanonical() && Dovetails.SCHEMA.equals(dsl.getSchema())) {
-                if (Dovetails.MAIN_FLOW.equals(dsl.getPath())) {
-                    this.name = dsl.getName();
-                    mainFlowBuilder = flowBuilder;
-                } else {
-                    otherFlowBuilders.put(dsl, flowBuilder);
-                }
-            }
-
-        }
-
-        // init context:
-        if (mainFlowBuilder == null) {
-            throw new IllegalArgumentException("Cannot determine main flow");
-        }
-        this.mainFlow = mainFlowBuilder.create(context);
-        for(Task task: mainFlow.tasks()) {
-            if(task instanceof DovetailAware) {
-                ((DovetailAware) task).setDovetail(this);
-            }
-        }
-
-        ImmutableMap.Builder<String, TaskFlow> builder = ImmutableMap.<String, TaskFlow>builder();
-        otherFlowBuilders.entrySet().forEach(e -> {
-            DSL key = e.getKey();
-            TaskFlowBuilder flowBuilder = e.getValue();
-
-            if(name.equals(key.getName())) {
-                ProcessContext ctx = context.deepCopy();
-                builder.put(key.getPath(), flowBuilder.create(ctx));
-
-            } else {
-                // TODO:
-            }
-
-        });
-
-        this.flows = builder.build();
-    }
-
-
-    private Map<String, TaskFlowBuilder> fromJsonObject(JsonObject json) {
         Map<String, TaskFlowBuilder> builders = new HashMap<>();
+        JsonObject json = GsonUtils.fromYaml(yaml).getAsJsonObject();
         Set<Map.Entry<String, JsonElement>> map = json.entrySet();
         for (Map.Entry<String, JsonElement> entry : map) {
             String key = entry.getKey();
             JsonElement value = entry.getValue();
 
-            TaskFlowBuilder builder = new TaskFlowBuilder(value);
-            builders.put(key, builder);
+            if(key.startsWith("dovetails:main://")) {
+                DSL dsl = DSL.fromURI(key);
+                this.mainFlowBuilder = new TaskFlowBuilder(value);
+                this.name = dsl.getPath();
+
+            } else {
+                builders.put(key, new TaskFlowBuilder(value));
+            }
+        }
+        this.taskFlowBuilders = ImmutableMap.copyOf(builders);
+
+        // init context:
+        if (mainFlowBuilder == null) {
+            throw new IllegalArgumentException("Cannot determine main flow");
         }
 
-        return builders;
+        this.mainFlow = create(mainFlowBuilder, context);
+    }
+
+    private TaskFlow create(TaskFlowBuilder builder, ProcessContext context) {
+        TaskFlow taskFlow = builder.create(context);
+        for(Task task: taskFlow.tasks()) {
+            if(task instanceof DovetailAware) {
+                ((DovetailAware) task).setDovetail(this);
+            }
+        }
+
+        return taskFlow;
     }
 
     @Override
@@ -99,21 +76,20 @@ public class DefaultDovetail implements Dovetail {
 
     @Override
     public String[] flows() {
-        return flows.keySet().toArray(new String[flows.size()]);
+        return taskFlowBuilders.keySet().toArray(new String[taskFlowBuilders.size()]);
     }
 
-    @Override
-    public TaskFlow getTaskFlow(String name) {
-        if(Dovetails.MAIN_FLOW.equals(name)) {
-            return mainFlow;
-        }
+    public TaskFlow createTaskFlow(String name, Properties properties) {
+        ProcessContext runtime = context.deepCopy(properties);
 
-        return flows.get(name);
+        TaskFlowBuilder builder = taskFlowBuilders.get(name);
+        TaskFlow flow = create(builder, context);
+        return flow;
     }
 
     @Override
     public TaskSession run() {
-        Future<TaskSession> future = controller.submit(mainFlow, context.deepCopy());
+        Future<TaskSession> future = controller.submit(mainFlow, context.deepCopy(null));
         while (!future.isDone()) {
             try {
                 Thread.sleep(50L);
@@ -132,8 +108,13 @@ public class DefaultDovetail implements Dovetail {
     }
 
     @Override
-    public TaskSession run(String flow) {
-        Future<TaskSession> future = controller.submit(flows.get(flow), context.deepCopy());
+    public TaskSession run(String flowName) {
+        ProcessContext runtime = context.deepCopy(null);
+
+        TaskFlowBuilder builder = taskFlowBuilders.get(flowName);
+        TaskFlow flow = create(builder, runtime);
+
+        Future<TaskSession> future = controller.submit(flow, runtime);
         while (!future.isDone()) {
             try {
                 Thread.sleep(50L);
@@ -149,13 +130,18 @@ public class DefaultDovetail implements Dovetail {
             throw new RuntimeException(e);
 
         }
+    }
+
+    @Override
+    public TaskSession run(String flowName, Properties properties) {
+        return null;
     }
 
     @Override
     public TaskSession run(Resource resource) {
         JsonElement json = GsonUtils.fromYaml(resource.getAsInputStream());
         TaskFlowBuilder builder = new TaskFlowBuilder(json);
-        ProcessContext ctx = context.deepCopy();
+        ProcessContext ctx = context.deepCopy(null);
 
         Future<TaskSession> future = controller.submit(builder.create(ctx), ctx);
         while (!future.isDone()) {
@@ -203,14 +189,25 @@ public class DefaultDovetail implements Dovetail {
         public TaskFlow create(ProcessContext context) {
             List<Task> tasks = new ArrayList<>();
             if (value.isJsonObject()) {
-                tasks.add(fromJsonObject(value.getAsJsonObject(), context));
-
+                Task task = fromJsonObject(value.getAsJsonObject(), context);
+                if(task instanceof ContextBuilder) {
+                    ((ContextBuilder) task).build(context);
+                } else {
+                    tasks.add(task);
+                }
             } else if (value.isJsonArray()) {
                 JsonArray array = value.getAsJsonArray();
                 for (int i = 0; i < array.size(); i++) {
-                    tasks.add(fromJsonObject(array.get(i).getAsJsonObject(), context));
+                    JsonObject jo = array.get(i).getAsJsonObject();
+                    Task task = fromJsonObject(jo, context);
+                    if(task instanceof ContextBuilder) {
+                        ((ContextBuilder) task).build(context);
+                    } else {
+                        tasks.add(task);
+                    }
                 }
             }
+
             return new DefaultTaskFlow(tasks);
         }
 
@@ -246,7 +243,9 @@ public class DefaultDovetail implements Dovetail {
                     taskBuilder = gson.fromJson(jsonElement, c);
                 }
 
-                return taskBuilder.create(uri, context);
+                Task task = taskBuilder.create(uri, context);
+
+                return task;
             }
 
             throw new IllegalArgumentException("Cannot create task from json: " + jsonObject.toString());

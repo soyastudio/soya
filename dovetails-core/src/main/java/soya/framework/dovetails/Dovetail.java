@@ -2,16 +2,18 @@ package soya.framework.dovetails;
 
 import soya.framework.Resource;
 
+import java.util.Properties;
+
 public interface Dovetail {
     String getName();
 
     String[] flows();
 
-    TaskFlow getTaskFlow(String name);
-
     TaskSession run();
 
-    TaskSession run(String flow);
+    TaskSession run(String flowName);
+
+    TaskSession run(String flowName, Properties properties);
 
     TaskSession run(Resource resource);
 

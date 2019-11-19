@@ -25,7 +25,8 @@ public final class FlowTask extends Task implements DovetailAware {
 
     @Override
     public void process(TaskSession session) throws Exception {
-        TaskFlow flow = dovetail.getTaskFlow(getPath());
+        DefaultDovetail defaultDovetail = (DefaultDovetail) dovetail;
+        TaskFlow flow = defaultDovetail.createTaskFlow(getPath(), configuration);
         for (Task e : flow.tasks()) {
             e.process(session);
         }

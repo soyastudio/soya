@@ -59,10 +59,18 @@ public class DefaultProcessContext implements ProcessContext {
         processors.put(name, processor);
     }
 
-    @Override
-    public ProcessContext deepCopy() {
+    public ProcessContext deepCopy(Properties configProperties) {
         DefaultProcessContext context = newInstance();
         context.properties = new Properties(properties);
+        if(configProperties != null) {
+            Enumeration<?> enumeration = configProperties.propertyNames();
+            while (enumeration.hasMoreElements()) {
+                String key = (String) enumeration.nextElement();
+                String value = configProperties.getProperty(key);
+                context.properties.setProperty(key, value);
+            }
+        }
+
         context.processors = new ConcurrentHashMap<>();
         processors.entrySet().forEach(e -> {
             String key = e.getKey();

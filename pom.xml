@@ -295,6 +295,7 @@
 
     <modules>
         <module>dovetails-core</module>
+        <module>dovetails-ant</module>
         <module>dovetails-maven-plugin</module>
         <module>zoya</module>
     </modules>

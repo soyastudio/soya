@@ -24,8 +24,39 @@ public class DefaultDovetail implements Dovetail {
     private String name;
     private TaskFlow mainFlow;
     private TaskFlowBuilder mainFlowBuilder;
-
     private ImmutableMap<String, TaskFlowBuilder> taskFlowBuilders;
+
+
+    public DefaultDovetail(InputStream yaml, ExternalContext externalContext, TaskFlowController controller) {
+        this.controller = controller;
+        this.context = new DefaultProcessContext(externalContext);
+
+        Map<String, TaskFlowBuilder> builders = new HashMap<>();
+        JsonObject json = GsonUtils.fromYaml(yaml).getAsJsonObject();
+        Set<Map.Entry<String, JsonElement>> map = json.entrySet();
+        for (Map.Entry<String, JsonElement> entry : map) {
+            String key = entry.getKey();
+            JsonElement value = entry.getValue();
+
+            if(key.startsWith("dovetails:main://")) {
+                DSL dsl = DSL.fromURI(key);
+                this.mainFlowBuilder = new TaskFlowBuilder(value);
+                this.name = dsl.getPath();
+
+            } else {
+                builders.put(key, new TaskFlowBuilder(value));
+            }
+        }
+        this.taskFlowBuilders = ImmutableMap.copyOf(builders);
+
+        // init context:
+        if (mainFlowBuilder == null) {
+            throw new IllegalArgumentException("Cannot determine main flow");
+        }
+
+        this.mainFlow = create(mainFlowBuilder, context);
+    }
+
 
     public DefaultDovetail(InputStream yaml, DefaultProcessContext context, TaskFlowController controller) {
         this.controller = controller;

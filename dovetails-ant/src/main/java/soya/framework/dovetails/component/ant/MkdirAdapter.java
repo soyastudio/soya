@@ -9,16 +9,20 @@ import java.io.File;
 
 @AntTaskDef(name = "mkdir", attributes = {"dir"})
 public class MkdirAdapter extends AntTaskAdapter<Mkdir> {
+    private String dir;
 
     public MkdirAdapter(JsonElement attributes, ProcessContext context) {
         super(attributes, context);
+
+        System.out.println("============ dir: " + dir);
     }
 
     @Override
-    protected Mkdir createAntTask(JsonElement attributes, ProcessContext context) {
+    protected Mkdir createAntTask(ProcessContext context) {
         Mkdir task = new Mkdir();
-        task.setDir(new File(context.getBaseDir(), "mkdir"));
+        task.setDir(new File(context.getBaseDir(), dir));
 
         return task;
     }
+
 }

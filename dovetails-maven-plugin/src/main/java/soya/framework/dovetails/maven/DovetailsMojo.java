@@ -28,6 +28,10 @@ public class DovetailsMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.basedir}/dovetails.yaml", property = "conf")
     private File yamlFile;
 
+
+    @Parameter(property = "flow")
+    private String flow;
+
     @Parameter(defaultValue = "${project.basedir}/target/generated-sources/dovetails")
     private File destination;
 
@@ -37,7 +41,11 @@ public class DovetailsMojo extends AbstractMojo {
             ExternalContext externalContext = new MavenContextWrapper(mavenProject);
             Dovetail dovetail = new DefaultDovetail(new FileInputStream(yamlFile), externalContext, defaultTaskFlowController);
 
-            dovetail.run();
+            if (flow != null) {
+                dovetail.run(flow);
+            } else {
+                dovetail.run();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new MojoFailureException(e.getMessage());

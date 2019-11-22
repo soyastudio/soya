@@ -13,6 +13,8 @@ public class AntTask extends Task {
 
     @Override
     public void process(TaskSession session) throws Exception {
+        adapter.preExecute(session);
         adapter.execute();
+        adapter.postExecute(session);
     }
 }

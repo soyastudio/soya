@@ -21,13 +21,14 @@ public class DefaultProcessContext implements ProcessContext {
         this.externalContext = externalContext;
     }
 
-    @Override
-    public File getBaseDir() {
-        return null;
-    }
 
     public Enumeration<?> propertyNames() {
         return properties.propertyNames();
+    }
+
+    @Override
+    public ExternalContext getExternalContext() {
+        return externalContext;
     }
 
     @Override

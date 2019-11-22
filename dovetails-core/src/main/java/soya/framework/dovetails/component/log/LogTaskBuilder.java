@@ -17,7 +17,7 @@ public final class LogTaskBuilder extends TaskBuilderSupport<LogTask> {
 
         String path = processor.getPath();
         if(path != null && !path.isEmpty()) {
-            File file = new File(context.getBaseDir(), path);
+            File file = new File(context.getExternalContext().getBaseDir(), path);
             processor.setLogFile(file);
         }
 

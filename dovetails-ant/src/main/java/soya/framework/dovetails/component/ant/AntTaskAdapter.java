@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.tools.ant.Task;
 import soya.framework.dovetails.ProcessContext;
+import soya.framework.dovetails.TaskSession;
 import soya.framework.util.ParameterizedText;
 
 import java.lang.reflect.Field;
@@ -43,6 +44,14 @@ public abstract class AntTaskAdapter<T extends Task> {
 
     public final void execute() {
         antTask.execute();
+    }
+
+    protected void preExecute(TaskSession session) {
+
+    }
+
+    protected void postExecute(TaskSession session) {
+
     }
 
     protected abstract T createAntTask(ProcessContext context);

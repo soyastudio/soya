@@ -14,7 +14,7 @@ public class MkdirTaskBuilder extends TaskBuilderSupport<MkdirTask> {
     @Override
     protected void configure(MkdirTask task, ProcessContext context) {
         if(location == null) {
-            task.dir = new File(context.getBaseDir(), task.getPath());
+            task.dir = new File(context.getExternalContext().getBaseDir(), task.getPath());
         }
     }
 }

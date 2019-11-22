@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Properties;
 
 public interface ProcessContext {
-    File getBaseDir();
+    ExternalContext getExternalContext();
 
     String getProperty(String propName);
 

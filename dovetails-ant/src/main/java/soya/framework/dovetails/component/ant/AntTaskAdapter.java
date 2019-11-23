@@ -12,9 +12,11 @@ import java.lang.reflect.Field;
 
 public abstract class AntTaskAdapter<T extends Task> {
     private final String name;
-    private final T antTask;
+    private final ProcessContext context;
 
     public AntTaskAdapter(JsonElement attributes, ProcessContext context) {
+        this.context = context;
+
         AntTaskDef def = getClass().getAnnotation(AntTaskDef.class);
         this.name = def.name();
         if (attributes != null) {
@@ -22,7 +24,7 @@ public abstract class AntTaskAdapter<T extends Task> {
             for (String attr : def.attributes()) {
                 if (json.get(attr) != null) {
                     try {
-                        Field field = getClass().getDeclaredField(attr);
+                        Field field =getClass().getDeclaredField(attr);
                         field.setAccessible(true);
                         Class<?> fieldType = field.getType();
                         field.set(this, evaluate(json.get(attr), fieldType, context));
@@ -33,9 +35,6 @@ public abstract class AntTaskAdapter<T extends Task> {
                 }
             }
         }
-
-
-        this.antTask = createAntTask(context);
     }
 
     public String getName() {
@@ -43,7 +42,7 @@ public abstract class AntTaskAdapter<T extends Task> {
     }
 
     public final void execute() {
-        antTask.execute();
+        createAntTask(context).execute();
     }
 
     protected void preExecute(TaskSession session) {

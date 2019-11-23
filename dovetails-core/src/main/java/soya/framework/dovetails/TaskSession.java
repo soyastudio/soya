@@ -4,6 +4,7 @@ import soya.framework.Session;
 import soya.framework.support.SessionSupport;
 
 public final class TaskSession extends SessionSupport {
+    public static final String CURRENT_DIRECTORY = "CURRENT_DIRECTORY";
 
     private ProcessContext context;
     private Session parentSession;

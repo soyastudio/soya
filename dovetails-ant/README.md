@@ -2,67 +2,87 @@
 
 ## Ant Adapters:
 1. Archive Task Adapters
-- [ ] GUnzip
-- [ ] BUnzip2 
-- [ ] UnXZ 
-- [ ] GZip 
-- [ ] BZip2
-- [ ] XZ 
-- [ ] Cab
-- [ ] Ear
-- [ ] Jar
-- [ ] Manifest
-- [ ] Rpm
-- [ ] SignJar
-- [ ] Tar
-- [ ] Unjar
-- [ ] Untar
-- [ ] Unwar
-- [ ] Unzip
-- [ ] War
-- [ ] Zip
+   - [ ] GUnzip
+   - [ ] BUnzip2 
+   - [ ] UnXZ 
+   - [ ] GZip
+   - [ ] BZip2
+   - [ ] XZ 
+   - [ ] Cab
+   - [ ] Ear
+   - [ ] Jar
+   - [ ] Manifest
+   - [ ] Rpm
+   - [ ] SignJar
+   - [ ] Tar
+   - [ ] Unjar
+   - [ ] Untar
+   - [ ] Unwar
+   - [ ] Unzip
+   - [ ] War
+   - [ ] Zip
     
 2. Execution Task Adapters
-- [ ] Ant
-- [ ] AntCall
-- [ ] Apply
-- [ ] Dependset
-- [ ] Exec
-- [ ] Java
-- [ ] Parallel
-- [ ] Sequential
-- [ ] Sleep
-- [ ] Subant
+   - [x] Ant
+   - [ ] Apply
+   - [ ] Dependset
+   - [ ] Exec
+   - [ ] Java
+   - [ ] Parallel
+   - [ ] Sequential
+   - [x] Sleep
 
 3. File Task Adapters
-- [ ] Attrib
-- [ ] Checksum
-- [ ] Chgrop
-- [ ] Chmod
-- [ ] Chown
-- [ ] Concat
-- [ ] Copy
-- [ ] Delete
-- [ ] Filter
-- [ ] FixCRLF
-- [ ] Get
-- [ ] Midir
-- [ ] Move
-- [ ] Patch
-- [ ] Replace
-- [ ] ReplaceRegExp
-- [ ] SetPermissions
-- [ ] Sync
-- [ ] Tempfile
-- [ ] Touch
+   - [ ] Attrib
+   - [x] _cd_
+   - [ ] Checksum
+   - [ ] Chgrop
+   - [ ] Chmod
+   - [ ] Chown
+   - [ ] Concat
+   - [ ] Copy
+   - [ ] Delete
+   - [ ] Filter
+   - [ ] FixCRLF
+   - [ ] Get
+   - [ ] Midir
+   - [ ] Move
+   - [ ] Patch
+   - [ ] Replace
+   - [ ] ReplaceRegExp
+   - [ ] SetPermissions
+   - [ ] Sync
+   - [ ] Tempfile
+   - [ ] Touch
 
 4. Remote Task Adapters:
-- [ ] FTP
-- [ ] Rexec
-- [ ] Scp
-- [ ] setproxy
-- [ ] Sshexec
-- [ ] Telnet
+   - [ ] FTP
+   - [ ] Rexec
+   - [ ] Scp
+   - [ ] setproxy
+   - [ ] Sshexec
+   - [ ] Telnet
+
+5. Build Task Adapters
+   - [ ] Ivy
+   - [ ] Javac
+ 
+6. Parsing, Transformation and Code Generation Adapters:
+   - [ ] Antlr
+   - [ ] AJC
+   - [ ] XJC
+
+7. SCM Task Adapters
+   - [ ] CVS
+   - [ ] Git
+
+8. Test Task Adapters
+   - [ ] Junit
+   - [ ] JMeter
+
+9.  Misc
+   - [x] Echo
+   - [ ] 
 
 
 ## Archive Task Adapters
@@ -94,7 +114,6 @@
 | DSL | Ant Task | Description|
 | ------ | ------ | ------ |
 | ant://ant| Ant | Runs Ant on a supplied buildfile, optionally passing properties (with possibly new values). This task can be used to build sub-projects. |
-| ant://antCall | AntCall | Runs another target within the same buildfile, optionally passing properties (with possibly new values).|
 | ant://apply | Apply | Executes a system command. When the os attribute is specified, the command is only executed when Ant is run on one of the specified operating systems.|
 | ant://dependset | Dependset | Compares a set of source files with a set of target files. If any of the source files is newer than any of the target files, all the target files are removed. |
 | ant://exec | Exec | Executes a system command. When the os attribute is specified, the command is only executed when Ant is run on one of the specified operating systems. |
@@ -102,13 +121,13 @@
 | ant://parallel | Parallel |  |
 | ant://sequential | Sefquential | |
 | ant://sleep | Sleep | |
-| ant://suant | Subant | |
 
 ## File Task Adapters
 
 | DSL | Ant Task | Description|
 | ------ | ------ | ------ |
 | ant://attrib| Attrib | Changes the permissions and/or attributes of a file or all files inside the specified directories. Currently, it has effect only under Windows.|
+| ant://cd | N/A | This is not an ant task. Set current directory in TaskSession. Same as the _cd_ command.|
 | ant://checksum | Checksum | Generates a checksum for a file or set of files. This task can also be used to perform checksum verifications.|
 | ant://chgrp | Chgrp | Changes the group ownership of a file or all files inside the specified directories. Currently, it has effect only under Unix.|
 | ant://chmod | Chmod | Changes the permissions of a file or all files inside the specified directories. Currently, it has effect only under Unix. The permissions are also UNIX style, like the arguments for the chmod command.|

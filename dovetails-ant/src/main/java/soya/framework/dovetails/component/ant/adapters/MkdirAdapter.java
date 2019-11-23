@@ -4,16 +4,14 @@ import com.google.gson.JsonElement;
 import org.apache.tools.ant.taskdefs.Mkdir;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
-import soya.framework.dovetails.component.ant.AntTaskAdapter;
 import soya.framework.dovetails.component.ant.AntTaskDef;
 
 import java.io.File;
 
-@AntTaskDef(name = "mkdir", attributes = {"base", "dir", "cd"})
-public class MkdirAdapter extends AntTaskAdapter<Mkdir> {
+@AntTaskDef(name = "mkdir", attributes = {"dir", "cd"})
+public class MkdirAdapter extends BaseDirectoryRelatedTaskAdapter<Mkdir> {
     private transient File currentDirectory;
 
-    private String base = "./";
     private String dir;
     private boolean cd;
 
@@ -23,10 +21,8 @@ public class MkdirAdapter extends AntTaskAdapter<Mkdir> {
 
     @Override
     protected Mkdir createAntTask(ProcessContext context) {
-        File baseDir = getBaseDir(base, context);
         Mkdir task = new Mkdir();
-        task.setDir(new File(baseDir, dir));
-
+        task.setDir(getDir(dir));
         return task;
     }
 
@@ -35,12 +31,9 @@ public class MkdirAdapter extends AntTaskAdapter<Mkdir> {
     }
 
     @Override
-    protected void preExecute(TaskSession session) {
-        System.out.println("-------------- set current state");
-    }
-
-    @Override
     protected void postExecute(TaskSession session) {
-        System.out.println("------- setAsCurrent: " + cd);
+        if(cd) {
+            session.set(TaskSession.CURRENT_DIRECTORY, getDir(dir));
+        }
     }
 }

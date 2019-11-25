@@ -62,7 +62,7 @@ FIXME:
    - [ ] SetPermissions
    - [ ] Sync
    - [ ] Tempfile
-   - [ ] Touch
+   - [x] Touch
 
 4. Remote Task Adapters:
    - [ ] FTP

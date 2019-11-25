@@ -6,12 +6,8 @@ import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
 import soya.framework.dovetails.component.ant.AntTaskDef;
 
-import java.io.File;
-
 @AntTaskDef(name = "mkdir", attributes = {"dir", "cd"})
-public class MkdirAdapter extends BaseDirectoryRelatedTaskAdapter<Mkdir> {
-    private transient File currentDirectory;
-
+public class MkdirAdapter extends AntTaskAdapterSupport<Mkdir> {
     private String dir;
     private boolean cd;
 
@@ -20,20 +16,14 @@ public class MkdirAdapter extends BaseDirectoryRelatedTaskAdapter<Mkdir> {
     }
 
     @Override
-    protected Mkdir createAntTask(ProcessContext context) {
-        Mkdir task = new Mkdir();
-        task.setDir(getDir(dir));
-        return task;
-    }
-
-    private File getBaseDir(String base, ProcessContext context) {
-        return context.getExternalContext().getBaseDir();
+    protected void postExecute(TaskSession session) {
+        if (cd) {
+            session.set(TaskSession.CURRENT_DIRECTORY, getDir(dir));
+        }
     }
 
     @Override
-    protected void postExecute(TaskSession session) {
-        if(cd) {
-            session.set(TaskSession.CURRENT_DIRECTORY, getDir(dir));
-        }
+    protected void init(Mkdir task, TaskSession session) {
+        task.setDir(getDir(dir));
     }
 }

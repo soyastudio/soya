@@ -2,7 +2,6 @@ package soya.framework.dovetails.component.ant.adapters;
 
 import com.google.gson.JsonElement;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.util.FileUtils;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
 import soya.framework.dovetails.component.ant.AntTaskDef;
@@ -10,7 +9,7 @@ import soya.framework.dovetails.component.ant.AntTaskDef;
 import java.io.File;
 
 @AntTaskDef(name = "cd", attributes = {"dir"})
-public class CdAdapter extends BaseDirectoryRelatedTaskAdapter<CdAdapter.Cd> {
+public class CdAdapter extends AntTaskAdapterSupport<CdAdapter.Cd> {
 
     private String dir;
 
@@ -19,9 +18,8 @@ public class CdAdapter extends BaseDirectoryRelatedTaskAdapter<CdAdapter.Cd> {
     }
 
     @Override
-    protected Cd createAntTask(ProcessContext context) {
-        Cd task = new Cd();
-        return task;
+    protected void init(Cd task, TaskSession session) {
+
     }
 
     @Override

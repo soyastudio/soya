@@ -1,6 +1,15 @@
 # Dovetails Ant Component
 
 ## Ant Adapters:
+FIXME:
+- [ ] Apply
+- [ ]
+
+1. Project Task Adapters
+    - [ ] Project
+    - [ ] Property
+    - [ ] TaskDef
+
 1. Archive Task Adapters
    - [ ] GUnzip
    - [ ] BUnzip2 
@@ -40,13 +49,13 @@
    - [ ] Chmod
    - [ ] Chown
    - [ ] Concat
-   - [ ] Copy
-   - [ ] Delete
+   - [x] Copy
+   - [x] Delete
    - [ ] Filter
    - [ ] FixCRLF
    - [ ] Get
-   - [ ] Midir
-   - [ ] Move
+   - [x] Midir
+   - [x] Move
    - [ ] Patch
    - [ ] Replace
    - [ ] ReplaceRegExp

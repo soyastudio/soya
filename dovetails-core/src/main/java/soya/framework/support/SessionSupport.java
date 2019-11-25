@@ -70,7 +70,7 @@ public abstract class SessionSupport implements Session {
         } else if (attrValue == null) {
             throw new IllegalArgumentException("Immutable attribute cannot be null.");
 
-        } else if (attrValue instanceof Cloneable) {
+        } else if (!(attrValue instanceof Cloneable)) {
             throw new IllegalArgumentException("Immutable attribute should be cloneable.");
 
         } else {

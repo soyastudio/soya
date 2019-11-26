@@ -24,10 +24,10 @@ FIXME:
    - [ ] Rpm
    - [ ] SignJar
    - [ ] Tar
-   - [ ] Unjar
+   - [x] Unjar
    - [ ] Untar
-   - [ ] Unwar
-   - [ ] Unzip
+   - [x] Unwar
+   - [x] Unzip
    - [ ] War
    - [ ] Zip
     

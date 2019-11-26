@@ -5,11 +5,10 @@ import org.apache.tools.ant.taskdefs.Expand;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.component.ant.AntTaskDef;
 
-@AntTaskDef(name = "unjar", attributes = {"source", "dest", "overwrite", "encoding", "resourcesSpecified",
+@AntTaskDef(name = "unwar", attributes = {"source", "dest", "overwrite", "encoding", "resourcesSpecified",
         "failOnEmptyArchive", "stripAbsolutePathSpec", "scanForUnicodeExtraFields", "allowFilesToEscapeDest"})
-public class UnjarAdapter extends ExpandAdapter<Expand> {
-
-    public UnjarAdapter(JsonElement attributes, ProcessContext context) {
+public class UnwarAdapter extends ExpandAdapter<Expand> {
+    public UnwarAdapter(JsonElement attributes, ProcessContext context) {
         super(attributes, context);
     }
 }

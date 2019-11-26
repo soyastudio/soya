@@ -39,7 +39,7 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
             for (String attr : def.attributes()) {
                 if (json.get(attr) != null) {
                     try {
-                        Field field = getClass().getDeclaredField(attr);
+                        Field field = getField(attr);
                         field.setAccessible(true);
                         Class<?> fieldType = field.getType();
                         field.set(this, evaluate(json.get(attr), fieldType, context));
@@ -52,6 +52,32 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
         }
 
         this._baseDir = context.getExternalContext().getBaseDir();
+    }
+
+    private Field getField(String name) throws NoSuchFieldException {
+        Field field = null;
+        Class clazz = getClass();
+        try {
+            field = clazz.getDeclaredField(name);
+
+        } catch (NoSuchFieldException e) {
+            // do nothing
+        }
+
+        while (field == null) {
+            if(Object.class.equals(clazz)) {
+                throw new NoSuchFieldException("No such field: " + name);
+            }
+            clazz = clazz.getSuperclass();
+            try {
+                field = clazz.getDeclaredField(name);
+
+            } catch (NoSuchFieldException e) {
+                // do nothing
+            }
+        }
+
+        return field;
     }
 
     public void execute(TaskSession session) {
@@ -108,6 +134,10 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
         try {
             T task = taskType.newInstance();
             task.setProject(getProject(session));
+            if(task instanceof SessionAwareAntTask) {
+                ((SessionAwareAntTask)task).setSession(session);
+            }
+
             init(task, session);
             return task;
         } catch (InstantiationException | IllegalAccessException e) {

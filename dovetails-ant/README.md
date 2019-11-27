@@ -8,7 +8,6 @@ FIXME:
 1. Project Task Adapters
     - [ ] Project
     - [ ] Property
-    - [ ] TaskDef
 
 1. Archive Task Adapters
    - [ ] GUnzip
@@ -92,6 +91,9 @@ FIXME:
 9.  Misc
    - [x] Echo
    - [ ] 
+   
+10. Dovetails Extension
+    - [ ] xxx
 
 
 ## Archive Task Adapters

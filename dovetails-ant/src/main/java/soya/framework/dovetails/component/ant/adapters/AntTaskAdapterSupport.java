@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.types.ZipFileSet;
 import org.apache.tools.ant.util.FileUtils;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
@@ -65,7 +66,7 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
         }
 
         while (field == null) {
-            if(Object.class.equals(clazz)) {
+            if (Object.class.equals(clazz)) {
                 throw new NoSuchFieldException("No such field: " + name);
             }
             clazz = clazz.getSuperclass();
@@ -91,7 +92,18 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
 
     protected FileSet getFileSet(FileSetModel model) {
         FileSet fileSet = new FileSet();
+        // FIXME:
+        fileSet.setProject(new Project());
 
+        fileSet.setDir(getDir(model.getDir()));
+        fileSet.setIncludes(model.getIncludes());
+        fileSet.setExcludes(model.getExcludes());
+        return fileSet;
+    }
+
+    protected ZipFileSet getZipFileSet(FileSetModel model) {
+        ZipFileSet fileSet = new ZipFileSet();
+        // FIXME:
         fileSet.setProject(new Project());
 
         fileSet.setDir(getDir(model.getDir()));
@@ -134,8 +146,8 @@ public abstract class AntTaskAdapterSupport<T extends Task> implements AntTaskAd
         try {
             T task = taskType.newInstance();
             task.setProject(getProject(session));
-            if(task instanceof SessionAwareAntTask) {
-                ((SessionAwareAntTask)task).setSession(session);
+            if (task instanceof SessionAwareAntTask) {
+                ((SessionAwareAntTask) task).setSession(session);
             }
 
             init(task, session);

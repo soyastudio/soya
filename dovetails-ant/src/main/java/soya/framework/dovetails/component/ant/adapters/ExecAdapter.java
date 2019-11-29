@@ -5,7 +5,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.ExecTask;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
-import soya.framework.dovetails.component.ant.AntTaskAdapter;
 import soya.framework.dovetails.component.ant.AntTaskDef;
 
 import java.io.File;

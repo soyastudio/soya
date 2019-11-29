@@ -10,16 +10,15 @@ FIXME:
     - [ ] Property
 
 1. Archive Task Adapters
-   - [ ] GUnzip
-   - [ ] BUnzip2 
+   - [x] GUnzip
+   - [x] BUnzip2 
    - [ ] UnXZ 
-   - [ ] GZip
-   - [ ] BZip2
+   - [x] GZip
+   - [x] BZip2
    - [ ] XZ 
    - [ ] Cab
-   - [ ] Ear
-   - [ ] Jar
-   - [ ] Manifest
+   - [x] Ear
+   - [x] Jar
    - [ ] Rpm
    - [ ] SignJar
    - [ ] Tar
@@ -27,8 +26,8 @@ FIXME:
    - [ ] Untar
    - [x] Unwar
    - [x] Unzip
-   - [ ] War
-   - [ ] Zip
+   - [x] War
+   - [x] Zip
     
 2. Execution Task Adapters
    - [x] Ant

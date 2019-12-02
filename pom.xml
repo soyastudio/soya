@@ -143,6 +143,12 @@
                 <version>${reflections.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
+            <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+                <version>4.11.9.201909030838-r</version>
+            </dependency>
 
             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
             <dependency>
@@ -276,7 +282,6 @@
                 <version>${classgraph.version}</version>
             </dependency>
 
-
             <!-- unit test -->
             <dependency>
                 <groupId>junit</groupId>
@@ -296,6 +301,8 @@
     <modules>
         <module>dovetails-core</module>
         <module>dovetails-ant</module>
+        <module>dovetails-git</module>
+        <module>dovetails-camel</module>
         <module>dovetails-maven-plugin</module>
         <module>zoya</module>
     </modules>

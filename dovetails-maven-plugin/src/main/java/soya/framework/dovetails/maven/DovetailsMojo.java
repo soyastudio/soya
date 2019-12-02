@@ -38,11 +38,14 @@ public class DovetailsMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             DefaultTaskFlowController defaultTaskFlowController = DefaultTaskFlowController.builder().create();
-            ExternalContext externalContext = new MavenContextWrapper(mavenProject);
-            Dovetail dovetail = new DefaultDovetail(new FileInputStream(yamlFile), externalContext, defaultTaskFlowController);
+            MavenContextWrapper.MavenContextBuilder builder = MavenContextWrapper.builder(mavenProject);
+            // TODO: settings
+
+            Dovetail dovetail = new DefaultDovetail(new FileInputStream(yamlFile), builder.create(), defaultTaskFlowController);
 
             if (flow != null) {
                 dovetail.run(flow);
+
             } else {
                 dovetail.run();
             }

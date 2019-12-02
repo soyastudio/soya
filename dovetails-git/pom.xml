@@ -6,11 +6,10 @@
         <artifactId>dovetails</artifactId>
         <groupId>soya.framework.dovetails</groupId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dovetails-ant</artifactId>
+    <artifactId>dovetails-git</artifactId>
 
     <dependencies>
         <dependency>
@@ -19,15 +18,11 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
-        <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
         </dependency>
     </dependencies>
+
+
 </project>

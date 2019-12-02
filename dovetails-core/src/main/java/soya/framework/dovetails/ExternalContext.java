@@ -5,8 +5,10 @@ import java.io.File;
 public interface ExternalContext {
     File getBaseDir();
 
-    <T> T getResource(String name, Class<T> type);
-
     String getProperty(String propName);
+
+    <T> T getService(Class<T> type);
+
+    <T> T getService(String name, Class<T> type);
 
 }

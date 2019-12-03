@@ -1,7 +1,6 @@
 package soya.framework.dovetails.component.ant.adapters;
 
 import com.google.gson.JsonElement;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Ant;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;

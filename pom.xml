@@ -300,10 +300,12 @@
 
     <modules>
         <module>dovetails-core</module>
+        <module>dovetails-quartz</module>
         <module>dovetails-ant</module>
         <module>dovetails-git</module>
         <module>dovetails-camel</module>
         <module>dovetails-maven-plugin</module>
+        <module>dovetails-application</module>
         <module>zoya</module>
     </modules>
 

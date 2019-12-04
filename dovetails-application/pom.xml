@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dovetails</artifactId>
+        <groupId>soya.framework.dovetails</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dovetails-application</artifactId>
+
+    <properties>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+
+        <springframework.boot.version>2.1.2.RELEASE</springframework.boot.version>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <common.beanutils.version></common.beanutils.version>
+        <google.guava.version>27.0.1-jre</google.guava.version>
+        <google.guice.version>4.2.2</google.guice.version>
+        <google.findbugs.version>3.0.0</google.findbugs.version>
+        <reflections.version>0.9.11</reflections.version>
+
+        <jolt.version>0.1.1</jolt.version>
+
+        <swagger-jersey2-jaxrs.version>1.5.22</swagger-jersey2-jaxrs.version>
+
+        <swagger-annotations-version>1.5.21</swagger-annotations-version>
+        <swagger-parser-version>1.0.33</swagger-parser-version>
+        <swagger-core-version>1.5.22</swagger-core-version>
+
+        <saxon.version>9.9.1-1</saxon.version>
+
+        <jersey-version>2.25.1</jersey-version>
+        <jackson-version>2.9.5</jackson-version>
+
+        <jodatime-version>2.7</jodatime-version>
+        <joda-money.version>1.0.1</joda-money.version>
+
+    </properties>
+
+    <dependencies>
+        <!-- dovetails -->
+        <dependency>
+            <groupId>soya.framework.dovetails</groupId>
+            <artifactId>dovetails-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>soya.framework.dovetails</groupId>
+            <artifactId>dovetails-ant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>soya.framework.dovetails</groupId>
+            <artifactId>dovetails-git</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>soya.framework.dovetails</groupId>
+            <artifactId>dovetails-quartz</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jersey</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.swagger/swagger-jersey2-jaxrs -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jersey2-jaxrs</artifactId>
+            <version>${swagger-jersey2-jaxrs.version}</version>
+        </dependency>
+
+        <!-- swagger -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-core</artifactId>
+            <version>${swagger-core-version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

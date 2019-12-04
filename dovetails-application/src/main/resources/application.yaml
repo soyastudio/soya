@@ -1,0 +1,5 @@
+server:
+  port: 7833
+
+spring.quartz.properties:
+  org.quartz.threadPool.threadCount: 15

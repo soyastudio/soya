@@ -3,3 +3,6 @@ server:
 
 spring.quartz.properties:
   org.quartz.threadPool.threadCount: 15
+
+soya.framework.dovetails.application:
+  deploy.dir: D:/dovtails

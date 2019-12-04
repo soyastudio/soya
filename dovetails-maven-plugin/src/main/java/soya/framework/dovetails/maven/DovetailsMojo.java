@@ -9,7 +9,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.configuration.PlexusConfiguration;
 import soya.framework.dovetails.Dovetail;
-import soya.framework.dovetails.ExternalContext;
 import soya.framework.dovetails.support.DefaultDovetail;
 import soya.framework.dovetails.support.DefaultTaskFlowController;
 

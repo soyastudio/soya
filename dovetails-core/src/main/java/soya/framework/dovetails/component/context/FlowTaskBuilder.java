@@ -5,10 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
-import soya.framework.dovetails.support.DefaultProcessContext;
 import soya.framework.dovetails.support.GenericTaskBuilder;
-import soya.framework.dovetails.support.TaskBuilderSupport;
-import soya.framework.util.PropertiesUtils;
 
 import java.util.Map;
 import java.util.Properties;

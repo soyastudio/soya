@@ -1,6 +1,5 @@
 package soya.framework.dovetails.component.log;
 
-import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskDef;
 import soya.framework.dovetails.support.TaskBuilderSupport;
 

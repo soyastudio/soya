@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import org.apache.tools.ant.taskdefs.Sleep;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskSession;
-import soya.framework.dovetails.component.ant.AntTaskAdapter;
 import soya.framework.dovetails.component.ant.AntTaskDef;
 
 @AntTaskDef(name = "sleep", attributes = {"failOnError", "hours", "minutes", "seconds", "milliseconds"})

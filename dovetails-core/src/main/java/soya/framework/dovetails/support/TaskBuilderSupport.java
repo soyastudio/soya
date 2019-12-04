@@ -1,6 +1,5 @@
 package soya.framework.dovetails.support;
 
-import com.google.gson.JsonElement;
 import soya.framework.dovetails.*;
 import soya.framework.util.ParameterizedText;
 

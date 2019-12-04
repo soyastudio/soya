@@ -1,7 +1,7 @@
 package soya.framework.dovetails.component.log;
 
-import soya.framework.dovetails.TaskSession;
 import soya.framework.dovetails.Task;
+import soya.framework.dovetails.TaskSession;
 
 import java.util.logging.Logger;
 

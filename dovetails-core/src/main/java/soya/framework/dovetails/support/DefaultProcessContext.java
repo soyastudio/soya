@@ -4,7 +4,6 @@ import soya.framework.dovetails.ExternalContext;
 import soya.framework.dovetails.ProcessContext;
 import soya.framework.dovetails.TaskProcessor;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Map;

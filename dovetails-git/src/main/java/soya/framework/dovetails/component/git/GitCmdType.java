@@ -1,6 +1,8 @@
 package soya.framework.dovetails.component.git;
 
-import soya.framework.dovetails.component.git.command.*;
+import soya.framework.dovetails.component.git.command.AddCmd;
+import soya.framework.dovetails.component.git.command.CheckoutCmd;
+import soya.framework.dovetails.component.git.command.CloneCmd;
 
 public enum GitCmdType {
     CLONE("clone", CloneCmd.class),

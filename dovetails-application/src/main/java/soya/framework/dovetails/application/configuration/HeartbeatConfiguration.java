@@ -8,13 +8,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import soya.framework.dovetails.application.service.DovetailsService;
-import soya.framework.dovetails.support.DefaultDovetail;
+import soya.framework.dovetails.application.service.PipelineService;
+import soya.framework.dovetails.application.service.RepositoryService;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.util.Date;
-import java.util.Scanner;
 
 @Configuration
 public class HeartbeatConfiguration implements ApplicationContextAware {
@@ -23,6 +21,15 @@ public class HeartbeatConfiguration implements ApplicationContextAware {
     @Autowired
     private Scheduler scheduler;
 
+    @Value("${soya.framework.dovetails.application.repository.home}")
+    private String repositoryHome;
+
+    @Value("${soya.framework.dovetails.application.heartbeat.scan}")
+    private String scanSchedule;
+
+    @Value("${soya.framework.dovetails.application.heartbeat.keygen}")
+    private String keygenSchedule;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -30,49 +37,66 @@ public class HeartbeatConfiguration implements ApplicationContextAware {
 
     @PostConstruct
     public void init() throws SchedulerException {
-        JobDetail job = JobBuilder.newJob(Heartbeat.class)
-                .withIdentity("heartbeat", "heartbeat")
+        // scan:
+        JobDetail scanJob = JobBuilder.newJob(Heartbeat.class)
+                .withIdentity("scan", "heartbeat")
                 .build();
 
-        Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger1", "group1")
+        Trigger scanTrigger = TriggerBuilder.newTrigger().withIdentity("scan_trigger", "heartbeat")
                 .startNow()
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(10)
+                        .withIntervalInSeconds(Integer.parseInt(scanSchedule))
                         .repeatForever())
                 .build();
 
-        scheduler.scheduleJob(job, trigger);
+        scheduler.scheduleJob(scanJob, scanTrigger);
+
+        // keygen:
+        JobDetail keyGenJob = JobBuilder.newJob(KeyGen.class).withIdentity("keygen", "heartbeat")
+                .build();
+
+        Trigger keygenTrigger = TriggerBuilder.newTrigger().withIdentity("keygen_trigger", "heartbeat")
+                .startNow()
+                .withSchedule(CronScheduleBuilder.cronSchedule(keygenSchedule))
+                .build();
+        scheduler.scheduleJob(keyGenJob, keygenTrigger);
     }
 
     @Bean
-    public DirectoryScanner directoryScanner(@Value("${soya.framework.dovetails.application.deploy.dir}") String home) {
-        return new DirectoryScanner(home);
+    public RepositoryService repositoryService() {
+        File home = new File(repositoryHome);
+        return new DefaultRepositoryService(home);
     }
 
     @Bean
-    public DefaultDovetailService dovetailService() {
-        return new DefaultDovetailService();
+    public PipelineService dovetailService() {
+        return new DefaultPipelineService();
     }
 
-    static class DirectoryScanner {
-        private File home;
+    static class KeyGen implements Job {
 
-        public DirectoryScanner(String dir) {
-            this.home = new File(dir);
-            if(!home.exists()) {
-                home.mkdirs();
-            }
+        @Override
+        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+            System.out.println("----------------- keygen...");
         }
     }
 
     static class Heartbeat implements Job {
         @Override
         public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            DovetailsService.getInstance().execute();
+            RepositoryService.getInstance().refresh();
         }
     }
 
-    static class DefaultDovetailService extends DovetailsService {
+    static class DefaultRepositoryService extends RepositoryService {
+
+        public DefaultRepositoryService(File home) {
+            super(home);
+            instance = this;
+        }
+    }
+
+    static class DefaultPipelineService extends PipelineService {
         @PostConstruct
         public void init() {
             instance = this;

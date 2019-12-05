@@ -7,10 +7,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
 
-public abstract class DovetailsService implements ApplicationContextAware {
-    protected static DovetailsService instance;
+public abstract class PipelineService implements ApplicationContextAware {
+    protected static PipelineService instance;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -18,7 +17,7 @@ public abstract class DovetailsService implements ApplicationContextAware {
     @Autowired
     private Scheduler scheduler;
 
-    protected DovetailsService() {
+    protected PipelineService() {
     }
 
     @Override
@@ -35,7 +34,7 @@ public abstract class DovetailsService implements ApplicationContextAware {
         System.out.println("--------------------- " + scheduler);
     }
 
-    public static DovetailsService getInstance() {
+    public static PipelineService getInstance() {
         return instance;
     }
 }

@@ -5,6 +5,6 @@ spring.quartz.properties:
   org.quartz.threadPool.threadCount: 15
 
 soya.framework.dovetails.application:
-  repository.home: D:/dovtails
-  heartbeat.scan: 10
-  heartbeat.keygen: 0/5 * * * * ?
+  repository.home: D:/dovetails
+  heartbeat.scan: 60
+  heartbeat.keygen: 0 0/5 * * * ?

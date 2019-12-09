@@ -1,4 +1,4 @@
-package soya.framework.dovetails.application.configuration;
+package soya.framework.dovetails.batch.configuration;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
@@ -19,7 +19,7 @@ public class JerseyConfiguration extends ResourceConfig implements ApplicationCo
     private ApplicationContext applicationContext;
 
     public JerseyConfiguration() {
-        packages("soya.framework.dovetails.application.api");
+        packages("soya.framework.dovetails.batch.api");
         swaggerConfig();
     }
 
@@ -28,13 +28,13 @@ public class JerseyConfiguration extends ResourceConfig implements ApplicationCo
         this.register(SwaggerSerializers.class);
 
         BeanConfig swaggerConfigBean = new BeanConfig();
-        swaggerConfigBean.setConfigId("soya-framework-dovetails");
-        swaggerConfigBean.setTitle("Soya Framework Dovetails");
+        swaggerConfigBean.setConfigId("spring-batch-application");
+        swaggerConfigBean.setTitle("Spring Batch Application");
         //swaggerConfigBean.setVersion("v1");
         swaggerConfigBean.setContact("wen_qun@hotmail.com");
         swaggerConfigBean.setSchemes(new String[]{"http"});
         swaggerConfigBean.setBasePath("/api");
-        swaggerConfigBean.setResourcePackage("soya.framework.dovetails.application.api");
+        swaggerConfigBean.setResourcePackage("soya.framework.dovetails.batch.api");
         swaggerConfigBean.setPrettyPrint(true);
         swaggerConfigBean.setScan(true);
 

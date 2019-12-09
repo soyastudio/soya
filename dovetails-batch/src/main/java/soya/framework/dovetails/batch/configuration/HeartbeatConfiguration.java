@@ -1,4 +1,4 @@
-package soya.framework.dovetails.application.configuration;
+package soya.framework.dovetails.batch.configuration;
 
 import org.quartz.*;
 import org.springframework.beans.BeansException;
@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import soya.framework.dovetails.application.service.PipelineService;
-import soya.framework.dovetails.application.service.RepositoryService;
+import soya.framework.dovetails.batch.service.PipelineService;
+import soya.framework.dovetails.batch.service.RepositoryService;
 
 import javax.annotation.PostConstruct;
 import java.io.File;

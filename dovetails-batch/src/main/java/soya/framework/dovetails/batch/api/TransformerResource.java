@@ -1,4 +1,4 @@
-package soya.framework.dovetails.application.api;
+package soya.framework.dovetails.batch.api;
 
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Component;

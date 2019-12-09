@@ -1,0 +1,6 @@
+metadata:
+  name: SupplyChainItem
+  table: table_name
+
+extract:
+  packageName: PKG_EXTRACT_ITEM_SUPPLYCHAIN

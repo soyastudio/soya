@@ -305,7 +305,7 @@
         <module>dovetails-git</module>
         <module>dovetails-camel</module>
         <module>dovetails-maven-plugin</module>
-        <module>dovetails-application</module>
+        <module>dovetails-batch</module>
         <module>zoya</module>
     </modules>
 

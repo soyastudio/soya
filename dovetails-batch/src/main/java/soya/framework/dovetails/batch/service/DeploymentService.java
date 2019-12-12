@@ -15,15 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class RepositoryService {
-    protected static RepositoryService instance;
+public abstract class DeploymentService {
 
     public static final String CONFIG_FILE_NAME = "edis.json";
 
     private File home;
     private Map<String, Deployment> deployments = new ConcurrentHashMap<>();
 
-    protected RepositoryService(File home) {
+    protected DeploymentService(File home) {
         this.home = home;
     }
 
@@ -42,7 +41,6 @@ public abstract class RepositoryService {
         List<String> ls = new ArrayList<>(deployments.keySet());
         ls.forEach(e -> {
             Deployment deployment = deployments.get(e);
-            PipelineService.getInstance().launch(deployment);
         });
     }
 
@@ -81,10 +79,6 @@ public abstract class RepositoryService {
 
     public Deployment getDeployment(String name) {
         return deployments.get(name);
-    }
-
-    public static RepositoryService getInstance() {
-        return instance;
     }
 
 

@@ -14,11 +14,11 @@ import javax.ws.rs.ApplicationPath;
 
 @Configuration
 @ApplicationPath("/api")
-public class JerseyConfiguration extends ResourceConfig implements ApplicationContextAware {
+public class RestApiConfiguration extends ResourceConfig implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    public JerseyConfiguration() {
+    public RestApiConfiguration() {
         packages("soya.framework.dovetails.batch.api");
         swaggerConfig();
     }

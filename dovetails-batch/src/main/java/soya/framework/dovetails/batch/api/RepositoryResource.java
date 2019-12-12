@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import soya.framework.dovetails.batch.service.DeploymentDescriptor;
-import soya.framework.dovetails.batch.service.RepositoryService;
+import soya.framework.dovetails.batch.service.DeploymentService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +18,7 @@ import java.util.List;
 @Api(value = "Deployment Service")
 public class RepositoryResource {
     @Autowired
-    RepositoryService repositoryService;
+    DeploymentService repositoryService;
 
     @GET
     @Path("/")

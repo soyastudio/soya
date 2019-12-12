@@ -14,21 +14,13 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class PipelineService implements ApplicationContextAware {
-    protected static PipelineService instance;
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public abstract class PipelineService {
 
     @Autowired
     private Scheduler scheduler;
@@ -46,16 +38,6 @@ public abstract class PipelineService implements ApplicationContextAware {
     private JobOperator jobOperator;
 
     protected PipelineService() {
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @PostConstruct
-    public void init() {
-        instance = this;
     }
 
     public List<String> getJobNames() {
@@ -115,9 +97,5 @@ public abstract class PipelineService implements ApplicationContextAware {
             throw new RuntimeException(e);
         }
 
-    }
-
-    public static PipelineService getInstance() {
-        return instance;
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 import soya.framework.dovetails.batch.service.*;
 
 import javax.annotation.PostConstruct;
@@ -61,12 +60,12 @@ public class ServerConfiguration {
     }
 
     @Bean
-    public DeploymentService repositoryService() {
+    public PipelineMonitoringService repositoryService() {
         File repository = new File(home, "pipeline");
         if (!repository.exists()) {
             repository.mkdirs();
         }
-        return new DefaultDeploymentService(repository);
+        return new DefaultPipelineMonitoringService(repository);
     }
 
     @Bean
@@ -196,15 +195,15 @@ public class ServerConfiguration {
         }
     }
 
-    static class DefaultDeploymentService extends DeploymentService implements ServiceEventListener<DeploymentScanEvent> {
+    static class DefaultPipelineMonitoringService extends PipelineMonitoringService implements ServiceEventListener<DeploymentScanEvent> {
 
-        public DefaultDeploymentService(File home) {
+        public DefaultPipelineMonitoringService(File home) {
             super(home);
         }
 
         @Subscribe
         public void onEvent(DeploymentScanEvent event) {
-            System.out.println("------------------- heartbeat: " + event.getCount());
+            refresh();
         }
     }
 

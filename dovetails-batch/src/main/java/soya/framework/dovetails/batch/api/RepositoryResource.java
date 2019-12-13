@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import soya.framework.dovetails.batch.service.DeploymentDescriptor;
-import soya.framework.dovetails.batch.service.DeploymentService;
+import soya.framework.dovetails.batch.service.PipelineMonitoringService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +18,7 @@ import java.util.List;
 @Api(value = "Deployment Service")
 public class RepositoryResource {
     @Autowired
-    DeploymentService repositoryService;
+    PipelineMonitoringService repositoryService;
 
     @GET
     @Path("/")
@@ -30,6 +30,27 @@ public class RepositoryResource {
         }
         return Response.status(200).entity(descriptors).build();
     }
+
+    @GET
+    @Path("/refresh")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response refresh() {
+        repositoryService.refresh();
+        while (repositoryService.isBusy()) {
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<DeploymentDescriptor> descriptors = new ArrayList<>();
+        for (String d : repositoryService.getDeployments()) {
+            descriptors.add(new DeploymentDescriptor(repositoryService.getDeployment(d)));
+        }
+        return Response.status(200).entity(descriptors).build();
+    }
+
 
     @GET
     @Path("/{name}")
@@ -45,4 +66,5 @@ public class RepositoryResource {
         DeploymentDescriptor dd = repositoryService.deploy(json);
         return Response.status(200).entity(dd).build();
     }
+
 }

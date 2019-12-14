@@ -9,14 +9,14 @@ public class Deployment {
     private File configFile;
     private Pipeline pipeline;
 
-    private DeploymentState state;
+    private State state;
     private long lastCheckedTime;
 
     public Deployment(File base, File configFile) {
         this.base = base;
         this.configFile = configFile;
         this.pipeline = Pipeline.fromJson(configFile);
-        this.state = DeploymentState.NEW;
+        this.state = State.NEW;
         this.lastCheckedTime = System.currentTimeMillis();
     }
 
@@ -24,11 +24,11 @@ public class Deployment {
         return base.getName();
     }
 
-    public DeploymentState getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(DeploymentState state) {
+    public void setState(State state) {
         this.state = state;
     }
 
@@ -52,18 +52,18 @@ public class Deployment {
         return new GsonBuilder().setPrettyPrinting().create().toJson(pipeline);
     }
 
-    public DeploymentState refresh(long timestamp) {
+    public State refresh(long timestamp) {
         if (!configFile.exists()) {
-            this.state = DeploymentState.REMOVED;
+            this.state = State.REMOVED;
         } else if (configFile.lastModified() > lastCheckedTime) {
-            this.state = DeploymentState.UPDATED;
+            this.state = State.UPDATED;
         }
 
         this.lastCheckedTime = timestamp;
         return state;
     }
 
-    static enum DeploymentState {
+    static enum State {
         NEW, DEPLOYING, DEPLOYED, UPDATED, REMOVING, REMOVED;
     }
 

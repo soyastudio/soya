@@ -7,13 +7,15 @@ import org.quartz.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cache.Cache;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
-import soya.framework.dovetails.batch.service.*;
+import soya.framework.dovetails.batch.server.*;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
@@ -21,28 +23,54 @@ import java.util.Properties;
 
 @Configuration
 public class ServerConfiguration {
+
     private static final String SERVER_CONFIGURATION_PREFIX = "soya.framework.dovetails.server.";
+    private static final String HOME = "home";
+    private static final String CONFIGURATION = "configuration";
+    private static final String GITHUB = "github";
+
+    // LOCAL DIR:
+    private static final String CONF = "conf";
+    private static final String GIT_REPOSITORY = "github";
+    private static final String PIPELINE = "pipeline";
+
+    private static final String WORKSPACE = "workspace";
 
     @Autowired
     private Environment environment;
 
     private File home;
     private File conf;
+    private File github;
+    private File workspace;
+
+    private File pipeline;
+
     private Properties configuration;
 
     @PostConstruct
-    public void init()  throws IOException{
-        home = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + "home"));
+    public void init() throws IOException {
+        home = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + HOME));
         if (!home.exists()) {
             home.mkdirs();
         }
-        conf = new File(home, "conf");
-        if(!conf.exists()) {
+        conf = new File(home, CONF);
+        if (!conf.exists()) {
             conf.mkdir();
         }
 
-        File configFile = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + "configuration"));
-        if(!configFile.exists()) {
+
+        github = new File(home, GIT_REPOSITORY);
+        if(!github.exists()) {
+            github.mkdir();
+        }
+        workspace = new File(home, WORKSPACE);
+        if(!workspace.exists()) {
+            workspace.mkdir();
+        }
+
+        File configFile = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + CONFIGURATION));
+        if (!configFile.exists()) {
             configFile.createNewFile();
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("server.properties");
             OutputStream os = new FileOutputStream(configFile);
@@ -60,12 +88,23 @@ public class ServerConfiguration {
     }
 
     @Bean
-    public PipelineMonitoringService repositoryService() {
-        File repository = new File(home, "pipeline");
-        if (!repository.exists()) {
-            repository.mkdirs();
+    public SecurityService securityService() {
+        return new DefaultSecurityService();
+    }
+
+    @Bean
+    public GithubService githubService() {
+        String url = environment.getProperty(SERVER_CONFIGURATION_PREFIX + GITHUB);
+        return new DefaultGithubService(url, github, workspace);
+    }
+
+    @Bean
+    public PipelineMonitoringService pipelineMonitoringService() {
+        File pipeline = new File(home, PIPELINE);
+        if (!pipeline.exists()) {
+            pipeline.mkdir();
         }
-        return new DefaultPipelineMonitoringService(repository);
+        return new DefaultPipelineMonitoringService(pipeline);
     }
 
     @Bean
@@ -74,46 +113,8 @@ public class ServerConfiguration {
     }
 
     @Bean
-    public SecurityService securityService() throws IOException {
-        File file = new File(conf, SecurityService.SECURITY_KEY_FILE);
-        if(!file.exists()) {
-            file.createNewFile();
-        }
-        return new DefaultSecurityService(file);
-    }
-
-    static class KeygenJob extends Heartbeat<KeygenEvent> {
-        @Override
-        protected KeygenEvent nextBeat() {
-            return new KeygenEvent();
-        }
-    }
-
-    static class DeploymentScanJob extends Heartbeat<DeploymentScanEvent> {
-
-        @Override
-        protected DeploymentScanEvent nextBeat() {
-            return new DeploymentScanEvent();
-        }
-    }
-
-    static class KeygenEvent extends HeartbeatEvent {
-        protected KeygenEvent() {
-        }
-    }
-
-    static class DeploymentScanEvent extends HeartbeatEvent {
-    }
-
-    static class PipelineScanEvent implements ServiceEvent {
-
-    }
-
-    static class PipelineScanJob implements Job {
-        @Override
-        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            Server.getInstance().publish(new PipelineScanEvent());
-        }
+    public EventStoreManager eventStoreManager() {
+        return new DefaultEventStoreManager();
     }
 
     static class DefaultServer extends Server implements ApplicationContextAware {
@@ -122,7 +123,11 @@ public class ServerConfiguration {
         @Autowired
         private Scheduler scheduler;
 
+        @Autowired
+        private CaffeineCacheManager caffeineCacheManager;
+
         private EventBus eventBus;
+        private Cache cache;
 
         protected DefaultServer(File home, Properties configuration) {
             super();
@@ -141,13 +146,15 @@ public class ServerConfiguration {
         @EventListener(classes = {ApplicationReadyEvent.class})
         public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
             try {
+                cache = caffeineCacheManager.getCache("Event");
+
                 // register service event listeners:
                 applicationContext.getBeansOfType(ServiceEventListener.class).values().forEach(e -> {
                     eventBus.register(e);
                 });
 
                 // keygen:
-                JobDetail keyGenJob = JobBuilder.newJob(KeygenJob.class).withIdentity("keygen", "heartbeat")
+                JobDetail keyGenJob = JobBuilder.newJob(KeyGen.class).withIdentity("keygen", "heartbeat")
                         .build();
 
                 Trigger keygenTrigger = TriggerBuilder.newTrigger().withIdentity("keygen_trigger", "heartbeat")
@@ -157,32 +164,18 @@ public class ServerConfiguration {
                 scheduler.scheduleJob(keyGenJob, keygenTrigger);
 
                 // scan:
-                JobDetail scanJob = JobBuilder.newJob(DeploymentScanJob.class)
+                JobDetail scanJob = JobBuilder.newJob(PipelineScanJob.class)
                         .withIdentity("scan", "heartbeat")
                         .build();
 
                 Trigger scanTrigger = TriggerBuilder.newTrigger().withIdentity("scan_trigger", "heartbeat")
                         .startNow()
                         .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                                .withIntervalInSeconds(Integer.parseInt("10"))
+                                .withIntervalInSeconds(Integer.parseInt("30"))
                                 .repeatForever())
                         .build();
 
                 scheduler.scheduleJob(scanJob, scanTrigger);
-
-                // pipeline scan:
-                JobDetail pipelineScanJob = JobBuilder.newJob(PipelineScanJob.class)
-                        .withIdentity("pipeline-scan", "heartbeat")
-                        .build();
-
-                Trigger pipelineScanTrigger = TriggerBuilder.newTrigger().withIdentity("pipeline_scan_trigger", "heartbeat")
-                        .startNow()
-                        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                                .withIntervalInSeconds(Integer.parseInt("300"))
-                                .repeatForever())
-                        .build();
-
-                scheduler.scheduleJob(pipelineScanJob, pipelineScanTrigger);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -192,37 +185,78 @@ public class ServerConfiguration {
         @Override
         public void publish(ServiceEvent event) {
             eventBus.post(event);
+            if (event instanceof TraceableEvent) {
+                TraceableEvent traceableEvent = (TraceableEvent) event;
+                cache.put(traceableEvent.getId(), traceableEvent);
+            }
         }
     }
 
-    static class DefaultPipelineMonitoringService extends PipelineMonitoringService implements ServiceEventListener<DeploymentScanEvent> {
+    static class DefaultGithubService extends GithubService {
+
+        protected DefaultGithubService(String uri, File directory, File workspace) {
+            super(uri, directory, workspace);
+        }
+    }
+
+    static class DefaultPipelineMonitoringService extends PipelineMonitoringService implements ServiceEventListener<PipelineScanEvent> {
 
         public DefaultPipelineMonitoringService(File home) {
             super(home);
         }
 
         @Subscribe
-        public void onEvent(DeploymentScanEvent event) {
+        public void onEvent(PipelineScanEvent repositoryScanEvent) {
             refresh();
         }
     }
 
-    static class DefaultSecurityService extends SecurityService implements ServiceEventListener<SecurityKeygenEvent> {
-        protected DefaultSecurityService(File file) {
-            super(file);
+    static class DefaultPipelineService extends PipelineService implements ServiceEventListener<DeploymentEvent> {
+        public DefaultPipelineService() {
+            super();
         }
 
         @Subscribe
-        public void onEvent(SecurityKeygenEvent event) {
+        public void onEvent(DeploymentEvent event) {
+            Deployment deployment = event.getDeployment();
+            if (Deployment.State.NEW.equals(deployment.getState())) {
+                launch(deployment);
+
+            } else if (Deployment.State.UPDATED.equals(deployment.getState())) {
+
+            } else if (Deployment.State.REMOVED.equals(deployment.getState())) {
+                System.out.println("--------------------- undeploying pipeline: " + event.getDeployment().getName());
+            }
+        }
+    }
+
+    static class PipelineScanJob extends HeartbeatJob<PipelineScanEvent> {
+        @Override
+        protected PipelineScanEvent nextBeat() {
+            return new PipelineScanEvent();
+        }
+    }
+
+    static class PipelineScanEvent extends HeartbeatEvent {
+        protected PipelineScanEvent() {
+        }
+    }
+
+    static class DefaultSecurityService extends SecurityService implements ServiceEventListener<KeyGenEvent> {
+
+        @Subscribe
+        public void onEvent(KeyGenEvent event) {
             refresh();
         }
     }
 
-    static class DefaultPipelineService extends PipelineService implements ServiceEventListener<PipelineScanEvent> {
-
+    static class KeyGen extends HeartbeatJob<KeyGenEvent> {
         @Override
-        public void onEvent(PipelineScanEvent event) {
-            System.out.println("------------------- get event: " + event);
+        protected KeyGenEvent nextBeat() {
+            return new KeyGenEvent();
         }
+    }
+
+    static class KeyGenEvent extends HeartbeatEvent {
     }
 }

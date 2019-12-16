@@ -1,4 +1,4 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharSink;
@@ -6,6 +6,7 @@ import com.google.common.io.Files;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +49,20 @@ public abstract class PipelineMonitoringService {
         } else {
             this.scanning = true;
             ((Runnable) () -> {
+                long start = System.currentTimeMillis();
                 File[] files = home.listFiles();
                 for (File dir : files) {
+
+                    File dm = new File(dir, ".dm");
+                    if(dm.exists()) {
+                        try {
+                            FileUtils.forceDelete(dm);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+
                     if (!deployments.containsKey(dir.getName()) && dir.isDirectory()) {
                         File wf = new File(dir, CONFIG_FILE_NAME);
                         if (wf.exists() && wf.isFile()) {
@@ -59,6 +72,12 @@ public abstract class PipelineMonitoringService {
                                 deployments.put(name, deployment);
 
                             }
+                        } else  {
+                            try {
+                                wf.createNewFile();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                 }
@@ -67,19 +86,19 @@ public abstract class PipelineMonitoringService {
                 List<String> ls = new ArrayList<>(deployments.keySet());
                 ls.forEach(e -> {
                     Deployment deployment = deployments.get(e);
-                    Deployment.DeploymentState state = deployment.refresh(timestamp);
-                    System.out.println("---------- " + deployment.getName() + ": " + state);
+                    Deployment.State state = deployment.refresh(timestamp);
+                    if (state.equals(Deployment.State.NEW)) {
+                        Server.getInstance().publish(new DeploymentEvent(deployment));
 
-                    if (state.equals(Deployment.DeploymentState.NEW)) {
-                        deploy(deployment);
+                    } else if (state.equals(Deployment.State.UPDATED)) {
+                        Server.getInstance().publish(new DeploymentEvent(deployment));
 
-                    } else if (state.equals(Deployment.DeploymentState.UPDATED)) {
-                        redeploy(deployment);
-
-                    } else if (state.equals(Deployment.DeploymentState.REMOVED)) {
-                        undeploy(deployment);
+                    } else if (state.equals(Deployment.State.REMOVED)) {
+                        Server.getInstance().publish(new DeploymentEvent(deployment));
+                        deployments.remove(deployment.getName());
                     }
                 });
+
                 this.scanning = false;
 
             }).run();
@@ -88,17 +107,15 @@ public abstract class PipelineMonitoringService {
 
     }
 
-    private void deploy(Deployment deployment) {
-        deployment.setState(Deployment.DeploymentState.DEPLOYED);
-    }
-
-    private void redeploy(Deployment deployment) {
-        System.out.println("============== redeploying...");
-        deployment.setState(Deployment.DeploymentState.DEPLOYED);
-    }
-
-    private void undeploy(Deployment deployment) {
-
+    public void delete(String name) {
+        File dir = new File(home, name);
+        if(dir.exists()) {
+            try {
+                FileUtils.forceDelete(dir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public String[] getDeployments() {
@@ -107,8 +124,8 @@ public abstract class PipelineMonitoringService {
         return list.toArray(new String[list.size()]);
     }
 
-    public DeploymentDescriptor deploy(String json) throws IOException {
-        JsonElement jsonElement = new JsonParser().parse(json);
+    public Deployment deploy(String json) throws IOException {
+        JsonElement jsonElement = JsonParser.parseString(json);
         JsonObject obj = jsonElement.getAsJsonObject();
 
         JsonObject metadata = obj.get("metadata").getAsJsonObject();
@@ -124,7 +141,7 @@ public abstract class PipelineMonitoringService {
             sink.write(json);
 
             Deployment deployment = new Deployment(dir, configFile);
-            return new DeploymentDescriptor(deployment);
+            return deployment;
         }
 
         return null;

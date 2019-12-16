@@ -1,10 +1,8 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ExecutionContext;
-
-import java.util.UUID;
 
 public class PipelineWorkflow implements Job {
     private Pipeline pipeline;
@@ -15,7 +13,7 @@ public class PipelineWorkflow implements Job {
 
     @Override
     public String getName() {
-        return pipeline.getMetadata().getName();
+        return pipeline.getName();
     }
 
     @Override
@@ -26,10 +24,6 @@ public class PipelineWorkflow implements Job {
     @Override
     public void execute(JobExecution jobExecution) {
         ExecutionContext context = jobExecution.getExecutionContext();
-        String uuid = UUID.randomUUID().toString();
-        context.putString("uuid", uuid);
-
-        System.out.println("=============== result: " + uuid);
         jobExecution.setStatus(BatchStatus.COMPLETED);
     }
 

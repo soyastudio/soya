@@ -66,12 +66,4 @@ public class BatchConfiguration {
 
         return jobOperator;
     }
-
-/*
-    @Bean
-    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
-        JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
-        jobRegistryBeanPostProcessor.setJobRegistry(jobRegistry);
-        return jobRegistryBeanPostProcessor;
-    }*/
 }

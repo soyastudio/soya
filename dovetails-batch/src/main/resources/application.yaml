@@ -1,6 +1,12 @@
 server:
   port: 7833
 
+spring:
+  cache:
+    cache-names: Event
+    caffeine:
+      spec: maximumSize=500, expireAfterAccess=300s
+
 spring.quartz.properties:
   org.quartz.threadPool.threadCount: 15
 
@@ -8,3 +14,4 @@ soya.framework.dovetails:
   server:
     home: D:/dovetails
     configuration: D:/dovetails/conf/server.properties
+    github: https://github.com/soyastudio/EDIS.git

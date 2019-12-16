@@ -3,7 +3,7 @@ package soya.framework.dovetails.batch.api;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import soya.framework.dovetails.batch.service.PipelineService;
+import soya.framework.dovetails.batch.server.PipelineService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

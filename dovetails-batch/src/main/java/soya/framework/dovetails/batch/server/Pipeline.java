@@ -1,4 +1,4 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -13,15 +13,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Pipeline {
-    private Metadata metadata;
 
-    public Metadata getMetadata() {
-        return metadata;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public JobParameters getJobParameters() {
         Map<String, JobParameter> params = new LinkedHashMap<>();
-        params.put("name", new JobParameter(metadata.getName(), true));
+        params.put("name", new JobParameter(name, true));
         return new JobParameters(params);
     }
 
@@ -33,19 +38,6 @@ public class Pipeline {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public static class Metadata {
-        private String name;
-        private String table;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getTable() {
-            return table;
         }
     }
 }

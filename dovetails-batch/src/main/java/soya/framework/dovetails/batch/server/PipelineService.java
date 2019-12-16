@@ -1,6 +1,6 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
-import org.quartz.Scheduler;
+import org.quartz.*;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.DuplicateJobException;
@@ -16,14 +16,10 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class PipelineService {
-
-    @Autowired
-    private Scheduler scheduler;
+    private static PipelineService instance;
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -37,7 +33,11 @@ public abstract class PipelineService {
     @Autowired
     private JobOperator jobOperator;
 
+    @Autowired
+    private Scheduler scheduler;
+
     protected PipelineService() {
+        instance = this;
     }
 
     public List<String> getJobNames() {
@@ -47,10 +47,25 @@ public abstract class PipelineService {
     }
 
     public void launch(Deployment deployment) {
-        if (!jobOperator.getJobNames().contains(deployment.getName())) {
-            deploy(deployment);
+        if (deployment.deployable() && !jobOperator.getJobNames().contains(deployment.getName())) {
+            deployment.setState(Deployment.State.DEPLOYING);
+            new Timer().schedule(new PipelineLauncher(deployment), new Random().nextInt(60000));
         }
+    }
 
+    private void schedule(Pipeline pipeline) throws SchedulerException {
+
+        JobDetail job = JobBuilder.newJob(PipelineRunner.class).withIdentity(pipeline.getName(), "pipeline")
+                .build();
+
+        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(pipeline.getName(), "pipeline")
+                .startAt(new Date(System.currentTimeMillis() + new Random().nextInt(300000)))
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                        .withIntervalInSeconds(Integer.parseInt("300"))
+                        .repeatForever())
+                .build();
+
+        scheduler.scheduleJob(job, trigger);
     }
 
     public long startNext(String jobName) {
@@ -60,17 +75,7 @@ public abstract class PipelineService {
 
                 return id;
 
-            } catch (JobInstanceAlreadyCompleteException e) {
-                e.printStackTrace();
-            } catch (NoSuchJobException e) {
-                e.printStackTrace();
-            } catch (JobRestartException e) {
-                e.printStackTrace();
-            } catch (JobParametersInvalidException e) {
-                e.printStackTrace();
-            } catch (JobParametersNotFoundException e) {
-                e.printStackTrace();
-            } catch (JobExecutionAlreadyRunningException e) {
+            } catch (JobInstanceAlreadyCompleteException | NoSuchJobException | JobRestartException | JobParametersInvalidException | JobParametersNotFoundException | JobExecutionAlreadyRunningException e) {
                 e.printStackTrace();
             }
         }
@@ -91,11 +96,41 @@ public abstract class PipelineService {
                 e.printStackTrace();
             }
 
+            deployment.setState(Deployment.State.DEPLOYED);
+
             return execution;
 
         } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException | DuplicateJobException | NoSuchJobException e) {
             throw new RuntimeException(e);
+
         }
 
     }
+
+    static class PipelineLauncher extends TimerTask {
+        private Deployment deployment;
+
+        public PipelineLauncher(Deployment deployment) {
+            this.deployment = deployment;
+        }
+
+        @Override
+        public void run() {
+            instance.deploy(deployment);
+            try {
+                instance.schedule(deployment.getPipeline());
+            } catch (SchedulerException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    static class PipelineRunner implements Job {
+        @Override
+        public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+            JobKey key = jobExecutionContext.getJobDetail().getKey();
+            instance.startNext(key.getName());
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobFactory;
@@ -12,7 +12,7 @@ public class PipelineJobFactory implements JobFactory {
 
     @Override
     public String getJobName() {
-        return pipeline.getMetadata().getName();
+        return pipeline.getName();
     }
 
     @Override

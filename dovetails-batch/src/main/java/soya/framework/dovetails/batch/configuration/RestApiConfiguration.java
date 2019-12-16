@@ -19,6 +19,7 @@ public class RestApiConfiguration extends ResourceConfig implements ApplicationC
     private ApplicationContext applicationContext;
 
     public RestApiConfiguration() {
+        register(GsonMessageBodyWriter.class);
         packages("soya.framework.dovetails.batch.api");
         swaggerConfig();
     }

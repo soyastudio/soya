@@ -1,4 +1,4 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 public class SecurityKeygenEvent implements ServiceEvent {
 

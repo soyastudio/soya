@@ -1,10 +1,11 @@
-package soya.framework.dovetails.batch.service;
+package soya.framework.dovetails.batch.server;
 
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
 
 public class Deployment {
+
     private File base;
     private File configFile;
     private Pipeline pipeline;
@@ -18,6 +19,11 @@ public class Deployment {
         this.pipeline = Pipeline.fromJson(configFile);
         this.state = State.NEW;
         this.lastCheckedTime = System.currentTimeMillis();
+
+        if(pipeline == null) {
+            pipeline = new Pipeline();
+        }
+        pipeline.setName(base.getName());
     }
 
     public String getName() {
@@ -30,6 +36,10 @@ public class Deployment {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public boolean deployable() {
+        return state == State.NEW || state == State.UPDATED || state == State.REMOVED;
     }
 
     public long getLastCheckedTime() {
@@ -53,8 +63,12 @@ public class Deployment {
     }
 
     public State refresh(long timestamp) {
-        if (!configFile.exists()) {
+        if(!State.DEPLOYED.equals(state)) {
+            return state;
+
+        } else if (!configFile.exists()) {
             this.state = State.REMOVED;
+
         } else if (configFile.lastModified() > lastCheckedTime) {
             this.state = State.UPDATED;
         }
@@ -63,7 +77,7 @@ public class Deployment {
         return state;
     }
 
-    static enum State {
+    public static enum State {
         NEW, DEPLOYING, DEPLOYED, UPDATED, REMOVING, REMOVED;
     }
 

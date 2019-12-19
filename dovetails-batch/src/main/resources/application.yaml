@@ -1,6 +1,14 @@
 server:
   port: 7833
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+hawtio:
+  authenticationEnabled: false
+
 spring:
   cache:
     cache-names: Event
@@ -14,4 +22,4 @@ soya.framework.dovetails:
   server:
     home: D:/dovetails
     configuration: D:/dovetails/conf/server.properties
-    github: https://github.com/soyastudio/EDIS.git
+    prefix: soya.framework.dovetails.

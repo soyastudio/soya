@@ -1,7 +1,7 @@
 package soya.framework.dovetails.batch.server;
 
 import com.google.common.io.ByteStreams;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -56,20 +56,69 @@ public abstract class GithubService {
 
         File dest = new File(userDir, path);
         if (!dest.exists()) {
-            File parent = dest.getParentFile();
-            if (!parent.exists()) {
-                parent.mkdirs();
-            }
-            try {
-                dest.createNewFile();
-                InputStream is = new FileInputStream(source);
-                OutputStream os = new FileOutputStream(dest);
-                ByteStreams.copy(is, os);
-                os.close();
-                is.close();
+            if (dest.isDirectory()) {
+                copyFolder(source, dest);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                File parent = dest.getParentFile();
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                try {
+                    dest.createNewFile();
+                    InputStream is = new FileInputStream(source);
+                    OutputStream os = new FileOutputStream(dest);
+                    ByteStreams.copy(is, os);
+                    os.close();
+                    is.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void copyFolder(File source, File destination) {
+        if (source.isDirectory()) {
+            if (!destination.exists()) {
+                destination.mkdirs();
+            }
+
+            String files[] = source.list();
+
+            for (String file : files) {
+                File srcFile = new File(source, file);
+                File destFile = new File(destination, file);
+
+                copyFolder(srcFile, destFile);
+            }
+        } else {
+            InputStream in = null;
+            OutputStream out = null;
+
+            try {
+                in = new FileInputStream(source);
+                out = new FileOutputStream(destination);
+
+                byte[] buffer = new byte[1024];
+
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+            } catch (Exception e) {
+                try {
+                    in.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                try {
+                    out.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
@@ -136,11 +185,64 @@ public abstract class GithubService {
                 os.close();
                 is.close();
 
+                File parent = dest.getParentFile();
                 FileUtils.forceDelete(dest);
+                while (parent.listFiles().length == 0) {
+                    File forDelete = parent;
+                    parent = parent.getParentFile();
+                    FileUtils.forceDelete(forDelete);
+
+                    if (parent.equals(workspace)) {
+                        break;
+                    }
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void cleanWorkspace(String user) {
+        File dir = new File(workspace, user);
+        if (dir.exists()) {
+            try {
+                FileUtils.forceDelete(dir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void clearWorkspace() {
+        File[] dirs = workspace.listFiles();
+        for (File dir : dirs) {
+            if (dir.exists() && dir.isDirectory()) {
+                try {
+                    FileUtils.forceDelete(dir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+    public void importToWorkspace(String user, String path, String uri) {
+        File dir = new File(workspace, user);
+        dir = new File(dir, path);
+
+        dir.mkdirs();
+        try {
+            Git.cloneRepository()
+                    .setURI(uri)
+                    .setDirectory(dir)
+                    .call();
+            File gitMeta = new File(dir, ".git");
+            FileUtils.forceDelete(gitMeta);
+
+        } catch (GitAPIException | IOException e) {
+            e.printStackTrace();
         }
     }
 

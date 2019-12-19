@@ -57,6 +57,7 @@ public abstract class PipelineService {
 
         JobDetail job = JobBuilder.newJob(PipelineRunner.class).withIdentity(pipeline.getName(), "pipeline")
                 .build();
+        job.getJobDataMap().put("PIPELINE", pipeline);
 
         Trigger trigger = TriggerBuilder.newTrigger().withIdentity(pipeline.getName(), "pipeline")
                 .startAt(new Date(System.currentTimeMillis() + new Random().nextInt(300000)))
@@ -90,12 +91,6 @@ public abstract class PipelineService {
             JobFactory factory = new PipelineJobFactory(pipeline);
             jobRegistry.register(factory);
             JobExecution execution = jobLauncher.run(jobRegistry.getJob(factory.getJobName()), pipeline.getJobParameters());
-            try {
-                Thread.sleep(100L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             deployment.setState(Deployment.State.DEPLOYED);
 
             return execution;
@@ -128,8 +123,8 @@ public abstract class PipelineService {
     static class PipelineRunner implements Job {
         @Override
         public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-            JobKey key = jobExecutionContext.getJobDetail().getKey();
-            instance.startNext(key.getName());
+            Pipeline pipeline = (Pipeline) jobExecutionContext.getJobDetail().getJobDataMap().get("PIPELINE");
+            Server.getInstance().publish(new PipelineEvent(pipeline));
         }
     }
 

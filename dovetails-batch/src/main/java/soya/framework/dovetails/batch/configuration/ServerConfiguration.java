@@ -24,21 +24,20 @@ import java.util.Properties;
 @Configuration
 public class ServerConfiguration {
 
-    private static final String SERVER_CONFIGURATION_PREFIX = "soya.framework.dovetails.server.";
+    private static final String SPRING_CONFIGURATION_PREFIX = "soya.framework.dovetails.server.";
     private static final String HOME = "home";
     private static final String CONFIGURATION = "configuration";
-    private static final String GITHUB = "github";
 
     // LOCAL DIR:
     private static final String CONF = "conf";
     private static final String GIT_REPOSITORY = "github";
     private static final String PIPELINE = "pipeline";
-
     private static final String WORKSPACE = "workspace";
 
     @Autowired
     private Environment environment;
 
+    private String configPrefix;
     private File home;
     private File conf;
     private File github;
@@ -50,7 +49,8 @@ public class ServerConfiguration {
 
     @PostConstruct
     public void init() throws IOException {
-        home = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + HOME));
+
+        home = new File(environment.getProperty(SPRING_CONFIGURATION_PREFIX + HOME));
         if (!home.exists()) {
             home.mkdirs();
         }
@@ -61,15 +61,15 @@ public class ServerConfiguration {
 
 
         github = new File(home, GIT_REPOSITORY);
-        if(!github.exists()) {
+        if (!github.exists()) {
             github.mkdir();
         }
         workspace = new File(home, WORKSPACE);
-        if(!workspace.exists()) {
+        if (!workspace.exists()) {
             workspace.mkdir();
         }
 
-        File configFile = new File(environment.getProperty(SERVER_CONFIGURATION_PREFIX + CONFIGURATION));
+        File configFile = new File(environment.getProperty(SPRING_CONFIGURATION_PREFIX + CONFIGURATION));
         if (!configFile.exists()) {
             configFile.createNewFile();
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("server.properties");
@@ -78,7 +78,8 @@ public class ServerConfiguration {
             os.close();
             is.close();
         }
-        Properties configuration = new Properties();
+
+        configuration = new Properties();
         configuration.load(new FileInputStream(configFile));
     }
 
@@ -94,7 +95,7 @@ public class ServerConfiguration {
 
     @Bean
     public GithubService githubService() {
-        String url = environment.getProperty(SERVER_CONFIGURATION_PREFIX + GITHUB);
+        String url = configuration.getProperty("service.github.url");
         return new DefaultGithubService(url, github, workspace);
     }
 
@@ -110,6 +111,11 @@ public class ServerConfiguration {
     @Bean
     public PipelineService pipelineService() {
         return new DefaultPipelineService();
+    }
+
+    @Bean
+    public PipelineInvokeService pipelineInvokeService(PipelineService pipelineService) {
+        return new PipelineInvokeService(pipelineService);
     }
 
     @Bean
@@ -154,28 +160,35 @@ public class ServerConfiguration {
                 });
 
                 // keygen:
-                JobDetail keyGenJob = JobBuilder.newJob(KeyGen.class).withIdentity("keygen", "heartbeat")
-                        .build();
+                String keygenScheduler = configuration.getProperty("service.heartbean.keygen");
+                if (keygenScheduler != null) {
+                    JobDetail keyGenJob = JobBuilder.newJob(KeyGen.class).withIdentity("keygen", "heartbeat")
+                            .build();
 
-                Trigger keygenTrigger = TriggerBuilder.newTrigger().withIdentity("keygen_trigger", "heartbeat")
-                        .startNow()
-                        .withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 * * * ?"))
-                        .build();
-                scheduler.scheduleJob(keyGenJob, keygenTrigger);
+                    Trigger keygenTrigger = TriggerBuilder.newTrigger().withIdentity("keygen_trigger", "heartbeat")
+                            .startNow()
+                            .withSchedule(CronScheduleBuilder.cronSchedule(keygenScheduler))
+                            .build();
+                    scheduler.scheduleJob(keyGenJob, keygenTrigger);
+
+                }
 
                 // scan:
-                JobDetail scanJob = JobBuilder.newJob(PipelineScanJob.class)
-                        .withIdentity("scan", "heartbeat")
-                        .build();
+                String scanScheduler = configuration.getProperty("service.heartbeat.scanner");
+                if (scanScheduler != null) {
+                    JobDetail scanJob = JobBuilder.newJob(PipelineScanJob.class)
+                            .withIdentity("scan", "heartbeat")
+                            .build();
 
-                Trigger scanTrigger = TriggerBuilder.newTrigger().withIdentity("scan_trigger", "heartbeat")
-                        .startNow()
-                        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                                .withIntervalInSeconds(Integer.parseInt("30"))
-                                .repeatForever())
-                        .build();
+                    Trigger scanTrigger = TriggerBuilder.newTrigger().withIdentity("scan_trigger", "heartbeat")
+                            .startNow()
+                            .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                                    .withIntervalInSeconds(Integer.parseInt(scanScheduler))
+                                    .repeatForever())
+                            .build();
 
-                scheduler.scheduleJob(scanJob, scanTrigger);
+                    scheduler.scheduleJob(scanJob, scanTrigger);
+                }
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -193,7 +206,6 @@ public class ServerConfiguration {
     }
 
     static class DefaultGithubService extends GithubService {
-
         protected DefaultGithubService(String uri, File directory, File workspace) {
             super(uri, directory, workspace);
         }
@@ -227,6 +239,19 @@ public class ServerConfiguration {
             } else if (Deployment.State.REMOVED.equals(deployment.getState())) {
                 System.out.println("--------------------- undeploying pipeline: " + event.getDeployment().getName());
             }
+        }
+    }
+
+    static class PipelineInvokeService implements ServiceEventListener<PipelineEvent> {
+        private PipelineService pipelineService;
+
+        protected PipelineInvokeService(PipelineService pipelineService) {
+            this.pipelineService = pipelineService;
+        }
+
+        @Subscribe
+        public void onEvent(PipelineEvent pipelineEvent) {
+            pipelineService.startNext(pipelineEvent.getPipeline().getName());
         }
     }
 

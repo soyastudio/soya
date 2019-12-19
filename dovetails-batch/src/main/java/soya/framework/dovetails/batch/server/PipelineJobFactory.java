@@ -17,6 +17,7 @@ public class PipelineJobFactory implements JobFactory {
 
     @Override
     public Job createJob() {
+
         return new PipelineWorkflow(pipeline);
     }
 }

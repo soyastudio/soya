@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Command(name = "mustache-attribute", uri = "resource://mustache-attribute")
+@Command(group = "resource", name = "mustache-attribute")
 public class MustacheAttributesCommand extends ResourceCommand {
     private final String regex = "\\{\\{([A-Za-z_][A-Za-z0-9_.]*)}}";
     private final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);

@@ -1,0 +1,12 @@
+package soya.framework.kafka.commands;
+
+import soya.framework.commons.cli.Command;
+
+@Command(group = "kafka", name = "poll-to-end")
+public class PollToEndCommand extends KafkaCommand {
+
+    @Override
+    public String call() throws Exception {
+        return null;
+    }
+}

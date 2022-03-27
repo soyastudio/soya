@@ -244,6 +244,9 @@
 
     <modules>
         <module>soya-core</module>
+        <module>soya-tool</module>
+        <module>soya-boot</module>
+        <module>soya-albertsons</module>
     </modules>
 
 </project>

@@ -8,12 +8,25 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
-    String uri();
+
+    String group();
 
     String name();
 
-    String desc() default "TODO";
+    String desc() default "";
 
-    String[] cases() default {};
+    HttpMethod httpMethod() default HttpMethod.POST;
+
+    MediaType[] httpRequestTypes() default {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML};
+
+    MediaType[] httpResponseTypes() default {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML};
+
+    enum HttpMethod {
+        GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS;
+    }
+
+    enum MediaType {
+        TEXT_PLAIN, APPLICATION_JSON, APPLICATION_XML, HTML;
+    }
 
 }

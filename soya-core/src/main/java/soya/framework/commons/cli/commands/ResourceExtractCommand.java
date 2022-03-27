@@ -2,7 +2,7 @@ package soya.framework.commons.cli.commands;
 
 import soya.framework.commons.cli.Command;
 
-@Command(name = "extract", uri = "resource://extract")
+@Command(group = "resource", name = "extract")
 public class ResourceExtractCommand extends ResourceCommand {
 
     @Override

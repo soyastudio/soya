@@ -1,0 +1,10 @@
+server:
+  port: 9775
+
+spring:
+  jersey:
+    type: servlet
+    load-on-startup: 1
+
+workspace:
+  home: C:/github/Workshop/AppBuild

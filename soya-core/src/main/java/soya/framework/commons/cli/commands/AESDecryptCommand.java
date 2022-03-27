@@ -2,7 +2,7 @@ package soya.framework.commons.cli.commands;
 
 import soya.framework.commons.cli.Command;
 
-@Command(name = "aes-decrypt", uri = "resource://aes-decrypt")
+@Command(group = "resource", name = "aes-decrypt")
 public class AESDecryptCommand extends AESCommand {
 
     @Override

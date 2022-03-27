@@ -11,8 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 
-@Command(name = "unzip", uri = "resource://unzip")
+@Command(group = "resource", name = "unzip")
 public class UnzipCommand extends ResourceCommand {
+
     @Override
     public String call() throws Exception {
         byte[] encoded = contents().getBytes(Charset.defaultCharset());

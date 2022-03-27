@@ -17,8 +17,18 @@ public @interface CommandOption {
 
     boolean required() default false;
 
+    boolean dataForProcessing() default false;
+
     String defaultValue() default "";
 
+    String referenceKey() default "";
+
     String desc() default "";
+
+    ParamType paramType() default ParamType.HeaderParam;
+
+    enum ParamType {
+        HeaderParam, PathParam, QueryParam, ReferenceParam;
+    }
 
 }

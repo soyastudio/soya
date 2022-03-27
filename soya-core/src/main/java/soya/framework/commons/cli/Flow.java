@@ -437,7 +437,7 @@ public class Flow {
             Command command = commandType.getAnnotation(Command.class);
             this.command = command.name();
             this.name = command.name();
-            this.options = CommandRunner.parse(commandType);
+            this.options = CommandParser.parse(commandType);
         }
 
         @Override
@@ -535,7 +535,6 @@ public class Flow {
                 return System.getProperty(attribute);
 
             }
-
 
             throw new IllegalArgumentException("Cannot find attribute on current context: " + attribute);
         }

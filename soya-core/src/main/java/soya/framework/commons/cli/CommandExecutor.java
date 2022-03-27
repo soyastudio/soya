@@ -76,26 +76,6 @@ public final class CommandExecutor {
             throw new IllegalArgumentException("Cannot find CommandLineTemplate on method: " + methodName);
         }
 
-        OptionMapping[] optionMappings = clt.options();
-        for (OptionMapping optionMapping : optionMappings) {
-            String opt = optionMapping.option();
-            String value = null;
-            if (optionMapping.parameterIndex() >= 0) {
-                value = args[optionMapping.parameterIndex()].toString();
-            } else if (optionMapping.property() != null && !optionMapping.property().endsWith("")) {
-                if (delegate.context().property(optionMapping.property()) != null) {
-                    value = delegate.context().property(optionMapping.property());
-
-                } else if (System.getProperty(optionMapping.property()) != null) {
-                    value = System.getProperty(optionMapping.property());
-
-                }
-            }
-
-            arguments.add("-" + opt);
-            arguments.add(value);
-        }
-
         // FIXME:
         if (clt.template() != null && clt.template().trim().length() > 0) {
             StringTokenizer tokenizer = new StringTokenizer(clt.template());
@@ -343,6 +323,7 @@ public final class CommandExecutor {
                 });
                 builder.append("\n");
             });
+
             return builder.toString();
         }
 
@@ -379,7 +360,7 @@ public final class CommandExecutor {
         private void register(Class<? extends CommandCallable> cls) {
             Command command = cls.getAnnotation(Command.class);
             String name = command.name();
-            String uri = command.uri();
+            String uri = command.group() + "://" + command.name();
 
             classMap.put(name, cls);
             if(uri != null) {

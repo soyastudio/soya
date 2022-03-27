@@ -10,7 +10,5 @@ import java.lang.annotation.Target;
 public @interface CommandMapping {
     String command();
 
-    OptionMapping[] options() default {};
-
     String template() default "";
 }

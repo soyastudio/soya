@@ -7,23 +7,38 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class CommandExecutionContext {
-    private static CommandExecutionContext me;
+    private static CommandExecutionContext INSTANCE;
 
-    private Properties properties;
-    private ExecutorService executorService;
-    private Map<String, Class<? extends CommandCallable>> commands = new HashMap<>();
+    private final Properties properties;
+    private final ExecutorService executorService;
+    private final Map<Class<?>, Object> services;
+    private final Map<String, Class<? extends CommandCallable>> commands;
 
-    private CommandExecutionContext(Properties properties, ExecutorService executorService) {
+    private CommandExecutionContext(Properties properties, ExecutorService executorService, Map<Class<?>, Object> services) {
         this.properties = properties;
         this.executorService = executorService;
+        this.services = services;
+
+        this.commands = new HashMap<>();
+        Reflections reflections = new Reflections();
+        Set<Class<?>> subTypes =
+                reflections.getTypesAnnotatedWith(Command.class);
+        subTypes.forEach(c -> {
+            Command command = c.getAnnotation(Command.class);
+            if (command != null) {
+                String uri = command.group() + "://" + command.name();
+                commands.put(uri, (Class<? extends CommandCallable>) c);
+            }
+        });
+
+        INSTANCE = this;
     }
 
     public static CommandExecutionContext getInstance() {
-        if(me == null) {
-            me = builder().create();
+        if (INSTANCE == null) {
+            builder().create();
         }
-
-        return me;
+        return INSTANCE;
     }
 
     public Properties getProperties() {
@@ -40,6 +55,10 @@ public class CommandExecutionContext {
         return executorService;
     }
 
+    public <T> T getService(Class<T> type) {
+        return (T) services.get(type);
+    }
+
     public List<String> getCommands() {
         List<String> list = new ArrayList<>(commands.keySet());
         Collections.sort(list);
@@ -51,7 +70,7 @@ public class CommandExecutionContext {
         List<String> list = new ArrayList<>();
         commands.entrySet().forEach(e -> {
             String uri = e.getKey();
-            if(uri.startsWith(prefix)) {
+            if (uri.startsWith(prefix)) {
                 list.add(uri);
             }
         });
@@ -64,7 +83,7 @@ public class CommandExecutionContext {
     }
 
     public static Builder builder() {
-        if (me != null) {
+        if (INSTANCE != null) {
             throw new IllegalStateException("CommandExecutionContext already created");
         }
 
@@ -75,6 +94,7 @@ public class CommandExecutionContext {
         private Properties properties = new Properties();
         private ExecutorService executorService;
         private Set<String> scanPackages = new HashSet<>();
+        private Map<Class<?>, Object> services = new HashMap<>();
 
         private Builder() {
         }
@@ -95,9 +115,14 @@ public class CommandExecutionContext {
         }
 
         public Builder addScanPackages(String... packageNames) {
-            for(String pkg: packageNames) {
+            for (String pkg : packageNames) {
                 scanPackages.add(pkg);
             }
+            return this;
+        }
+
+        public <T> Builder register(T t, Class<T> type) {
+            services.put(type, t);
             return this;
         }
 
@@ -106,20 +131,7 @@ public class CommandExecutionContext {
                 executorService = Executors.newSingleThreadExecutor();
             }
 
-            me = new CommandExecutionContext(properties, executorService);
-
-            Reflections reflections = new Reflections();
-            Set<Class<?>> subTypes =
-                    reflections.getTypesAnnotatedWith(Command.class);
-            subTypes.forEach(c -> {
-                Command command = c.getAnnotation(Command.class);
-                if (command != null) {
-                    String uri = command.group() + "://" + command.name();
-                    me.commands.put(uri, (Class<? extends CommandCallable>) c);
-                }
-            });
-
-            return me;
+            return new CommandExecutionContext(properties, executorService, services);
         }
     }
 }

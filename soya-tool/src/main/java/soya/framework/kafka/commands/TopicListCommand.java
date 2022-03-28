@@ -4,7 +4,7 @@ import soya.framework.commons.cli.Command;
 import soya.framework.commons.cli.CommandOption;
 import soya.framework.kafka.KafkaUtils;
 
-@Command(group = "kafka", name = "topics")
+@Command(group = "kafka", name = "topics", httpMethod = Command.HttpMethod.GET)
 public class TopicListCommand extends KafkaCommand {
 
     @CommandOption(option = "q", longOption = "query")

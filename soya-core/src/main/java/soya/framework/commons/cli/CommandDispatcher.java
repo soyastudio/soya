@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.*;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public abstract class CommandDispatcher {
@@ -63,7 +62,7 @@ public abstract class CommandDispatcher {
         StringTokenizer tokenizer = new StringTokenizer(arguments);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if(token.contains("{") && token.contains("}")) {
+            if (token.contains("{") && token.contains("}")) {
                 token = replace(token, new Object[0]);
             }
 

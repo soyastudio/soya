@@ -8,7 +8,7 @@ public abstract class AbstractProduceCommand extends KafkaCommand {
     @CommandOption(option = "p", longOption = "produceTopic", required = true)
     protected String produceTopic;
 
-    @CommandOption(option = "m", longOption = "message", required = true)
+    @CommandOption(option = "m", longOption = "message", required = true, dataForProcessing = true)
     protected String message;
 
 

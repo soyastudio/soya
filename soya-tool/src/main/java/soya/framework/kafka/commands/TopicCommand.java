@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Command(group = "kafka", name = "topic")
+@Command(group = "kafka", name = "topic", httpMethod = Command.HttpMethod.GET)
 public class TopicCommand extends KafkaCommand {
 
     @CommandOption(option = "c", longOption = "topic", required = true)

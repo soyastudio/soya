@@ -556,7 +556,6 @@ public class Flow {
             for (Callback callback : callbacks) {
                 callback.onSuccess(session);
             }
-
         }
     }
 

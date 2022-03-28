@@ -5,7 +5,7 @@ import soya.framework.commons.cli.Command;
 import soya.framework.commons.cli.CommandOption;
 import soya.framework.kafka.KafkaUtils;
 
-@Command(group = "kafka", name = "consume")
+@Command(group = "kafka", name = "consume", httpMethod = Command.HttpMethod.GET)
 public class ConsumeCommand extends KafkaCommand {
 
     @CommandOption(option = "c", longOption = "consumeTopic", required = true)

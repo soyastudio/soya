@@ -3,6 +3,7 @@ package soya.framework.kafka;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.KafkaAdminClient;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -26,6 +27,10 @@ public class KafkaClientFactory {
     private Properties consumerProperties;
     private Properties adminProperties;
     private Properties streamProperties;
+
+    private KafkaProducer producer;
+    private KafkaConsumer consumer;
+    private AdminClient adminClient;
 
     static {
         try {
@@ -124,20 +129,29 @@ public class KafkaClientFactory {
     }
 
     public KafkaProducer createKafkaProducer() {
-        return new KafkaProducer(producerProperties);
+        if(producer == null) {
+            producer = new KafkaProducer(producerProperties);
+        }
+        return producer;
     }
 
     public KafkaConsumer createKafkaConsumer() {
-        return new KafkaConsumer(consumerProperties);
+        if(consumer == null) {
+            consumer = new KafkaConsumer(consumerProperties);
+        }
+        return consumer;
     }
 
     public AdminClient createAdminClient() {
-        return AdminClient.create(adminProperties);
+        if(adminClient == null) {
+            adminClient = AdminClient.create(adminProperties);
+        }
+        return adminClient;
     }
 
     public static KafkaClientFactory getInstance(String env) {
-        String name = env == null? "LOCAL" : env.toUpperCase();
-        if(!factories.containsKey(name)) {
+        String name = env == null ? "LOCAL" : env.toUpperCase();
+        if (!factories.containsKey(name)) {
             factories.put(name, new KafkaClientFactory(name));
         }
 

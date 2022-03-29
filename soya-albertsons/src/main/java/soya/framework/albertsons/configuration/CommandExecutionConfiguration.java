@@ -18,6 +18,9 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
     @Value("${workspace.home}")
     private String workspaceHome;
 
+    @Value("${ant.work.home}")
+    private String antWorkHome;
+
     @Bean
     ExecutorService commandExecutorService() {
         return Executors.newFixedThreadPool(10);
@@ -28,6 +31,7 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
         return CommandExecutionContext.builder()
                 .setExecutorService(service)
                 .setProperty("workspace.home", workspaceHome)
+                .setProperty("ant.work.home", antWorkHome)
                 .create();
     }
 

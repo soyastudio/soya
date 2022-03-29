@@ -1,6 +1,5 @@
 package soya.framework.tool.ant;
 
-import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Ant;
 import soya.framework.commons.cli.Command;
 import soya.framework.commons.cli.CommandOption;

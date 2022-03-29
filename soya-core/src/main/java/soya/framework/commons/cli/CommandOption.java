@@ -28,7 +28,18 @@ public @interface CommandOption {
     ParamType paramType() default ParamType.HeaderParam;
 
     enum ParamType {
-        HeaderParam, PathParam, QueryParam, ReferenceParam;
+        PathParam, HeaderParam, QueryParam, ReferenceParam;
+
+        public static int indexOf(ParamType value) {
+            ParamType[] values = values();
+            for(int i = 0; i < values.length; i ++) {
+                if(values[i].equals(value)) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 
 }

@@ -12,7 +12,7 @@ public abstract class AbstractProduceCommand extends KafkaCommand {
     protected String message;
 
 
-    protected String getMessage() throws Exception{
+    protected String getMessage() throws Exception {
         return Resources.getResourceAsString(message);
     }
 }

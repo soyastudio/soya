@@ -15,7 +15,7 @@ public class PubAndSubCommand extends AbstractProduceCommand {
     @Override
     public String call() throws Exception {
         String msg = Resources.getResourceAsString(message);
-        ConsumerRecord<String, byte[]> record = KafkaUtils.pubAndSub(produceTopic, msg, consumeTopic, timeout, environment);
+        ConsumerRecord<String, byte[]> record = KafkaUtils.pubAndSub(consumeTopic, msg, produceTopic, timeout, environment);
 
         return new String(record.value());
     }

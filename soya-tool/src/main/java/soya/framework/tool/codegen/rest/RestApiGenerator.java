@@ -100,6 +100,7 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
                 params.add(field);
             }
         }
+        Collections.sort(params, new FieldComparator());
 
         for (int i = 0; i < params.size(); i++) {
             Field field = params.get(i);
@@ -132,9 +133,11 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
 
     private String path(Class<? extends CommandCallable> cls) {
         StringBuilder builder = new StringBuilder("/").append(cls.getAnnotation(Command.class).name());
+
         Field[] fields = CommandParser.getOptionFields(cls);
         List<Field> list = Arrays.asList(fields);
         Collections.sort(list, new FieldComparator());
+
         list.forEach(e -> {
             CommandOption commandOption = e.getAnnotation(CommandOption.class);
             if(commandOption.paramType().equals(CommandOption.ParamType.PathParam)) {
@@ -159,13 +162,17 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
     private String template(Field[] fields) {
         StringBuilder builder = new StringBuilder();
 
+        List<Field> list = Arrays.asList(fields);
+        Collections.sort(list, new FieldComparator());
+
         int index = 0;
-        for(int i = 0; i < fields.length; i ++) {
+        for(int i = 0; i < list.size(); i ++) {
+            Field field = list.get(i);
             if(i > 0) {
                 builder.append(" ");
             }
 
-            CommandOption mapping = fields[i].getAnnotation(CommandOption.class);
+            CommandOption mapping = field.getAnnotation(CommandOption.class);
             if(mapping.paramType().equals(CommandOption.ParamType.ReferenceParam) && !mapping.referenceKey().isEmpty()) {
                 builder.append("-" + mapping.option()).append(" {").append(mapping.referenceKey()).append("}");
 
@@ -184,6 +191,7 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
                 params.add(field);
             }
         }
+        Collections.sort(params, new FieldComparator());
 
         StringBuilder builder = new StringBuilder("new Object[]{");
         for(int i = 0; i < params.size(); i ++) {
@@ -209,7 +217,34 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
 
         @Override
         public int compare(Field o1, Field o2) {
-            return o1.getName().compareTo(o2.getName());
+            CommandOption commandOption1 = o1.getAnnotation(CommandOption.class);
+            CommandOption commandOption2 = o2.getAnnotation(CommandOption.class);
+
+            Class<?> cls1 = o1.getDeclaringClass();
+            Class<?> cls2 = o2.getDeclaringClass();
+
+            if(commandOption1.dataForProcessing() && !commandOption2.dataForProcessing()) {
+                return 1;
+
+            } else if(!commandOption1.dataForProcessing() && commandOption2.dataForProcessing()) {
+                return -1;
+
+            } else {
+                int paramDiff = CommandOption.ParamType.indexOf(commandOption1.paramType()) - CommandOption.ParamType.indexOf(commandOption2.paramType());
+                if(paramDiff != 0) {
+                    return paramDiff;
+
+                } else if (cls1.equals(cls2)) {
+                    return o1.getName().compareTo(o2.getName());
+
+                } else if (cls2.isAssignableFrom(cls1)) {
+                    return 1;
+
+                } else {
+                    return -1;
+                }
+
+            }
         }
     }
 

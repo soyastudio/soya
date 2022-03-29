@@ -43,7 +43,7 @@ public abstract class KafkaCommand implements CommandCallable<String> {
     protected String environment = "LOCAL";
 
     @CommandOption(option = "t", longOption = "timeout")
-    protected Long timeout = Long.valueOf(5000l);
+    protected Long timeout = Long.valueOf(30000l);
 
     protected KafkaProducer createKafkaProducer() {
         return KafkaClientFactory.getInstance(environment).createKafkaProducer();

@@ -69,14 +69,14 @@ public class KafkaController extends CommandDispatcher {
     }
 
     @GET
-    @Path("/consume/{environment}")
+    @Path("/consume/{consumeTopic}/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "consume", template = "-c {0} -f {1} -e {2} -t {3}")
-    public Response consume(@HeaderParam("consumeTopic") String consumeTopic, @HeaderParam("format") String format, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "consume", template = "-f {0} -c {1} -e {2} -t {3}")
+    public Response consume(@HeaderParam("format") String format, @PathParam("consumeTopic") String consumeTopic, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
         return Response
                 .ok(_dispatch("consume",
-                        new Object[]{consumeTopic, format, environment, timeout}))
+                        new Object[]{format, consumeTopic, environment, timeout}))
                 .build();
     }
 

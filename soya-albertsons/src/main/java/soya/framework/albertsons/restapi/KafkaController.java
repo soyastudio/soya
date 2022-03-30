@@ -36,11 +36,11 @@ public class KafkaController extends CommandDispatcher {
     @Path("/produce/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "produce", template = "-p {0} -m {1} -e {2} -t {3}")
-    public Response produce(@HeaderParam("produceTopic") String produceTopic, String message, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "produce", template = "-e {0} -t {1} -p {2} -m {3}")
+    public Response produce(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("produceTopic") String produceTopic, String message) throws Exception {
         return Response
                 .ok(_dispatch("produce",
-                        new Object[]{produceTopic, encodeMessage(message), environment, timeout}))
+                        new Object[]{environment, timeout, produceTopic, encodeMessage(message)}))
                 .build();
     }
 
@@ -48,11 +48,11 @@ public class KafkaController extends CommandDispatcher {
     @Path("/topics/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "topics", template = "-q {0} -e {1} -t {2}")
-    public Response topics(@HeaderParam("query") String query, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "topics", template = "-e {0} -t {1} -q {2}")
+    public Response topics(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("query") String query) throws Exception {
         return Response
                 .ok(_dispatch("topics",
-                        new Object[]{query, environment, timeout}))
+                        new Object[]{environment, timeout, query}))
                 .build();
     }
 
@@ -60,23 +60,23 @@ public class KafkaController extends CommandDispatcher {
     @Path("/topic/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "topic", template = "-c {0} -e {1} -t {2}")
-    public Response topic(@HeaderParam("topicName") String topicName, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "topic", template = "-e {0} -t {1} -c {2}")
+    public Response topic(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("topicName") String topicName) throws Exception {
         return Response
                 .ok(_dispatch("topic",
-                        new Object[]{topicName, environment, timeout}))
+                        new Object[]{environment, timeout, topicName}))
                 .build();
     }
 
     @GET
-    @Path("/consume/{consumeTopic}/{environment}")
+    @Path("/consume/{environment}/{consumeTopic}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "consume", template = "-f {0} -c {1} -e {2} -t {3}")
-    public Response consume(@HeaderParam("format") String format, @PathParam("consumeTopic") String consumeTopic, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "consume", template = "-e {0} -c {1} -t {2} -f {3}")
+    public Response consume(@PathParam("environment") String environment, @PathParam("consumeTopic") String consumeTopic, @HeaderParam("timeout") String timeout, @HeaderParam("format") String format) throws Exception {
         return Response
                 .ok(_dispatch("consume",
-                        new Object[]{format, consumeTopic, environment, timeout}))
+                        new Object[]{environment, consumeTopic, timeout, format}))
                 .build();
     }
 
@@ -84,11 +84,11 @@ public class KafkaController extends CommandDispatcher {
     @Path("/pub-and-sub/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "pub-and-sub", template = "-c {0} -p {1} -m {2} -e {3} -t {4}")
-    public Response pubAndSub(@HeaderParam("consumeTopic") String consumeTopic, @HeaderParam("produceTopic") String produceTopic, String message, @PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
+    @CommandMapping(command = "pub-and-sub", template = "-e {0} -t {1} -p {2} -c {3} -m {4}")
+    public Response pubAndSub(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("produceTopic") String produceTopic, @HeaderParam("consumeTopic") String consumeTopic, String message) throws Exception {
         return Response
                 .ok(_dispatch("pubAndSub",
-                        new Object[]{consumeTopic, produceTopic, encodeMessage(message), environment, timeout}))
+                        new Object[]{environment, timeout, produceTopic, consumeTopic, encodeMessage(message)}))
                 .build();
     }
 

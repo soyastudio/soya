@@ -65,16 +65,12 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
     }
 
     private void printCommandMethod(Class<? extends CommandCallable> cls, CodeBuilder builder) {
-
         Command command = cls.getAnnotation(Command.class);
-        String httpMethod = command.httpMethod().name();
+        CommandMethodMapping mapping = new CommandMethodMapping(cls);
+        List<Field> arguments = mapping.getArguments();
 
-        Field[] fields = CommandParser.getOptionFields(cls);
-        String methodName = command.name().replaceAll("-", "_");
-        methodName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, methodName);
-
-        builder.append("@", indent).appendLine(httpMethod);
-        builder.append("@Path(\"", indent).append(path(cls)).appendLine("\")");
+        builder.append("@", indent).appendLine(mapping.getHttpMethod());
+        builder.append("@Path(\"", indent).append(mapping.getPath()).appendLine("\")");
 
         if(command.httpRequestTypes().length > 0) {
             builder.append("@Consumes({", indent).append(mediaTypes(command.httpRequestTypes())).appendLine("})");
@@ -85,25 +81,16 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
         }
 
         builder.append("@CommandMapping(", indent)
-                .append("command = \"").append(command.name()).append("\"");
-        if(fields.length > 0) {
-            builder.append(", template = \"").append(template(fields)).append("\"");
-        }
+                .append("command = \"").append(mapping.getCommand()).append("\"")
+                .append(", template = \"").append(mapping.getTemplate()).append("\"");;
+
 
         builder.append(")").appendLine();
 
-        builder.append("public Response ", indent).append(methodName).append("(");
+        builder.append("public Response ", indent).append(mapping.getMethodName()).append("(");
 
-        List<Field> params = new ArrayList<>();
-        for(Field field: fields) {
-            if(field.getAnnotation(CommandOption.class).referenceKey().isEmpty()) {
-                params.add(field);
-            }
-        }
-        Collections.sort(params, new FieldComparator());
-
-        for (int i = 0; i < params.size(); i++) {
-            Field field = params.get(i);
+        for (int i = 0; i < arguments.size(); i++) {
+            Field field = arguments.get(i);
             CommandOption option = field.getAnnotation(CommandOption.class);
             if (i > 0) {
                 builder.append(", ");
@@ -121,31 +108,14 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
         builder.appendLine("return Response", indent)
                 .append(".ok(", indent + 2)
                 .append("_dispatch(\"")
-                .append(methodName)
+                .append(mapping.getMethodName())
                 .appendLine("\", ")
-                .append(arguments(fields), indent + 4)
+                .append(arguments(arguments), indent + 4)
                 .append(")")
                 .appendLine(")")
                 .appendLine(".build();", indent + 2);
         indent--;
         builder.appendLine("}", indent).appendLine();
-    }
-
-    private String path(Class<? extends CommandCallable> cls) {
-        StringBuilder builder = new StringBuilder("/").append(cls.getAnnotation(Command.class).name());
-
-        Field[] fields = CommandParser.getOptionFields(cls);
-        List<Field> list = Arrays.asList(fields);
-        Collections.sort(list, new FieldComparator());
-
-        list.forEach(e -> {
-            CommandOption commandOption = e.getAnnotation(CommandOption.class);
-            if(commandOption.paramType().equals(CommandOption.ParamType.PathParam)) {
-                builder.append("/{").append(e.getName()).append("}");
-            }
-        });
-
-        return builder.toString();
     }
 
     private String mediaTypes(Command.MediaType[] mediaTypes) {
@@ -184,25 +154,17 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
         return builder.toString();
     }
 
-    private String arguments(Field[] fields) {
-        List<Field> params = new ArrayList<>();
-        for(Field field: fields) {
-            if(field.getAnnotation(CommandOption.class).referenceKey().isEmpty()) {
-                params.add(field);
-            }
-        }
-        Collections.sort(params, new FieldComparator());
-
+    private String arguments(List<Field> fields) {
         StringBuilder builder = new StringBuilder("new Object[]{");
-        for(int i = 0; i < params.size(); i ++) {
-            Field field = params.get(i);
+        for(int i = 0; i < fields.size(); i ++) {
+            Field field = fields.get(i);
             if(i > 0) {
                 builder.append(", ");
             }
 
             CommandOption mapping = field.getAnnotation(CommandOption.class);
             if(mapping.dataForProcessing()) {
-                builder.append("encodeMessage(").append(fields[i].getName()).append(")");
+                builder.append("encodeMessage(").append(field.getName()).append(")");
             } else {
                 builder.append(field.getName());
 
@@ -211,6 +173,100 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
 
         builder.append("}");
         return builder.toString();
+    }
+
+    class CommandMethodMapping {
+        private Class<?> cls;
+
+        private String command;
+        private List<Field> fields;
+
+        private String httpMethod;
+        private String path;
+
+        private String template;
+        private String methodName;
+
+        private List<Field> arguments;
+
+        CommandMethodMapping(Class<? extends CommandCallable> cls) {
+            this.cls = cls;
+            Command command = cls.getAnnotation(Command.class);
+
+            this.command = command.name();
+            this.fields = Arrays.asList(CommandParser.getOptionFields(cls));
+            Collections.sort(fields, new FieldComparator());
+
+            this.httpMethod = command.httpMethod().name();
+
+            StringBuilder pathBuilder = new StringBuilder("/").append(cls.getAnnotation(Command.class).name());
+            fields.forEach(e -> {
+                CommandOption commandOption = e.getAnnotation(CommandOption.class);
+                if(commandOption.paramType().equals(CommandOption.ParamType.PathParam)) {
+                    pathBuilder.append("/{").append(e.getName()).append("}");
+                }
+            });
+            this.path = pathBuilder.toString();
+
+            StringBuilder templateBuilder = new StringBuilder();
+            int index = 0;
+            for(int i = 0; i < fields.size(); i ++) {
+                Field field = fields.get(i);
+                if(i > 0) {
+                    templateBuilder.append(" ");
+                }
+
+                CommandOption mapping = field.getAnnotation(CommandOption.class);
+                if(mapping.paramType().equals(CommandOption.ParamType.ReferenceParam) && !mapping.referenceKey().isEmpty()) {
+                    templateBuilder.append("-" + mapping.option()).append(" {").append(mapping.referenceKey()).append("}");
+
+                } else {
+                    templateBuilder.append("-" + mapping.option()).append(" {").append(index).append("}");
+                    index ++;
+                }
+            }
+            this.template = templateBuilder.toString();
+
+            methodName = command.name().replaceAll("-", "_");
+            methodName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, methodName);
+
+            this.arguments = new ArrayList<>();
+            fields.forEach(e -> {
+                CommandOption option = e.getAnnotation(CommandOption.class);
+                if(option.referenceKey().isEmpty()) {
+                    arguments.add(e);
+                }
+            });
+
+        }
+
+        public String getCommand() {
+            return command;
+        }
+
+        public List<Field> getFields() {
+            return fields;
+        }
+
+        public String getHttpMethod() {
+            return httpMethod;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public String getTemplate() {
+            return template;
+        }
+
+        public String getMethodName() {
+            return methodName;
+        }
+
+        public List<Field> getArguments() {
+            return arguments;
+        }
     }
 
     class FieldComparator implements Comparator<Field> {

@@ -28,7 +28,7 @@ public @interface CommandOption {
     ParamType paramType() default ParamType.HeaderParam;
 
     enum ParamType {
-        PathParam, HeaderParam, QueryParam, ReferenceParam;
+        ReferenceParam, PathParam, HeaderParam, QueryParam;
 
         public static int indexOf(ParamType value) {
             ParamType[] values = values();

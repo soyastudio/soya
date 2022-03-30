@@ -24,11 +24,11 @@ public class BodController extends CommandDispatcher {
     @Path("/mappings-override/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "mappings-override", template = "-o {0} -m {1} -h {workspace.home} -b {2}")
-    public Response mappingsOverride(String override, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "mappings-override", template = "-h {workspace.home} -b {0} -m {1} -o {2}")
+    public Response mappingsOverride(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, String override) throws Exception {
         return Response
                 .ok(_dispatch("mappingsOverride",
-                        new Object[]{encodeMessage(override), mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, encodeMessage(override)}))
                 .build();
     }
 
@@ -36,11 +36,11 @@ public class BodController extends CommandDispatcher {
     @Path("/arrays/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "arrays", template = "-c {0} -m {1} -h {workspace.home} -b {2}")
-    public Response arrays(@HeaderParam("construction") String construction, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "arrays", template = "-h {workspace.home} -b {0} -m {1} -c {2}")
+    public Response arrays(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, @HeaderParam("construction") String construction) throws Exception {
         return Response
                 .ok(_dispatch("arrays",
-                        new Object[]{construction, mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, construction}))
                 .build();
     }
 
@@ -48,11 +48,11 @@ public class BodController extends CommandDispatcher {
     @Path("/esql-validation/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "esql-validation", template = "-c {0} -m {1} -h {workspace.home} -b {2}")
-    public Response esqlValidation(String code, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "esql-validation", template = "-h {workspace.home} -b {0} -m {1} -c {2}")
+    public Response esqlValidation(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, String code) throws Exception {
         return Response
                 .ok(_dispatch("esqlValidation",
-                        new Object[]{encodeMessage(code), mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, encodeMessage(code)}))
                 .build();
     }
 
@@ -60,11 +60,11 @@ public class BodController extends CommandDispatcher {
     @Path("/construct-annotate/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "construct-annotate", template = "-m {0} -h {workspace.home} -b {1}")
-    public Response constructAnnotate(@HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "construct-annotate", template = "-h {workspace.home} -b {0} -m {1}")
+    public Response constructAnnotate(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile) throws Exception {
         return Response
                 .ok(_dispatch("constructAnnotate",
-                        new Object[]{mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile}))
                 .build();
     }
 
@@ -72,11 +72,11 @@ public class BodController extends CommandDispatcher {
     @Path("/array-annotate/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "array-annotate", template = "-m {0} -h {workspace.home} -b {1}")
-    public Response arrayAnnotate(@HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "array-annotate", template = "-h {workspace.home} -b {0} -m {1}")
+    public Response arrayAnnotate(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile) throws Exception {
         return Response
                 .ok(_dispatch("arrayAnnotate",
-                        new Object[]{mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile}))
                 .build();
     }
 
@@ -84,11 +84,11 @@ public class BodController extends CommandDispatcher {
     @Path("/xlsx-mappings/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "xlsx-mappings", template = "-f {0} -s {1} -h {workspace.home} -b {2}")
-    public Response xlsxMappings(@HeaderParam("mappingFile") String mappingFile, @HeaderParam("mappingSheet") String mappingSheet, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "xlsx-mappings", template = "-h {workspace.home} -b {0} -f {1} -s {2}")
+    public Response xlsxMappings(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, @HeaderParam("mappingSheet") String mappingSheet) throws Exception {
         return Response
                 .ok(_dispatch("xlsxMappings",
-                        new Object[]{mappingFile, mappingSheet, businessObject}))
+                        new Object[]{businessObject, mappingFile, mappingSheet}))
                 .build();
     }
 
@@ -120,11 +120,11 @@ public class BodController extends CommandDispatcher {
     @Path("/xpath-mappings/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "xpath-mappings", template = "-m {0} -h {workspace.home} -b {1}")
-    public Response xpathMappings(@HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "xpath-mappings", template = "-h {workspace.home} -b {0} -m {1}")
+    public Response xpathMappings(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile) throws Exception {
         return Response
                 .ok(_dispatch("xpathMappings",
-                        new Object[]{mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile}))
                 .build();
     }
 
@@ -132,11 +132,11 @@ public class BodController extends CommandDispatcher {
     @Path("/xpath-construct/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "xpath-construct", template = "-c {0} -m {1} -h {workspace.home} -b {2}")
-    public Response xpathConstruct(@HeaderParam("construction") String construction, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "xpath-construct", template = "-h {workspace.home} -b {0} -m {1} -c {2}")
+    public Response xpathConstruct(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, @HeaderParam("construction") String construction) throws Exception {
         return Response
                 .ok(_dispatch("xpathConstruct",
-                        new Object[]{construction, mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, construction}))
                 .build();
     }
 
@@ -168,11 +168,11 @@ public class BodController extends CommandDispatcher {
     @Path("/json-schema/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "json-schema", template = "-x {0} -h {workspace.home} -b {1}")
-    public Response jsonSchema(@HeaderParam("jsonSchemaFile") String jsonSchemaFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "json-schema", template = "-h {workspace.home} -b {0} -x {1}")
+    public Response jsonSchema(@PathParam("businessObject") String businessObject, @HeaderParam("jsonSchemaFile") String jsonSchemaFile) throws Exception {
         return Response
                 .ok(_dispatch("jsonSchema",
-                        new Object[]{jsonSchemaFile, businessObject}))
+                        new Object[]{businessObject, jsonSchemaFile}))
                 .build();
     }
 
@@ -180,11 +180,11 @@ public class BodController extends CommandDispatcher {
     @Path("/filter-mapping/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "filter-mapping", template = "-q {0} -m {1} -h {workspace.home} -b {2}")
-    public Response filterMapping(@HeaderParam("expression") String expression, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "filter-mapping", template = "-h {workspace.home} -b {0} -m {1} -q {2}")
+    public Response filterMapping(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, @HeaderParam("expression") String expression) throws Exception {
         return Response
                 .ok(_dispatch("filterMapping",
-                        new Object[]{expression, mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, expression}))
                 .build();
     }
 
@@ -192,11 +192,11 @@ public class BodController extends CommandDispatcher {
     @Path("/esql-gen/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "esql-gen", template = "-c {0} -m {1} -h {workspace.home} -b {2}")
-    public Response esqlGen(@HeaderParam("construction") String construction, @HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "esql-gen", template = "-h {workspace.home} -b {0} -m {1} -c {2}")
+    public Response esqlGen(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile, @HeaderParam("construction") String construction) throws Exception {
         return Response
                 .ok(_dispatch("esqlGen",
-                        new Object[]{construction, mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile, construction}))
                 .build();
     }
 
@@ -204,11 +204,11 @@ public class BodController extends CommandDispatcher {
     @Path("/mappings-validation/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "mappings-validation", template = "-m {0} -h {workspace.home} -b {1}")
-    public Response mappingsValidation(@HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "mappings-validation", template = "-h {workspace.home} -b {0} -m {1}")
+    public Response mappingsValidation(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile) throws Exception {
         return Response
                 .ok(_dispatch("mappingsValidation",
-                        new Object[]{mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile}))
                 .build();
     }
 
@@ -240,11 +240,11 @@ public class BodController extends CommandDispatcher {
     @Path("/json-sample/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "json-sample", template = "-x {0} -h {workspace.home} -b {1}")
-    public Response jsonSample(@HeaderParam("jsonSchemaFile") String jsonSchemaFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "json-sample", template = "-h {workspace.home} -b {0} -x {1}")
+    public Response jsonSample(@PathParam("businessObject") String businessObject, @HeaderParam("jsonSchemaFile") String jsonSchemaFile) throws Exception {
         return Response
                 .ok(_dispatch("jsonSample",
-                        new Object[]{jsonSchemaFile, businessObject}))
+                        new Object[]{businessObject, jsonSchemaFile}))
                 .build();
     }
 
@@ -264,11 +264,11 @@ public class BodController extends CommandDispatcher {
     @Path("/deprecated-mappings/{businessObject}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "deprecated-mappings", template = "-m {0} -h {workspace.home} -b {1}")
-    public Response deprecatedMappings(@HeaderParam("mappingFile") String mappingFile, @PathParam("businessObject") String businessObject) throws Exception {
+    @CommandMapping(command = "deprecated-mappings", template = "-h {workspace.home} -b {0} -m {1}")
+    public Response deprecatedMappings(@PathParam("businessObject") String businessObject, @HeaderParam("mappingFile") String mappingFile) throws Exception {
         return Response
                 .ok(_dispatch("deprecatedMappings",
-                        new Object[]{mappingFile, businessObject}))
+                        new Object[]{businessObject, mappingFile}))
                 .build();
     }
 

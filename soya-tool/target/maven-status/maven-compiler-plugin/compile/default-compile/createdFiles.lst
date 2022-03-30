@@ -138,6 +138,7 @@ soya\framework\commons\poi\MappingService$ConstructCommand.class
 soya\framework\tool\ant\AntTaskChain$AntTaskProcessor.class
 soya\framework\transform\schema\T123W$RendererBuilder.class
 soya\framework\tool\Main.class
+soya\framework\tool\codegen\rest\RestApiGenerator$CommandMethodMapping.class
 soya\framework\commons\poi\MappingService$MismatchCommand.class
 soya\framework\transform\schema\avro\SampleAvroGenerator$1.class
 soya\framework\tool\service\DataSourceBuilder$1.class

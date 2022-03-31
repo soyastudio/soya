@@ -32,6 +32,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>soya.framework</groupId>
+            <artifactId>soya-servlet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,6 +47,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jersey</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.joinfaces/primefaces-spring-boot-starter -->
+        <dependency>
+            <groupId>org.joinfaces</groupId>
+            <artifactId>primefaces-spring-boot-starter</artifactId>
+            <version>4.6.5</version>
         </dependency>
 
         <dependency>
@@ -55,6 +68,14 @@
             <artifactId>swagger-jersey2-jaxrs</artifactId>
             <version>1.5.22</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.glassfish/javax.el -->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.reflections</groupId>

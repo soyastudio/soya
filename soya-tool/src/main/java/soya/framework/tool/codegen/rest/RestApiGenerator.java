@@ -133,7 +133,6 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
         StringBuilder builder = new StringBuilder();
 
         List<Field> list = Arrays.asList(fields);
-        Collections.sort(list, new FieldComparator());
 
         int index = 0;
         for(int i = 0; i < list.size(); i ++) {
@@ -195,7 +194,6 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
 
             this.command = command.name();
             this.fields = Arrays.asList(CommandParser.getOptionFields(cls));
-            Collections.sort(fields, new FieldComparator());
 
             this.httpMethod = command.httpMethod().name();
 
@@ -268,41 +266,5 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
             return arguments;
         }
     }
-
-    class FieldComparator implements Comparator<Field> {
-
-        @Override
-        public int compare(Field o1, Field o2) {
-            CommandOption commandOption1 = o1.getAnnotation(CommandOption.class);
-            CommandOption commandOption2 = o2.getAnnotation(CommandOption.class);
-
-            Class<?> cls1 = o1.getDeclaringClass();
-            Class<?> cls2 = o2.getDeclaringClass();
-
-            if(commandOption1.dataForProcessing() && !commandOption2.dataForProcessing()) {
-                return 1;
-
-            } else if(!commandOption1.dataForProcessing() && commandOption2.dataForProcessing()) {
-                return -1;
-
-            } else {
-                int paramDiff = CommandOption.ParamType.indexOf(commandOption1.paramType()) - CommandOption.ParamType.indexOf(commandOption2.paramType());
-                if(paramDiff != 0) {
-                    return paramDiff;
-
-                } else if (cls1.equals(cls2)) {
-                    return o1.getName().compareTo(o2.getName());
-
-                } else if (cls2.isAssignableFrom(cls1)) {
-                    return 1;
-
-                } else {
-                    return -1;
-                }
-
-            }
-        }
-    }
-
 
 }

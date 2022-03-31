@@ -17,7 +17,7 @@ public class JerseyConfiguration extends ResourceConfig {
     public JerseyConfiguration() {
         register(GsonMessageBodyHandler.class);
         register(MultiPartFeature.class);
-        packages("soya.framework.springboot.api");
+        packages("soya.framework.albertsons.restapi");
 
         swaggerConfig();
     }
@@ -27,8 +27,8 @@ public class JerseyConfiguration extends ResourceConfig {
         this.register(SwaggerSerializers.class);
 
         BeanConfig swaggerConfigBean = new BeanConfig();
-        swaggerConfigBean.setConfigId("soyaframework");
-        swaggerConfigBean.setTitle("Soya Framework API");
+        swaggerConfigBean.setConfigId("Workshop");
+        swaggerConfigBean.setTitle("Workshop Server");
         //swaggerConfigBean.setVersion("v1");
         swaggerConfigBean.setContact("wenqun.soya@gmail.com");
         swaggerConfigBean.setSchemes(new String[]{"http"});
@@ -39,6 +39,4 @@ public class JerseyConfiguration extends ResourceConfig {
 
         return swaggerConfigBean.getSwagger();
     }
-
-
 }

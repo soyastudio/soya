@@ -111,7 +111,6 @@ soya\framework\tool\ant\AntTaskChain$DeleteProcessor.class
 soya\framework\transform\schema\support\MoneyTree.class
 soya\framework\tool\ant\JavaTaskProcessors$JavaTaskProcessor.class
 soya\framework\commons\poi\MappingService$MappingCommand.class
-soya\framework\tool\codegen\rest\RestApiGenerator$FieldComparator.class
 soya\framework\transform\schema\xs\XmlBeansUtils$XMLBuildInType.class
 soya\framework\tool\codegen\patterns\SingletonGenerator.class
 soya\framework\transform\schema\support\GenericBuilder$GenericAnnotatorBuilder.class

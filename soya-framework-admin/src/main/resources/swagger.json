@@ -1,0 +1,1471 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Workshop Server",
+    "contact" : {
+      "name" : "wenqun.soya@gmail.com"
+    }
+  },
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "ant"
+  }, {
+    "name" : "bod"
+  }, {
+    "name" : "Business Object Development Service"
+  }, {
+    "name" : "Command Service"
+  }, {
+    "name" : "kafka"
+  }, {
+    "name" : "resource"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/ant/mkdir" : {
+      "post" : {
+        "tags" : [ "ant" ],
+        "operationId" : "mkdir",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "dir",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/ant/build" : {
+      "post" : {
+        "tags" : [ "ant" ],
+        "operationId" : "build",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "baseDir",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "buildFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "task",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/create/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "create",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/mappings-override/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "mappingsOverride",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/arrays/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "arrays",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "construction",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/esql-validation/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "esqlValidation",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/sample-xml/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "sampleXml",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/json-schema/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "jsonSchema",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "jsonSchemaFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/json-sample/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "jsonSample",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "jsonSchemaFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/sample-avro/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "sampleAvro",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/array-annotate/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "arrayAnnotate",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/json-types/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "jsonTypes",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/json-type-mappings/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "jsonTypeMappings",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/xlsx-mappings/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "xlsxMappings",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "mappingSheet",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/xpath-mappings/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "xpathMappings",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/filter-mapping/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "filterMapping",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "expression",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/avsc/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "avsc",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/xpath-construct/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "xpathConstruct",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "construction",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/esql-gen/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "esqlGen",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "construction",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/mappings-validation/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "mappingsValidation",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/construct-annotate/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "constructAnnotate",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/deprecated-mappings/{businessObject}" : {
+      "post" : {
+        "tags" : [ "bod" ],
+        "operationId" : "deprecatedMappings",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "mappingFile",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/bod/schema/{businessObject}" : {
+      "get" : {
+        "tags" : [ "bod" ],
+        "operationId" : "schema",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "businessObject",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/create/{bod}" : {
+      "post" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "create_1",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/mappings/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "mappings",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/arrays/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "arrays_1",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/mappings-override/{bod}" : {
+      "post" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "overrideMappings",
+        "consumes" : [ "text/plain" ],
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/esql-validate/{bod}" : {
+      "post" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "esqlValidate",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/sample-xml/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "sampleXml_1",
+        "produces" : [ "application/xml" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/xlsx-mappings/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "xlsx",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/sample-source-json/{bod}" : {
+      "post" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "jsonSample_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/sample-avro/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "sampleAvro_1",
+        "produces" : [ "application/xml" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/array-annotate/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "arrayAnnotate_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/json-types/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "jsonTypes_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/source-schema/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "sourceSchema",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/mappings-validate/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "validateMappings",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/avsc/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "avsc_1",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/esql-gen/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "esqlGen_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/construct/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "construct",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/construct-annotate/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "constructAnnotate_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/edis/schema/{bod}" : {
+      "get" : {
+        "tags" : [ "Business Object Development Service" ],
+        "operationId" : "schema_1",
+        "produces" : [ "text/plain" ],
+        "parameters" : [ {
+          "name" : "bod",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/cmd/groups" : {
+      "get" : {
+        "tags" : [ "Command Service" ],
+        "operationId" : "groups",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/cmd/execute/{group}/{command}" : {
+      "post" : {
+        "tags" : [ "Command Service" ],
+        "operationId" : "execute",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "group",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "command",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "arguments",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/cmd/uri" : {
+      "post" : {
+        "tags" : [ "Command Service" ],
+        "operationId" : "uri",
+        "consumes" : [ "text/plain" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/cmd/command/{group}/{command}" : {
+      "get" : {
+        "tags" : [ "Command Service" ],
+        "operationId" : "command",
+        "consumes" : [ "text/plain" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "group",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "command",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/cmd/commands" : {
+      "get" : {
+        "tags" : [ "Command Service" ],
+        "operationId" : "commands",
+        "consumes" : [ "text/plain" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "group",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/poll-to-end/{environment}" : {
+      "get" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "pollToEnd",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/pub-and-sub/{environment}" : {
+      "post" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "pubAndSub",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "produceTopic",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "consumeTopic",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/topics/{environment}" : {
+      "get" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "topics",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "query",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/topic/{environment}" : {
+      "get" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "topic",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "topicName",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/metrics/{environment}" : {
+      "get" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "metrics",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/consume/{environment}/{consumeTopic}" : {
+      "get" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "consume",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "consumeTopic",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "format",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/kafka/produce/{environment}" : {
+      "post" : {
+        "tags" : [ "kafka" ],
+        "operationId" : "produce",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "timeout",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "produceTopic",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/aes-decrypt" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "aesDecrypt",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "secret",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/unzip" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "unzip",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/aes-encrypt" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "aesEncrypt",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "secret",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/base64-decode" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "base64Decode",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/base64-encode" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "base64Encode",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/json-format" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "jsonFormat",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/echo" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "echo",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/extract" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "extract",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/mustache-attribute" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "mustacheAttribute",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/resource/gzip" : {
+      "post" : {
+        "tags" : [ "resource" ],
+        "operationId" : "gzip",
+        "consumes" : [ "text/plain", "application/json", "application/xml" ],
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    }
+  }
+}

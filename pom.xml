@@ -243,11 +243,12 @@
     </dependencyManagement>
 
     <modules>
-        <module>soya-core</module>
-        <module>soya-tool</module>
-        <module>soya-servlet</module>
-        <module>soya-boot</module>
-        <module>soya-albertsons</module>
+        <module>soya-framework-core</module>
+        <module>soya-framework-tool</module>
+        <module>soya-framework-servlet</module>
+        <module>soya-framework-ams</module>
+        <module>soya-framework-alberta</module>
+        <module>soya-framework-admin</module>
     </modules>
 
 </project>

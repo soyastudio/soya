@@ -7,8 +7,8 @@ spring:
     load-on-startup: 1
 
 workspace:
-  home: C:/github/Workshop/AppBuild
+  home: D:/github/Workshop/AppBuild
 
 ant:
   work:
-    home: C:/github/Workshop/Ant
+    home: D:/github/Workshop/Ant

@@ -1,6 +1,6 @@
 package soya.framework.tool;
 
-import soya.framework.commons.cli.CommandRunner;
+import soya.framework.core.CommandRunner;
 
 import java.net.URI;
 

@@ -12,8 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import soya.framework.commons.cli.*;
 import soya.framework.commons.util.CodeBuilder;
+import soya.framework.core.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

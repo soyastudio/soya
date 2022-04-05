@@ -1,6 +1,6 @@
 package soya.framework.kafka.commands;
 
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandOption;
 
 public abstract class AbstractConsumeCommand extends KafkaCommand {
 

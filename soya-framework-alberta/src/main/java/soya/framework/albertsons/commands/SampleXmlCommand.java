@@ -1,7 +1,7 @@
 package soya.framework.albertsons.commands;
 
 import org.apache.xmlbeans.impl.xsd2inst.SampleXmlUtil;
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 
 @Command(group = "bod", name = "sample-xml", httpMethod = Command.HttpMethod.GET)
 public class SampleXmlCommand extends SchemaCommand {

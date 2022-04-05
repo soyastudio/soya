@@ -1,10 +1,9 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import org.springframework.stereotype.Controller;
-import soya.framework.commons.cli.CommandDispatcher;
-import soya.framework.commons.cli.CommandMapping;
-import soya.framework.commons.cli.GroupMapping;
+import soya.framework.core.CommandDispatcher;
+import soya.framework.core.CommandMapping;
+import soya.framework.core.GroupMapping;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

@@ -1,7 +1,7 @@
 package soya.framework.tool.codegen;
 
-import soya.framework.commons.cli.CommandCallable;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandOption;
 
 public abstract class JavaCodegenCommand implements CommandCallable<String> {
 

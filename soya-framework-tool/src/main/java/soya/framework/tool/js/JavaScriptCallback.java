@@ -1,6 +1,6 @@
 package soya.framework.tool.js;
 
-import soya.framework.commons.cli.Flow;
+import soya.framework.core.Flow;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

@@ -249,6 +249,7 @@
         <module>soya-framework-ams</module>
         <module>soya-framework-alberta</module>
         <module>soya-framework-admin</module>
+        <module>soya-framework-openbank</module>
     </modules>
 
 </project>

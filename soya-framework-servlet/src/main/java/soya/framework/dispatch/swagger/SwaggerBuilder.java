@@ -1,7 +1,7 @@
 package soya.framework.dispatch.swagger;
 
 import com.google.common.base.CaseFormat;
-import soya.framework.commons.cli.*;
+import soya.framework.core.*;
 import soya.framework.dispatch.swagger.parameters.*;
 
 import java.lang.reflect.Field;
@@ -69,6 +69,8 @@ public class SwaggerBuilder {
                 } else if (!option.paramType().equals(CommandOption.ParamType.ReferenceParam)) {
                     operation.parameter(new GenericParameter(arg));
                 }
+
+                operation.description(mapping.getDescription());
 
             });
 
@@ -214,6 +216,7 @@ public class SwaggerBuilder {
 
         private String httpMethod;
         private String path;
+        private String description;
 
         private List<String> consumeTypes = new ArrayList<>();
         private List<String> produceTypes = new ArrayList<>();
@@ -241,6 +244,12 @@ public class SwaggerBuilder {
                 }
             });
             this.path = pathBuilder.toString();
+
+            StringBuilder builder = new StringBuilder();
+            for(String line: command.desc()) {
+                builder.append(line);
+            }
+            this.description = builder.toString();
 
             for (Command.MediaType ct : command.httpRequestTypes()) {
                 consumeTypes.add(toString(ct));
@@ -300,6 +309,10 @@ public class SwaggerBuilder {
 
         public String getPath() {
             return path;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         public List<String> getConsumeTypes() {

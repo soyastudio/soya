@@ -1,7 +1,7 @@
 package soya.framework.kafka.commands;
 
-import soya.framework.commons.cli.CommandOption;
-import soya.framework.commons.cli.Resources;
+import soya.framework.core.CommandOption;
+import soya.framework.core.Resources;
 
 public abstract class AbstractProduceCommand extends KafkaCommand {
 

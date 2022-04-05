@@ -1,6 +1,6 @@
 package soya.framework.kafka.commands;
 
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 
 @Command(group = "kafka", name = "poll-to-end", httpMethod = Command.HttpMethod.GET)
 public class PollToEndCommand extends KafkaCommand {

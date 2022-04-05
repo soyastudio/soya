@@ -1,8 +1,8 @@
 package soya.framework.kafka.commands;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.Command;
+import soya.framework.core.CommandOption;
 import soya.framework.kafka.KafkaUtils;
 
 @Command(group = "kafka", name = "consume", httpMethod = Command.HttpMethod.GET)

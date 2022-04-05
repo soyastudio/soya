@@ -1,8 +1,8 @@
 package soya.framework.tool.ant;
 
 import org.apache.tools.ant.taskdefs.Ant;
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.Command;
+import soya.framework.core.CommandOption;
 
 @Command(group = "ant", name = "build")
 public class BuildCommand extends AntTaskCommand<Ant> {

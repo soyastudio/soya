@@ -5,7 +5,7 @@ import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 
 import java.io.File;
 import java.io.FileInputStream;

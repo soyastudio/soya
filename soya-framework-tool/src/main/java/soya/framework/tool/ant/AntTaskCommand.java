@@ -1,8 +1,8 @@
 package soya.framework.tool.ant;
 
 import org.apache.tools.ant.Task;
-import soya.framework.commons.cli.CommandCallable;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandOption;
 
 import java.io.File;
 

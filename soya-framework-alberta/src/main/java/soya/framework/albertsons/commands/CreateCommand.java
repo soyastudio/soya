@@ -2,7 +2,7 @@ package soya.framework.albertsons.commands;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.xmlbeans.SchemaTypeSystem;
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.transform.schema.KnowledgeTree;
 import soya.framework.transform.schema.KnowledgeTreeNode;

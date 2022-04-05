@@ -1,7 +1,7 @@
 package soya.framework.albertsons.commands;
 
 import com.google.common.base.CaseFormat;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandOption;
 import soya.framework.transform.schema.KnowledgeTreeNode;
 import soya.framework.transform.schema.xs.XsNode;
 

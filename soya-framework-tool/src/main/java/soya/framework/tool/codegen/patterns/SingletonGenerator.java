@@ -1,6 +1,6 @@
 package soya.framework.tool.codegen.patterns;
 
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 import soya.framework.tool.codegen.JavaCodeBuilderCommand;
 import soya.framework.commons.util.CodeBuilder;
 

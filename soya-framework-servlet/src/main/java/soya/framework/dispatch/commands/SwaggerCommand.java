@@ -1,13 +1,14 @@
 package soya.framework.dispatch.commands;
 
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandExecutionContext;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.Command;
+import soya.framework.core.CommandExecutionContext;
+import soya.framework.core.CommandOption;
+import soya.framework.core.commands.reflect.ReflectCommand;
 import soya.framework.dispatch.swagger.Swagger;
 import soya.framework.dispatch.swagger.SwaggerBuilder;
 
 @Command(group = "dispatch", name = "swagger", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
-public class SwaggerCommand extends DispatchCommand<String> {
+public class SwaggerCommand extends ReflectCommand<String> {
 
     @CommandOption(option = "b", longOption = "basePath", paramType = CommandOption.ParamType.QueryParam)
     private String basePath = "api";

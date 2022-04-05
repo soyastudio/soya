@@ -1,6 +1,6 @@
 package soya.framework.tool.http;
 
-import soya.framework.commons.cli.CommandCallable;
+import soya.framework.core.CommandCallable;
 
 public class HttpCommand implements CommandCallable<String> {
 

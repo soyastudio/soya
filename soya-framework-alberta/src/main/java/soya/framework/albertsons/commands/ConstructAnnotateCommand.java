@@ -1,6 +1,6 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.transform.schema.KnowledgeTreeNode;
 import soya.framework.transform.schema.xs.XsNode;

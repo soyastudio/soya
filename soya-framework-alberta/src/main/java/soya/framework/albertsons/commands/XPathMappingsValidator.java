@@ -1,6 +1,6 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 import soya.framework.transform.schema.xs.XsNode;
 
 @Command(group = "bod", name = "mappings-validation", httpMethod = Command.HttpMethod.GET)

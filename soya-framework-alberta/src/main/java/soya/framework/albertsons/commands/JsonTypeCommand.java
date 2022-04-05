@@ -1,6 +1,6 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.Command;
+import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
 
 @Command(group = "bod", name = "json-types", httpMethod = Command.HttpMethod.GET)

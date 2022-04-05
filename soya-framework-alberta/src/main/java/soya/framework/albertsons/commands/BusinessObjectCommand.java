@@ -2,8 +2,8 @@ package soya.framework.albertsons.commands;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import soya.framework.commons.cli.CommandCallable;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandOption;
 
 import java.io.File;
 import java.io.FileReader;

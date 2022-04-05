@@ -1,11 +1,12 @@
 package soya.framework.dispatch.servlet;
 
-import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import soya.framework.commons.cli.*;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandExecutionContext;
+import soya.framework.core.CommandOption;
+import soya.framework.core.CommandParser;
 import soya.framework.dispatch.swagger.*;
-import soya.framework.dispatch.swagger.parameters.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

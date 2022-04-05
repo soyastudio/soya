@@ -5,8 +5,8 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Ear;
 import org.apache.tools.ant.taskdefs.Jar;
 import org.apache.tools.ant.taskdefs.War;
-import soya.framework.commons.cli.Flow;
-import soya.framework.commons.cli.Resources;
+import soya.framework.core.Flow;
+import soya.framework.core.Resources;
 
 import java.io.File;
 import java.net.MalformedURLException;

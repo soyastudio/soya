@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import soya.framework.commons.cli.CommandExecutionContext;
+import soya.framework.core.CommandExecutionContext;
 
 import javax.sql.DataSource;
 import java.util.concurrent.ExecutorService;

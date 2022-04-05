@@ -2,7 +2,6 @@ package soya.framework.tool.codegen;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import soya.framework.commons.cli.Command;
 
 import javax.lang.model.element.Modifier;
 

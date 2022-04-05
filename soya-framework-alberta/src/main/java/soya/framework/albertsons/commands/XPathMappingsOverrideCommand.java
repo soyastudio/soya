@@ -1,8 +1,8 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandOption;
-import soya.framework.commons.cli.Resources;
+import soya.framework.core.Command;
+import soya.framework.core.CommandOption;
+import soya.framework.core.Resources;
 
 import java.io.BufferedReader;
 import java.io.IOException;

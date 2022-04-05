@@ -1,7 +1,7 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.Command;
+import soya.framework.core.CommandOption;
 import soya.framework.commons.util.CodeBuilder;
 
 import java.util.Locale;

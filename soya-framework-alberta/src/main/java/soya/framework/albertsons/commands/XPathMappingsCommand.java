@@ -1,6 +1,6 @@
 package soya.framework.albertsons.commands;
 
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandOption;
 
 import java.io.BufferedReader;
 import java.io.File;

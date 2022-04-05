@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.text.StrSubstitutor;
-import soya.framework.commons.cli.*;
+import soya.framework.core.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

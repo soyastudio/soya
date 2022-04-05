@@ -3,11 +3,8 @@ package soya.framework.albertsons.commands;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.everit.json.schema.Schema;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-import soya.framework.commons.cli.Command;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.Command;
+import soya.framework.core.CommandOption;
 
 import java.io.*;
 import java.util.LinkedHashMap;

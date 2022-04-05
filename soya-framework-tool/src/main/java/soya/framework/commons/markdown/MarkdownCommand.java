@@ -3,8 +3,8 @@ package soya.framework.commons.markdown;
 import org.commonmark.node.Node;
 import org.commonmark.node.Visitor;
 import org.commonmark.parser.Parser;
-import soya.framework.commons.cli.CommandCallable;
-import soya.framework.commons.cli.CommandOption;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandOption;
 
 import java.io.FileReader;
 

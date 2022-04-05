@@ -1,10 +1,12 @@
 package soya.framework.tool.codegen.rest;
 
 import com.google.common.base.CaseFormat;
-import org.apache.commons.cli.Options;
 import org.reflections.Reflections;
-import soya.framework.commons.cli.*;
 import soya.framework.commons.util.CodeBuilder;
+import soya.framework.core.Command;
+import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandOption;
+import soya.framework.core.CommandParser;
 import soya.framework.tool.codegen.JavaCodeBuilderCommand;
 
 import java.lang.reflect.Field;
@@ -19,9 +21,9 @@ public class RestApiGenerator extends JavaCodeBuilderCommand {
     @Override
     protected void printImports(CodeBuilder builder) {
         builder.appendLine("import io.swagger.annotations.Api;")
-                .appendLine("import soya.framework.commons.cli.CommandDispatcher;")
-                .appendLine("import soya.framework.commons.cli.CommandMapping;")
-                .appendLine("import soya.framework.commons.cli.GroupMapping;")
+                .appendLine("import soya.framework.core.CommandDispatcher;")
+                .appendLine("import soya.framework.core.CommandMapping;")
+                .appendLine("import soya.framework.core.GroupMapping;")
                 .appendLine()
                 .appendLine("import javax.ws.rs.*;")
                 .appendLine("import javax.ws.rs.core.MediaType;")

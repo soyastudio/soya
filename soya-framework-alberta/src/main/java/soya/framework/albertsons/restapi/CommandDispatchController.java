@@ -63,7 +63,6 @@ public class CommandDispatchController extends CommandDispatcher {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("group", cmd.group());
         jsonObject.addProperty("name", cmd.name());
-        jsonObject.addProperty("description", cmd.desc());
 
         JsonArray array = new JsonArray();
 

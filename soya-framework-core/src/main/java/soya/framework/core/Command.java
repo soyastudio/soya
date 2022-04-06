@@ -13,7 +13,11 @@ public @interface Command {
 
     String name();
 
+    String summary() default "";
+
     String[] desc() default {};
+
+    String[] tags() default {};
 
     HttpMethod httpMethod() default HttpMethod.POST;
 

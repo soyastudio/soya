@@ -2,8 +2,6 @@ package soya.framework.core;
 
 import org.reflections.Reflections;
 
-import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -16,23 +14,27 @@ public abstract class CommandExecutionContext {
 
     private final Properties properties;
     private final ExecutorService executorService;
+    private final ServiceLocator serviceLocator;
     private final Map<String, Class<? extends CommandCallable>> commands;
 
-    protected CommandExecutionContext(Properties properties, ExecutorService executorService) {
+    protected CommandExecutionContext(Properties properties,
+                                      ExecutorService executorService,
+                                      ServiceLocator serviceLocator,
+                                      Set<Class<? extends CommandCallable>> commandClasses) {
+
         this.properties = properties;
         this.executorService = executorService;
-
+        this.serviceLocator = serviceLocator;
         this.commands = new HashMap<>();
-        Reflections reflections = new Reflections();
-        Set<Class<?>> subTypes =
-                reflections.getTypesAnnotatedWith(Command.class);
-        subTypes.forEach(c -> {
-            Command command = c.getAnnotation(Command.class);
-            if (command != null) {
-                String uri = command.group() + "://" + command.name();
-                commands.put(uri, (Class<? extends CommandCallable>) c);
-            }
-        });
+        if (commandClasses != null) {
+            commandClasses.forEach(e -> {
+                Command command = e.getAnnotation(Command.class);
+                if (command != null) {
+                    String uri = command.group() + "://" + command.name();
+                    commands.put(uri, (Class<? extends CommandCallable>) e);
+                }
+            });
+        }
 
         INSTANCE = this;
     }
@@ -58,7 +60,13 @@ public abstract class CommandExecutionContext {
         return executorService;
     }
 
-    public abstract <T> T getService(Class<T> type);
+    public <T> T getService(Class<T> type) {
+        return serviceLocator.getService(type);
+    }
+
+    protected ServiceLocator getServiceLocator() {
+        return serviceLocator;
+    }
 
     public List<String> groups() {
         Set<String> set = new HashSet<>();
@@ -98,10 +106,6 @@ public abstract class CommandExecutionContext {
         return commands.get(uri);
     }
 
-    public Listable listable() {
-        return null;
-    }
-
     public static Builder builder() {
         if (INSTANCE != null) {
             throw new IllegalStateException("CommandExecutionContext already created");
@@ -112,9 +116,20 @@ public abstract class CommandExecutionContext {
 
     public interface ServiceLocator {
         <T> T getService(Class<T> type);
+
+        List<String> serviceTypes();
+    }
+
+    public class ServiceLocatorException extends NullPointerException {
+        private Class<?> type;
+
+        public ServiceLocatorException(Class<?> type) {
+            super("Cannot find service of type '" + type.getName() + "'!");
+        }
     }
 
     public static class Builder {
+
         private Properties properties = new Properties();
         private ExecutorService executorService;
         private Set<String> scanPackages = new HashSet<>();
@@ -147,32 +162,22 @@ public abstract class CommandExecutionContext {
         }
 
         public Builder serviceLocator(Object serviceLocator) {
-            if (serviceLocator instanceof ServiceLocator) {
+            if(serviceLocator instanceof ServiceLocator) {
                 this.serviceLocator = (ServiceLocator) serviceLocator;
 
-            } else if (isSpringApplicationContext(serviceLocator)) {
+            } else if(SpringApplicationContextWrapper.isApplicationContext(serviceLocator)) {
                 this.serviceLocator = new SpringApplicationContextWrapper(serviceLocator);
 
             } else {
-                throw new IllegalArgumentException("");
+                throw new IllegalArgumentException("Cannot bind service locator with type: " + serviceLocator.getClass().getName());
             }
 
             return this;
         }
 
-        private boolean isSpringApplicationContext(Object serviceLocator) {
-            try {
-                Class c = Class.forName("org.springframework.context.ApplicationContext");
-                return c.isInstance(serviceLocator);
-
-            } catch (ClassNotFoundException e) {
-                return false;
-            }
-        }
-
         public <T> Builder register(T t, Class<T> type) {
-            if (type.getName().equals(""))
-                services.put(type, t);
+            services.put(type, t);
+
             return this;
         }
 
@@ -180,49 +185,51 @@ public abstract class CommandExecutionContext {
             if (executorService == null) {
                 executorService = Executors.newSingleThreadExecutor();
             }
-            return new DefaultExecutionContext(properties, executorService, new DefaultServiceLocator(serviceLocator, services));
+
+            Set<Class<? extends CommandCallable>> set = new HashSet<>();
+            if (scanPackages != null && scanPackages.size() > 0) {
+                scanPackages.forEach(pkg -> {
+                    set.addAll(scanPackage(pkg));
+                });
+            } else {
+                Reflections reflections = new Reflections();
+                Set<Class<?>> subTypes =
+                        reflections.getTypesAnnotatedWith(Command.class);
+                subTypes.forEach(c -> {
+                    Command command = c.getAnnotation(Command.class);
+                    if (command != null) {
+                        set.add((Class<? extends CommandCallable>) c);
+                    }
+                });
+            }
+
+            return new DefaultExecutionContext(properties, executorService, set, new DefaultServiceLocator(serviceLocator, services));
         }
-    }
 
-    public interface Listable {
-        String[] getServiceDefinitionNames();
+        private Set<Class<? extends CommandCallable>> scanPackage(String pkg) {
+            Set<Class<? extends CommandCallable>> set = new HashSet<>();
+            Reflections reflections = new Reflections(pkg);
+            Set<Class<?>> subTypes =
+                    reflections.getTypesAnnotatedWith(Command.class);
+            subTypes.forEach(c -> {
+                Command command = c.getAnnotation(Command.class);
+                if (command != null) {
+                    set.add((Class<? extends CommandCallable>) c);
+                }
+            });
 
-        String[] getServiceNamesForType(@Nullable Class<?> var1);
-
-        String[] getServiceNamesForType(@Nullable Class<?> var1, boolean var2, boolean var3);
-
-        <T> Map<String, T> getServicesOfType(@Nullable Class<T> var1) throws Exception;
-
-        <T> Map<String, T> getServicesOfType(@Nullable Class<T> var1, boolean var2, boolean var3) throws Exception;
-
-        String[] getServiceNamesForAnnotation(Class<? extends Annotation> var1);
-
-        Map<String, Object> getServicesWithAnnotation(Class<? extends Annotation> var1) throws Exception;
-
-        @Nullable
-        <A extends Annotation> A findAnnotationOnService(String var1, Class<A> var2) throws Exception;
-
-        @Nullable
-        <A extends Annotation> A findAnnotationOnService(String var1, Class<A> var2, boolean var3) throws Exception;
+            return set;
+        }
     }
 
     static class DefaultExecutionContext extends CommandExecutionContext implements ServiceLocator {
-        private ServiceLocator serviceLocator;
-
-        protected DefaultExecutionContext(Properties properties, ExecutorService executorService, ServiceLocator serviceLocator) {
-            super(properties, executorService);
-            this.serviceLocator = serviceLocator;
-        }
-
-
-        @Override
-        public <T> T getService(Class<T> type) {
-            return serviceLocator.getService(type);
+        protected DefaultExecutionContext(Properties properties, ExecutorService executorService, Set<Class<? extends CommandCallable>> commandClasses, ServiceLocator serviceLocator) {
+            super(properties, executorService, serviceLocator, commandClasses);
         }
 
         @Override
-        public Listable listable() {
-            return ((DefaultServiceLocator)serviceLocator).listable();
+        public List<String> serviceTypes() {
+            return getServiceLocator().serviceTypes();
         }
     }
 
@@ -242,87 +249,80 @@ public abstract class CommandExecutionContext {
 
             } else if (serviceLocator != null) {
                 return serviceLocator.getService(type);
+
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public List<String> serviceTypes() {
+            Set<String> set = new HashSet<>();
+            if (serviceLocator != null) {
+                set.addAll(serviceLocator.serviceTypes());
             }
 
-            return null;
+            services.keySet().forEach(e -> {
+                set.add(e.getName());
+            });
+
+            return new ArrayList<>(set);
         }
 
-        public Listable listable() {
-            return (Listable) serviceLocator;
-        }
+
     }
 
-    static class SpringApplicationContextWrapper implements ServiceLocator, Listable {
+    static class SpringApplicationContextWrapper implements CommandExecutionContext.ServiceLocator {
+
+        private static Class<?> cls;
         private Object applicationContext;
 
-        SpringApplicationContextWrapper(Object applicationContext) {
+        static {
+            try {
+                cls = Class.forName("org.springframework.context.ApplicationContext");
+            } catch (ClassNotFoundException e) {
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+
+        public SpringApplicationContextWrapper(Object applicationContext) {
             this.applicationContext = applicationContext;
         }
 
         @Override
         public <T> T getService(Class<T> type) {
             try {
-                return (T) applicationContext
-                        .getClass()
-                        .getMethod("getBean", new Class[]{Class.class})
-                        .invoke(applicationContext, new Object[]{type});
+                return (T) applicationContext.getClass().getMethod("getBean", new Class[]{Class.class}).invoke(applicationContext, new Object[]{type});
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
         @Override
-        public String[] getServiceDefinitionNames() {
+        public List<String> serviceTypes() {
             try {
-                return (String[]) applicationContext
-                        .getClass()
-                        .getMethod("getBeanDefinitionNames", new Class[0])
-                        .invoke(applicationContext, new Object[0]);
+                Set<String> set = new HashSet<>();
+                String[] names = (String[]) cls.getMethod("getBeanDefinitionNames", new Class[0]).invoke(applicationContext, new Object[0]);
+                for (String name : names) {
+                    Object obj = cls.getMethod("getBean", new Class[] {String.class}).invoke(applicationContext, new Object[] {name});
+                    String className = obj.getClass().getName();
+                    if (!className.startsWith("org.springframework.") && !className.contains("$$EnhancerBySpringCGLIB$$")) {
+                        set.add(className);
+                    }
+                }
+
+                return new ArrayList<>(set);
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
         }
 
-        @Override
-        public String[] getServiceNamesForType(@Nullable Class<?> var1) {
-            return new String[0];
-        }
-
-        @Override
-        public String[] getServiceNamesForType(@Nullable Class<?> var1, boolean var2, boolean var3) {
-            return new String[0];
-        }
-
-        @Override
-        public <T> Map<String, T> getServicesOfType(@Nullable Class<T> var1) throws Exception {
-            return null;
-        }
-
-        @Override
-        public <T> Map<String, T> getServicesOfType(@Nullable Class<T> var1, boolean var2, boolean var3) throws Exception {
-            return null;
-        }
-
-        @Override
-        public String[] getServiceNamesForAnnotation(Class<? extends Annotation> var1) {
-            return new String[0];
-        }
-
-        @Override
-        public Map<String, Object> getServicesWithAnnotation(Class<? extends Annotation> var1) throws Exception {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public <A extends Annotation> A findAnnotationOnService(String var1, Class<A> var2) throws Exception {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public <A extends Annotation> A findAnnotationOnService(String var1, Class<A> var2, boolean var3) throws Exception {
-            return null;
+        public static boolean isApplicationContext(Object applicationContext) {
+            return cls.isInstance(applicationContext);
         }
     }
+
 }

@@ -34,8 +34,8 @@ public class ServiceDefinitionsCommand extends ReflectCommand<String> {
             System.out.println("****************************************");
         }
 
+        CommandExecutionContext.ServiceLocator serviceLocator = (CommandExecutionContext.ServiceLocator) CommandExecutionContext.getInstance();
 
-        String[] names = CommandExecutionContext.getInstance().listable().getServiceDefinitionNames();
-        return toJson(names);
+        return toJson(serviceLocator.serviceTypes());
     }
 }

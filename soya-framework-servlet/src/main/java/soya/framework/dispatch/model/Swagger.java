@@ -1,11 +1,21 @@
 package soya.framework.dispatch.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import soya.framework.commons.util.JsonUtils;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class Swagger {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private String swagger = "2.0";
     private InfoObject info;
@@ -15,7 +25,7 @@ public class Swagger {
     private String[] consumes;
     private String[] produces;
 
-    private PathsObject paths;
+    private Map<String, PathItemObject> paths = new LinkedHashMap<>();
     private ParametersDefinitionsObject parameters;
     private ResponsesDefinitionsObject responses;
     private SecurityDefinitionsObject securityDefinitions;
@@ -30,12 +40,23 @@ public class Swagger {
         return null;
     }
 
+    public static Swagger fromJson(String json) {
+        return GSON.fromJson(json, Swagger.class);
+    }
+
+    public static Swagger fromJson(InputStream inputStream) {
+        return GSON.fromJson(new InputStreamReader(inputStream), Swagger.class);
+    }
+
+    public static Swagger fromJson(Reader reader) {
+        return GSON.fromJson(reader, Swagger.class);
+    }
+
     public static SwaggerBuilder builder() {
         return new SwaggerBuilder();
     }
 
     public static class SwaggerBuilder {
-
         private String swagger = "2.0";
         private InfoObject info = new InfoObject();
         private String host;
@@ -173,14 +194,34 @@ public class Swagger {
     public static class PathBuilder {
         private SwaggerBuilder swaggerBuilder;
         private String path;
+
         private String httpMethod;
-        private String operationId;
+        private OperationObject operation;
 
         private PathBuilder(SwaggerBuilder swaggerBuilder, String path, String httpMethod, String operationId) {
             this.swaggerBuilder = swaggerBuilder;
             this.path = path;
             this.httpMethod = httpMethod;
-            this.operationId = operationId;
+            this.operation = new OperationObject(operationId);
+        }
+
+        private void build() {
+            PathItemObject pathItem = swaggerBuilder.paths.get(path);
+            if (pathItem == null) {
+                pathItem = new PathItemObject();
+                swaggerBuilder.paths.put(path, pathItem);
+            }
+
+            if("get".equals(httpMethod)) {
+                pathItem.get = operation;
+
+            } else if("post".equals(httpMethod)) {
+                pathItem.post = operation;
+
+            } else if("put".equals(httpMethod)) {
+                pathItem.put = operation;
+
+            }
         }
     }
 
@@ -230,6 +271,9 @@ public class Swagger {
         private String[] consumes;
         private String[] produces;
 
+        OperationObject(String operationId) {
+            this.operationId = operationId;
+        }
     }
 
     static class DefinitionsObject {
@@ -258,5 +302,11 @@ public class Swagger {
 
     static class ExternalDocumentObject {
 
+    }
+
+    public static void main(String[] args) {
+        Swagger swagger = fromJson(Swagger.class.getClassLoader().getResourceAsStream("swagger.json"));
+
+        System.out.println(GSON.toJson(swagger));
     }
 }

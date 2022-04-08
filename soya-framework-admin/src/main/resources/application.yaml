@@ -2,8 +2,8 @@ server:
   port: 9775
 
 workspace:
-  home: D:/github/Workshop/AppBuild
+  home: C:/github/Workshop/AppBuild
 
 ant:
   work:
-    home: D:/github/Workshop/Ant
+    home: C:/github/Workshop/Ant

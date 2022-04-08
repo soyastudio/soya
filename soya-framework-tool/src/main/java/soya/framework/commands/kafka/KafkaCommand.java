@@ -18,8 +18,8 @@ import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 import soya.framework.core.CommandCallable;
+import soya.framework.core.CommandGroup;
 import soya.framework.core.CommandOption;
-import soya.framework.commands.kafka.KafkaClientFactory;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
@@ -35,6 +35,9 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
+@CommandGroup(group = "kafka",
+        displayName = "Kafka Tool",
+        description = "Kafka toolkit for executing kafka commands in multiple kafka environments.")
 public abstract class KafkaCommand implements CommandCallable<String> {
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static Gson GSON = new GsonBuilder().setPrettyPrinting().create();

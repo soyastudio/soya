@@ -23,13 +23,13 @@ public class Swagger {
     private String[] schemas;
     private String[] consumes;
     private String[] produces;
-
     private Map<String, PathItemObject> paths = new LinkedHashMap<>();
-    private List<ParameterObject> parameters;
 
+    private List<ParameterObject> parameters;
     private ResponsesDefinitionsObject responses;
     private SecurityDefinitionsObject securityDefinitions;
     private SecurityRequirementObject[] security;
+
     private TagObject[] tags;
 
     public String getSwagger() {
@@ -82,6 +82,10 @@ public class Swagger {
 
     public TagObject[] getTags() {
         return tags;
+    }
+
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
     }
 
     public String toJson() {
@@ -232,10 +236,7 @@ public class Swagger {
             return new PathBuilder(this, path, HttpMethod.patch, operationId);
         }
 
-        public SwaggerBuilder addTag(String name, String description) {
-            TagObject tagObject = new TagObject();
-            tagObject.name = name;
-            tagObject.description = description;
+        public SwaggerBuilder addTag(TagObject tagObject) {
             tags.add(tagObject);
             return this;
         }
@@ -254,13 +255,13 @@ public class Swagger {
                 api.consumes = this.consumes.toArray(new String[consumes.size()]);
             }
 
-            if(produces.isEmpty()) {
+            if(!produces.isEmpty()) {
                 api.produces = this.produces.toArray(new String[produces.size()]);
             }
 
             api.paths = this.paths;
 
-            if(tags.isEmpty()) {
+            if(!tags.isEmpty()) {
                 api.tags = tags.toArray(new TagObject[tags.size()]);
             }
 
@@ -293,6 +294,11 @@ public class Swagger {
             return new BodyParameterBuilder(this, name, description);
         }
 
+        public PathBuilder addTag(String name) {
+            operation.tags.add(name);
+            return this;
+        }
+
         public PathBuilder consumes(String... consume) {
             if(consume != null) {
                 for(String c: consume) {
@@ -319,12 +325,20 @@ public class Swagger {
                 owner.paths.put(path, pathItem);
             }
 
+            List<ParameterObject> pathParams = new ArrayList<>();
+            if(pathItem.parameters != null) {
+                pathParams.addAll(Arrays.asList(pathItem.parameters));
+            }
+
             for (ParameterObject e : parameterObjects) {
                 if (e.forPath) {
-                    pathItem.parameters.add(e);
+                    pathParams.add(e);
                 } else {
                     operation.parameters.add(e);
                 }
+            }
+            if(!pathParams.isEmpty()) {
+                pathItem.parameters = pathParams.toArray(new ParameterObject[pathParams.size()]);
             }
 
             if (HttpMethod.get.equals(httpMethod)) {
@@ -532,7 +546,7 @@ public class Swagger {
         private OperationObject head;
         private OperationObject patch;
 
-        private Set<ParameterObject> parameters = new LinkedHashSet<>();
+        private ParameterObject[] parameters;
 
         public OperationObject getOperation() {
             return get;
@@ -562,13 +576,13 @@ public class Swagger {
             return patch;
         }
 
-        public Set<ParameterObject> getParameters() {
+        public ParameterObject[] getParameters() {
             return parameters;
         }
     }
 
     public static class OperationObject {
-        private List<String> tags = new ArrayList<>();
+        private Set<String> tags = new LinkedHashSet<>();
         private String summary;
         private String description;
         private String operationId;
@@ -577,11 +591,13 @@ public class Swagger {
 
         private List<ParameterObject> parameters = new ArrayList<>();
 
+        private Map<String, ResponsesDefinitionsObject> responses = new LinkedHashMap<>();
+
         OperationObject(String operationId) {
             this.operationId = operationId;
         }
 
-        public List<String> getTags() {
+        public Set<String> getTags() {
             return tags;
         }
 
@@ -666,6 +682,23 @@ public class Swagger {
     public static class TagObject {
         private String name;
         private String description;
+
+        private TagObject() {
+        }
+
+        public static TagObject instance() {
+            return new TagObject();
+        }
+
+        public TagObject name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public TagObject description(String description) {
+            this.description = description;
+            return this;
+        }
 
     }
 

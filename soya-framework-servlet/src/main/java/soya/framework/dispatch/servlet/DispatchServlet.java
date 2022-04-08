@@ -2,13 +2,12 @@ package soya.framework.dispatch.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import soya.framework.core.CommandCallable;
 import soya.framework.core.CommandExecutionContext;
 import soya.framework.core.CommandOption;
 import soya.framework.core.CommandParser;
-import soya.framework.dispatch.swagger.*;
+import soya.framework.oas.swagger.Swagger;
+import soya.framework.oas.swagger.SwaggerBuilder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,10 +16,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -43,8 +43,8 @@ public class DispatchServlet extends HttpServlet {
         }
 
         this.context = CommandExecutionContext.getInstance();
-
-        swagger = SwaggerBuilder.create(context, path);
+        swagger = SwaggerBuilder.create(context);
+        swagger.setBasePath(path);
 
     }
 
@@ -71,6 +71,8 @@ public class DispatchServlet extends HttpServlet {
     }
 
     private void dispatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        System.out.println("============== dispatching request: " + req.getPathInfo());
 
         String accept = req.getHeader("accept");
         int status = HttpServletResponse.SC_OK;
@@ -151,7 +153,7 @@ public class DispatchServlet extends HttpServlet {
         CommandOption option = field.getAnnotation(CommandOption.class);
 
 
-        if(option.dataForProcessing()) {
+        if (option.dataForProcessing()) {
             value = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
         } else {

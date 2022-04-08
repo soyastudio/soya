@@ -15,25 +15,53 @@ public abstract class CommandExecutionContext {
     private final Properties properties;
     private final ExecutorService executorService;
     private final ServiceLocator serviceLocator;
-    private final Map<String, Class<? extends CommandCallable>> commands;
+
+    private Map<String, GroupDescription> groupDescriptions = new HashMap<>();
+    private Map<String, Class<? extends CommandCallable>> commands = new HashMap<>();
 
     protected CommandExecutionContext(Properties properties,
                                       ExecutorService executorService,
                                       ServiceLocator serviceLocator,
-                                      Set<Class<? extends CommandCallable>> commandClasses) {
+                                      Set<String> scanPackages) {
 
         this.properties = properties;
         this.executorService = executorService;
         this.serviceLocator = serviceLocator;
         this.commands = new HashMap<>();
-        if (commandClasses != null) {
-            commandClasses.forEach(e -> {
-                Command command = e.getAnnotation(Command.class);
-                if (command != null) {
+
+        if (scanPackages != null && scanPackages.size() > 0) {
+            scanPackages.forEach(pkg -> {
+                Reflections scanner = new Reflections(pkg);
+                scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
+                    CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
+                    GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.displayName(), commandGroup.description());
+                    groupDescriptions.put(groupDescription.getGroup(), groupDescription);
+                });
+
+                scanner.getTypesAnnotatedWith(Command.class).forEach(e -> {
+                    Command command = e.getAnnotation(Command.class);
                     String uri = command.group() + "://" + command.name();
                     commands.put(uri, (Class<? extends CommandCallable>) e);
+                });
+            });
+
+        } else {
+            Reflections scanner = new Reflections();
+            scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
+                CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
+                if(commandGroup != null) {
+                    GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.displayName(), commandGroup.description());
+                    groupDescriptions.put(groupDescription.getGroup(), groupDescription);
+
                 }
             });
+
+            scanner.getTypesAnnotatedWith(Command.class).forEach(e -> {
+                Command command = e.getAnnotation(Command.class);
+                String uri = command.group() + "://" + command.name();
+                commands.put(uri, (Class<? extends CommandCallable>) e);
+            });
+
         }
 
         INSTANCE = this;
@@ -83,6 +111,10 @@ public abstract class CommandExecutionContext {
         return list;
     }
 
+    public GroupDescription groupDescription(String group) {
+        return groupDescriptions.get(group);
+    }
+
     public List<String> getCommands() {
         List<String> list = new ArrayList<>(commands.keySet());
         Collections.sort(list);
@@ -112,6 +144,30 @@ public abstract class CommandExecutionContext {
         }
 
         return new Builder();
+    }
+
+    public static final class GroupDescription {
+        private final String group;
+        private final String displayName;
+        private final String description;
+
+        private GroupDescription(String group, String displayName, String description) {
+            this.group = group;
+            this.displayName = displayName;
+            this.description = description;
+        }
+
+        public String getGroup() {
+            return group;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
     public interface ServiceLocator {
@@ -162,10 +218,10 @@ public abstract class CommandExecutionContext {
         }
 
         public Builder serviceLocator(Object serviceLocator) {
-            if(serviceLocator instanceof ServiceLocator) {
+            if (serviceLocator instanceof ServiceLocator) {
                 this.serviceLocator = (ServiceLocator) serviceLocator;
 
-            } else if(SpringApplicationContextWrapper.isApplicationContext(serviceLocator)) {
+            } else if (SpringApplicationContextWrapper.isApplicationContext(serviceLocator)) {
                 this.serviceLocator = new SpringApplicationContextWrapper(serviceLocator);
 
             } else {
@@ -186,24 +242,7 @@ public abstract class CommandExecutionContext {
                 executorService = Executors.newSingleThreadExecutor();
             }
 
-            Set<Class<? extends CommandCallable>> set = new HashSet<>();
-            if (scanPackages != null && scanPackages.size() > 0) {
-                scanPackages.forEach(pkg -> {
-                    set.addAll(scanPackage(pkg));
-                });
-            } else {
-                Reflections reflections = new Reflections();
-                Set<Class<?>> subTypes =
-                        reflections.getTypesAnnotatedWith(Command.class);
-                subTypes.forEach(c -> {
-                    Command command = c.getAnnotation(Command.class);
-                    if (command != null) {
-                        set.add((Class<? extends CommandCallable>) c);
-                    }
-                });
-            }
-
-            return new DefaultExecutionContext(properties, executorService, set, new DefaultServiceLocator(serviceLocator, services));
+            return new DefaultExecutionContext(properties, executorService, new DefaultServiceLocator(serviceLocator, services), scanPackages);
         }
 
         private Set<Class<? extends CommandCallable>> scanPackage(String pkg) {
@@ -223,8 +262,8 @@ public abstract class CommandExecutionContext {
     }
 
     static class DefaultExecutionContext extends CommandExecutionContext implements ServiceLocator {
-        protected DefaultExecutionContext(Properties properties, ExecutorService executorService, Set<Class<? extends CommandCallable>> commandClasses, ServiceLocator serviceLocator) {
-            super(properties, executorService, serviceLocator, commandClasses);
+        protected DefaultExecutionContext(Properties properties, ExecutorService executorService, ServiceLocator serviceLocator, Set<String> scanPackages) {
+            super(properties, executorService, serviceLocator, scanPackages);
         }
 
         @Override
@@ -305,7 +344,7 @@ public abstract class CommandExecutionContext {
                 Set<String> set = new HashSet<>();
                 String[] names = (String[]) cls.getMethod("getBeanDefinitionNames", new Class[0]).invoke(applicationContext, new Object[0]);
                 for (String name : names) {
-                    Object obj = cls.getMethod("getBean", new Class[] {String.class}).invoke(applicationContext, new Object[] {name});
+                    Object obj = cls.getMethod("getBean", new Class[]{String.class}).invoke(applicationContext, new Object[]{name});
                     String className = obj.getClass().getName();
                     if (!className.startsWith("org.springframework.") && !className.contains("$$EnhancerBySpringCGLIB$$")) {
                         set.add(className);

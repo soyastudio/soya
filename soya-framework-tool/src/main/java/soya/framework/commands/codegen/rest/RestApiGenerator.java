@@ -15,7 +15,7 @@ import java.util.*;
 @Command(group = "soya-rest", name = "api")
 public class RestApiGenerator extends JavaCodeBuilderCommand {
 
-    @CommandOption(option = "g", longOption = "group", required = true)
+    @CommandOption(option = "g", required = true)
     protected String group;
 
     @Override

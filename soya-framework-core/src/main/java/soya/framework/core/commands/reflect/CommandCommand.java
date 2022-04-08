@@ -2,16 +2,17 @@ package soya.framework.core.commands.reflect;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.commons.cli.Options;
 import soya.framework.core.*;
 
 import java.lang.reflect.Field;
 
 @Command(group = "reflect", name = "command", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
 public class CommandCommand extends ReflectCommand<String> {
-    @CommandOption(option = "g", longOption = "group", required = true)
+    @CommandOption(option = "g", required = true)
     private String group;
 
-    @CommandOption(option = "c", longOption = "command", required = true)
+    @CommandOption(option = "c", required = true)
     private String command;
 
     @Override
@@ -34,6 +35,8 @@ public class CommandCommand extends ReflectCommand<String> {
 
         Class<?> superClass = cls;
         Field[] fields = CommandParser.getOptionFields(cls);
+        Options options = CommandParser.parse(cls);
+
         StringBuilder builder = new StringBuilder();
         StringBuilder uriBuilder = new StringBuilder(group).append("://").append(command);
         if (fields.length > 0) {
@@ -46,7 +49,7 @@ public class CommandCommand extends ReflectCommand<String> {
             if (commandOption != null) {
                 JsonObject option = new JsonObject();
                 option.addProperty("option", commandOption.option());
-                option.addProperty("longOption", commandOption.longOption());
+                option.addProperty("longOption", options.getOption(commandOption.option()).getLongOpt());
                 option.addProperty("required", commandOption.required());
                 option.addProperty("hasArg", commandOption.hasArg());
                 option.addProperty("defaultValue", commandOption.defaultValue());
@@ -71,8 +74,8 @@ public class CommandCommand extends ReflectCommand<String> {
                         uriBuilder.append("{").append(commandOption.defaultValue()).append("}");
 
                     } else {
-                        builder.append(" {").append(commandOption.longOption()).append("}");
-                        uriBuilder.append("{").append(commandOption.longOption()).append("}");
+                        builder.append(" {").append(options.getOption(commandOption.option()).getLongOpt()).append("}");
+                        uriBuilder.append("{").append(options.getOption(commandOption.option()).getLongOpt()).append("}");
                     }
                 }
             }

@@ -38,6 +38,12 @@
 
 		<dependency>
 			<groupId>soya.framework</groupId>
+			<artifactId>soya-framework-openapi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>soya.framework</groupId>
 			<artifactId>soya-framework-servlet</artifactId>
 			<version>${project.version}</version>
 		</dependency>

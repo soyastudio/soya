@@ -15,16 +15,16 @@ import java.util.concurrent.Future;
 @Command(group = "reflect", name = "execute")
 public class DispatchCommand extends ReflectCommand<Object> {
 
-    @CommandOption(option = "g", longOption = "group", required = true)
+    @CommandOption(option = "g", required = true)
     private String group;
 
-    @CommandOption(option = "c", longOption = "command", required = true)
+    @CommandOption(option = "c", required = true)
     private String command;
 
-    @CommandOption(option = "a", longOption = "arguments")
+    @CommandOption(option = "a")
     private String arguments;
 
-    @CommandOption(option = "p", longOption = "payload", dataForProcessing = true)
+    @CommandOption(option = "p", dataForProcessing = true)
     private String payload;
 
     @Override

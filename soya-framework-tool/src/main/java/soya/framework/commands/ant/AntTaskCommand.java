@@ -8,7 +8,7 @@ import java.io.File;
 
 public abstract class AntTaskCommand<T extends Task> extends AntTask<T> implements CommandCallable<Void> {
 
-    @CommandOption(option = "h", longOption = "home", required = true, paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "ant.work.home")
+    @CommandOption(option = "h", required = true, paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "ant.work.home")
     protected String home;
 
     @Override

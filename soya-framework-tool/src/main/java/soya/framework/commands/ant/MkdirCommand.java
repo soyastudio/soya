@@ -9,7 +9,7 @@ import java.io.File;
 @Command(group = "ant", name = "mkdir", httpMethod = Command.HttpMethod.POST)
 public class MkdirCommand extends AntTaskCommand<Mkdir> {
 
-    @CommandOption(option = "d", longOption = "dir", required = true)
+    @CommandOption(option = "d", required = true)
     protected String dir;
 
     @Override

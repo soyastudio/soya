@@ -9,12 +9,12 @@ import java.util.Locale;
 @Command(group = "bod", name = "filter-mapping")
 public class FilterMappingsCommand extends XPathMappingsCommand {
 
-    @CommandOption(option = "q", longOption = "query")
-    protected String expression;
+    @CommandOption(option = "q")
+    protected String query;
 
     @Override
     protected String render() {
-        String token = expression == null? "::" : expression.toUpperCase(Locale.ROOT);
+        String token = query == null? "::" : query.toUpperCase(Locale.ROOT);
         CodeBuilder builder = CodeBuilder.newInstance();
         mappings.entrySet().forEach(e -> {
             String value = e.getValue().toString().toUpperCase(Locale.ROOT);

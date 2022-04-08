@@ -114,6 +114,7 @@ public class CommandRunner {
     }
 
     private static String help(Class<? extends CommandCallable> cls) {
+
         Command command = cls.getAnnotation(Command.class);
 
         JsonObject jsonObject = new JsonObject();
@@ -137,7 +138,7 @@ public class CommandRunner {
                 if (commandOption != null) {
                     JsonObject option = new JsonObject();
                     option.addProperty("option", commandOption.option());
-                    option.addProperty("longOption", commandOption.longOption());
+                    option.addProperty("longOption", field.getName());
                     option.addProperty("required", commandOption.required());
                     option.addProperty("hasArg", commandOption.hasArg());
                     option.addProperty("defaultValue", commandOption.defaultValue());
@@ -155,4 +156,5 @@ public class CommandRunner {
         return new GsonBuilder().setPrettyPrinting().create().toJson(jsonObject);
 
     }
+
 }

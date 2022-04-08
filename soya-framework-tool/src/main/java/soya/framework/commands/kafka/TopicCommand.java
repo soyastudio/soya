@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Command(group = "kafka", name = "topic", httpMethod = Command.HttpMethod.GET)
 public class TopicCommand extends KafkaCommand {
 
-    @CommandOption(option = "c", longOption = "topic", required = true)
+    @CommandOption(option = "c", required = true)
     private String topicName;
 
     @Override

@@ -39,10 +39,10 @@ public abstract class KafkaCommand implements CommandCallable<String> {
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     public static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    @CommandOption(option = "e", longOption = "env", paramType = CommandOption.ParamType.PathParam)
+    @CommandOption(option = "e", paramType = CommandOption.ParamType.PathParam)
     protected String environment = "LOCAL";
 
-    @CommandOption(option = "t", longOption = "timeout")
+    @CommandOption(option = "t")
     protected Long timeout = Long.valueOf(30000l);
 
     protected KafkaProducer createKafkaProducer() {

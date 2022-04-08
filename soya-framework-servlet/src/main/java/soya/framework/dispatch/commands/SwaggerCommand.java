@@ -7,10 +7,10 @@ import soya.framework.core.commands.reflect.ReflectCommand;
 import soya.framework.dispatch.swagger.Swagger;
 import soya.framework.dispatch.swagger.SwaggerBuilder;
 
-@Command(group = "dispatch", name = "swagger", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
+@Command(group = "swagger", name = "soya-api", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
 public class SwaggerCommand extends ReflectCommand<String> {
 
-    @CommandOption(option = "b", longOption = "basePath", paramType = CommandOption.ParamType.QueryParam)
+    @CommandOption(option = "b", paramType = CommandOption.ParamType.QueryParam)
     private String basePath = "api";
 
     @Override

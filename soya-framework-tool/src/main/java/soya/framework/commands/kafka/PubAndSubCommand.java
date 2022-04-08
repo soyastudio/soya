@@ -8,7 +8,7 @@ import soya.framework.core.Resources;
 @Command(group = "kafka", name = "pub-and-sub")
 public class PubAndSubCommand extends AbstractProduceCommand {
 
-    @CommandOption(option = "c", longOption = "consumeTopic", required = true)
+    @CommandOption(option = "c", required = true)
     protected String consumeTopic;
 
     @Override

@@ -12,10 +12,10 @@ import java.util.*;
 @Command(group = "bod", name = "xlsx-mappings", httpMethod = Command.HttpMethod.GET)
 public class XlsxMappingsCommand extends BusinessObjectCommand {
 
-    @CommandOption(option = "f", longOption = "file")
+    @CommandOption(option = "f")
     protected String mappingFile = XLSX_MAPPINGS_FILE;
 
-    @CommandOption(option = "s", longOption = "s")
+    @CommandOption(option = "s")
     protected String mappingSheet;
 
     protected Map<String, Mapping> mappings;

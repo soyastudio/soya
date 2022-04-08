@@ -197,7 +197,7 @@ public final class CommandExecutor {
         }
 
         public CommandExecutor create() {
-            if(commandOption == null) {
+            if (commandOption == null) {
                 commandOption = Option.builder("a").longOpt("action").hasArg().required().build();
             }
 
@@ -229,7 +229,7 @@ public final class CommandExecutor {
 
         Context(String name, Class<? extends CommandCallable>[] classes, Properties properties, Option commandOption) {
             this.name = name;
-            for(Class<? extends CommandCallable> c: classes) {
+            for (Class<? extends CommandCallable> c : classes) {
                 register((Class<? extends CommandCallable>) c);
             }
 
@@ -277,7 +277,7 @@ public final class CommandExecutor {
         }
 
         public CommandCallable create(String cmd, String[] args) {
-            if(!classMap.containsKey(cmd)) {
+            if (!classMap.containsKey(cmd)) {
                 throw new IllegalArgumentException("Command not defined: " + cmd);
             }
             Class<? extends CommandCallable> cls = classMap.get(cmd);
@@ -328,16 +328,16 @@ public final class CommandExecutor {
         }
 
         public String toString(String cmd) {
-            if(cmd != null && classMap.containsKey(cmd)) {
+            if (cmd != null && classMap.containsKey(cmd)) {
                 StringBuilder builder = new StringBuilder();
                 builder.append("-a ").append(cmd);
                 Options options = optionsMap.get(cmd);
                 options.getOptions().forEach(e -> {
-                    if(!e.getOpt().equals("r")) {
+                    if (!e.getOpt().equals("r")) {
                         builder.append(" -").append(e.getOpt());
-                        if(e.hasArg()) {
+                        if (e.hasArg()) {
                             builder.append(" [");
-                            if(e.isRequired()) {
+                            if (e.isRequired()) {
                                 builder.append("required: ");
                             } else {
                                 builder.append("optional: ");
@@ -363,7 +363,7 @@ public final class CommandExecutor {
             String uri = command.group() + "://" + command.name();
 
             classMap.put(name, cls);
-            if(uri != null) {
+            if (uri != null) {
                 classMap.put(uri, cls);
             }
 
@@ -376,7 +376,7 @@ public final class CommandExecutor {
                     CommandOption commandOption = field.getAnnotation(CommandOption.class);
                     if (commandOption != null && options.getOption(commandOption.option()) == null) {
                         options.addOption(Option.builder(commandOption.option())
-                                .longOpt(commandOption.longOption())
+                                .longOpt(options.getOption(commandOption.option()).getLongOpt())
                                 .hasArg(commandOption.hasArg())
                                 .required(commandOption.required())
                                 .desc(commandOption.desc())

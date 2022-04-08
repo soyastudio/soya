@@ -15,7 +15,7 @@ public class JsonSchemaCommand extends BusinessObjectCommand {
 
     public static final String JSON_SCHEMA_FILE = "source-schema.json";
 
-    @CommandOption(option = "x", longOption = "jsonSchema")
+    @CommandOption(option = "x")
     protected String jsonSchemaFile = JSON_SCHEMA_FILE;
 
     protected Map<String, Schema> schemaMap = new LinkedHashMap<>();

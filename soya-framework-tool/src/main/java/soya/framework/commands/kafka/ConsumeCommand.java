@@ -7,7 +7,7 @@ import soya.framework.core.CommandOption;
 @Command(group = "kafka", name = "consume", httpMethod = Command.HttpMethod.GET)
 public class ConsumeCommand extends AbstractConsumeCommand {
 
-    @CommandOption(option = "f", longOption = "format")
+    @CommandOption(option = "f")
     protected String format;
 
     @Override

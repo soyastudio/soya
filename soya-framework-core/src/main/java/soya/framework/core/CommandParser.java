@@ -31,10 +31,11 @@ public final class CommandParser {
         while (!Object.class.equals(superClass)) {
             Field[] fields = superClass.getDeclaredFields();
             for (Field field : fields) {
+                String longOption = longOption(field.getName());
                 CommandOption commandOption = field.getAnnotation(CommandOption.class);
                 if (commandOption != null && options.getOption(commandOption.option()) == null) {
                     options.addOption(Option.builder(commandOption.option())
-                            .longOpt(commandOption.longOption())
+                            .longOpt(longOption)
                             .hasArg(commandOption.hasArg())
                             .required(commandOption.required())
                             .desc(commandOption.desc())
@@ -45,6 +46,10 @@ public final class CommandParser {
         }
 
         return options;
+    }
+
+    private static String longOption(String fieldName) {
+        return fieldName;
     }
 
     public static Field[] getOptionFields(Class<? extends CommandCallable> cmd) {
@@ -63,7 +68,7 @@ public final class CommandParser {
                 CommandOption commandOption = field.getAnnotation(CommandOption.class);
                 if (commandOption != null && options.getOption(commandOption.option()) == null) {
                     options.addOption(Option.builder(commandOption.option())
-                            .longOpt(commandOption.longOption())
+                            .longOpt(longOption(field.getName()))
                             .hasArg(commandOption.hasArg())
                             .required(commandOption.required())
                             .desc(commandOption.desc())

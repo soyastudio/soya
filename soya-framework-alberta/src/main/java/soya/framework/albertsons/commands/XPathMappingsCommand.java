@@ -10,7 +10,7 @@ import java.util.Map;
 
 public abstract class XPathMappingsCommand extends SchemaCommand {
 
-    @CommandOption(option = "m", longOption = "mappingFile")
+    @CommandOption(option = "m")
     protected String mappingFile = XPATH_MAPPINGS_FILE;
 
     protected Map<String, Mapping> mappings = new LinkedHashMap<>();

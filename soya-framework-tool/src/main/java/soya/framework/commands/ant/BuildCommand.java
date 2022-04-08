@@ -7,13 +7,13 @@ import soya.framework.core.CommandOption;
 @Command(group = "ant", name = "build")
 public class BuildCommand extends AntTaskCommand<Ant> {
 
-    @CommandOption(option = "b", longOption = "base", required = true)
+    @CommandOption(option = "b", required = true)
     private String baseDir;
 
-    @CommandOption(option = "f", longOption = "buildFile", required = true)
+    @CommandOption(option = "f", required = true)
     private String buildFile;
 
-    @CommandOption(option = "t", longOption = "task")
+    @CommandOption(option = "t")
     private String task;
 
     @Override

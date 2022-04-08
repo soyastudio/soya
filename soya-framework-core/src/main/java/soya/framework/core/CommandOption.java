@@ -11,8 +11,6 @@ public @interface CommandOption {
 
     String option();
 
-    String longOption() default "";
-
     boolean hasArg() default true;
 
     boolean required() default false;

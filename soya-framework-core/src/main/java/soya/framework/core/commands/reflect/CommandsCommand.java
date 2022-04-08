@@ -9,7 +9,7 @@ import java.util.List;
 @Command(group = "reflect", name = "commands", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
 public class CommandsCommand extends ReflectCommand<String> {
 
-    @CommandOption(option = "g", longOption = "group")
+    @CommandOption(option = "g")
     private String group;
 
     @Override

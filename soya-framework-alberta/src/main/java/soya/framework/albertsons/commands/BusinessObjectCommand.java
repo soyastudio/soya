@@ -26,11 +26,11 @@ public abstract class BusinessObjectCommand implements CommandCallable<String> {
     public static final String XLSX_MAPPINGS_FILE = "xpath-mappings.xlsx";
     public static final String XPATH_MAPPINGS_FILE = "xpath-mappings.properties";
 
-    @CommandOption(option = "h", longOption = "home", required = true,
+    @CommandOption(option = "h", required = true,
             paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "workspace.home")
     protected String home;
 
-    @CommandOption(option = "b", longOption = "businessObject", required = true, paramType = CommandOption.ParamType.PathParam)
+    @CommandOption(option = "b", required = true, paramType = CommandOption.ParamType.PathParam)
     protected String businessObject;
 
     protected File homeDir;

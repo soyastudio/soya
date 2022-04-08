@@ -11,7 +11,7 @@ import java.io.StringReader;
 @Command(group = "bod", name = "mappings-override")
 public class XPathMappingsOverrideCommand extends XPathMappingsRenderer {
 
-    @CommandOption(option = "o", longOption = "override", dataForProcessing = true)
+    @CommandOption(option = "o", dataForProcessing = true)
     protected String override;
 
     @Override

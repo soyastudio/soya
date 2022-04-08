@@ -6,7 +6,7 @@ import soya.framework.core.CommandOption;
 @Command(group = "kafka", name = "topics", httpMethod = Command.HttpMethod.GET)
 public class TopicListCommand extends KafkaCommand {
 
-    @CommandOption(option = "q", longOption = "query")
+    @CommandOption(option = "q")
     private String query;
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import soya.framework.dispatch.servlet.DispatchServlet;
 
-@Configuration
+//@Configuration
 public class DispatchServletConfiguration {
     @Bean
     public ServletRegistrationBean dispatchServletBean() {

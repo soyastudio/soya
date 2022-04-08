@@ -16,7 +16,7 @@ public abstract class ConstructCommand extends XPathMappingsCommand {
     public static final String ASSIGNMENT_NAMESPACE = "ASSIGN";
     public static final String CONSTRUCTION_NAMESPACE = "CONSTRUCT";
 
-    @CommandOption(option = "c", longOption = "construct")
+    @CommandOption(option = "c")
     protected String construction = "xpath-construct.properties";
 
     protected Map<String, Array> arrayMap = new LinkedHashMap<>();

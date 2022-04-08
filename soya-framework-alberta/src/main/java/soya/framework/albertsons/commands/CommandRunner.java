@@ -132,7 +132,7 @@ public class CommandRunner {
                 CommandOption commandOption = field.getAnnotation(CommandOption.class);
                 if (commandOption != null && options.getOption(commandOption.option()) == null) {
                     options.addOption(Option.builder(commandOption.option())
-                            .longOpt(commandOption.longOption())
+                            .longOpt(options.getOption(commandOption.option()).getLongOpt())
                             .hasArg(commandOption.hasArg())
                             .required(commandOption.required())
                             .desc(commandOption.desc())

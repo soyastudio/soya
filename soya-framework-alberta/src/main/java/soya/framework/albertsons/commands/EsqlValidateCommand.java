@@ -12,7 +12,7 @@ import java.util.Set;
 @Command(group = "bod", name = "esql-validation")
 public class EsqlValidateCommand extends XPathMappingsCommand {
 
-    @CommandOption(option = "c", longOption = "code", required = true, dataForProcessing = true)
+    @CommandOption(option = "c", required = true, dataForProcessing = true)
     protected String code;
 
     private Set<String> lines = new LinkedHashSet<>();

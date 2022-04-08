@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 public abstract class ResourceCommand implements CommandCallable<String> {
 
-    @CommandOption(option = "s", longOption = "source", required = true, dataForProcessing = true)
+    @CommandOption(option = "s", required = true, dataForProcessing = true)
     protected String source;
 
     protected String contents() throws Exception {

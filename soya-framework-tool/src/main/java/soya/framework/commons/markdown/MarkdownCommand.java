@@ -14,26 +14,26 @@ public abstract class MarkdownCommand implements CommandCallable {
     public static final String SOURCE_TYPE_FILE = "file";
     public static final String SOURCE_TYPE_URL = "url";
 
-    @CommandOption(option = "s", longOption = "source")
+    @CommandOption(option = "s")
     protected String source;
 
-    @CommandOption(option = "c", longOption = "contents")
+    @CommandOption(option = "c")
     protected String sourceType = SOURCE_TYPE_FILE;
 
-    @CommandOption(option = "t", longOption = "target")
+    @CommandOption(option = "t")
     protected String target;
 
     @Override
     public String call() throws Exception {
         Parser parser = Parser.builder().build();
         Node document = null;
-        if(SOURCE_TYPE_TEXT.equalsIgnoreCase(sourceType)) {
+        if (SOURCE_TYPE_TEXT.equalsIgnoreCase(sourceType)) {
             document = parser.parse(source);
 
-        } else if(SOURCE_TYPE_FILE.equalsIgnoreCase(sourceType)) {
+        } else if (SOURCE_TYPE_FILE.equalsIgnoreCase(sourceType)) {
             document = parser.parseReader(new FileReader(source));
 
-        } else if(SOURCE_TYPE_URL.equalsIgnoreCase(sourceType)) {
+        } else if (SOURCE_TYPE_URL.equalsIgnoreCase(sourceType)) {
 
         }
 

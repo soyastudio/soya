@@ -27,7 +27,7 @@ public abstract class AESCommand extends ResourceCommand {
             "RSA/ECB/OAEPWithSHA-256AndMGF1Padding"
     };
 
-    @CommandOption(option = "k", longOption = "secret", required = true)
+    @CommandOption(option = "k", required = true)
     protected String secret;
 
     protected String encrypt(String message, String secret) throws Exception {

@@ -46,8 +46,6 @@ public class DispatchServlet extends HttpServlet {
 
         swagger = SwaggerBuilder.create(context, path);
 
-        JsonElement json = JsonParser.parseReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("swagger2.json")));
-
     }
 
     @Override
@@ -83,7 +81,6 @@ public class DispatchServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         resp.setContentType(accept);
         resp.setStatus(status);
@@ -148,10 +145,11 @@ public class DispatchServlet extends HttpServlet {
         return null;
     }
 
-
     private String getValue(Field field, HttpServletRequest request) throws IOException {
         String value = null;
+
         CommandOption option = field.getAnnotation(CommandOption.class);
+
 
         if(option.dataForProcessing()) {
             value = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
@@ -160,7 +158,7 @@ public class DispatchServlet extends HttpServlet {
             value = request.getParameter(option.option());
 
             if (value == null) {
-                value = request.getParameter(option.longOption());
+                value = request.getParameter(field.getName());
             }
 
             if (value == null) {
@@ -168,7 +166,7 @@ public class DispatchServlet extends HttpServlet {
             }
 
             if (value == null) {
-                value = request.getHeader(option.longOption());
+                value = request.getHeader(field.getName());
             }
 
             if (value == null && !option.referenceKey().isEmpty()) {

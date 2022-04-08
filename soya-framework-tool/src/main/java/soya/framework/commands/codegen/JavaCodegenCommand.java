@@ -5,13 +5,13 @@ import soya.framework.core.CommandOption;
 
 public abstract class JavaCodegenCommand implements CommandCallable<String> {
 
-    @CommandOption(option = "p", longOption = "pkg")
+    @CommandOption(option = "p")
     protected String packageName;
 
-    @CommandOption(option = "c", longOption = "cls")
+    @CommandOption(option = "c")
     protected String className = "MyClass";
 
-    @CommandOption(option = "i", longOption = "imp")
+    @CommandOption(option = "i")
     protected String imports;
 
 }

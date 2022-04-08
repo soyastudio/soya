@@ -53,13 +53,49 @@ public class SoyaApiGenerator implements CommandCallable<String> {
 
         for(Field field: fields) {
             CommandOption commandOption = field.getAnnotation(CommandOption.class);
-            if(!commandOption.paramType().equals(CommandOption.ParamType.ReferenceParam)) {
+            CommandOption.ParamType paramType = commandOption.paramType();
+            if(paramType.equals(CommandOption.ParamType.ReferenceParam)) {
 
+            } else if(commandOption.dataForProcessing()) {
+                Swagger.BodyParameterBuilder bodyParameterBuilder = pathBuilder.bodyParameterBuilder(field.getName(), commandOption.desc());
+                if(commandOption.required()) {
+                    bodyParameterBuilder.required();
+                }
+
+                bodyParameterBuilder.build();
+
+            } else {
+                String param = paramType.name().substring(0, paramType.name().indexOf("Param")).toLowerCase();
+                Swagger.SimpleParameterBuilder parameterBuilder = pathBuilder.parameterBuilder(field.getName(), param, commandOption.desc());
+                if(commandOption.required()) {
+                    parameterBuilder.required();
+                }
+
+                parameterBuilder.build();
+            }
+
+            for(Command.MediaType t: command.httpRequestTypes()) {
+                if(Command.MediaType.APPLICATION_JSON.equals(t)) {
+                    pathBuilder.consumes("application/json");
+                } else if(Command.MediaType.APPLICATION_XML.equals(t)) {
+                    pathBuilder.consumes("application/xml");
+                } else {
+                    pathBuilder.consumes("text/plain");
+                }
+            }
+
+            for(Command.MediaType t: command.httpResponseTypes()) {
+                if(Command.MediaType.APPLICATION_JSON.equals(t)) {
+                    pathBuilder.produces("application/json");
+                } else if(Command.MediaType.APPLICATION_XML.equals(t)) {
+                    pathBuilder.produces("application/xml");
+                } else {
+                    pathBuilder.produces("text/plain");
+                }
             }
         }
 
         pathBuilder.build();
-        //builder.addPath(pathBuilder);
     }
 
 

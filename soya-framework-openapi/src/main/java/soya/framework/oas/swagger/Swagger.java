@@ -200,12 +200,6 @@ public class Swagger {
             return this;
         }
 
-        public SwaggerBuilder addPath(PathBuilder pathBuilder) {
-
-            pathBuilder.build();
-            return this;
-        }
-
         public PathBuilder pathBuilder(String path, String method, String operationId) {
             return new PathBuilder(this, path, HttpMethod.valueOf(method.toLowerCase()), operationId);
         }
@@ -238,10 +232,6 @@ public class Swagger {
             return new PathBuilder(this, path, HttpMethod.patch, operationId);
         }
 
-        public SwaggerBuilder addPath() {
-            return this;
-        }
-
         public SwaggerBuilder addTag(String name, String description) {
             TagObject tagObject = new TagObject();
             tagObject.name = name;
@@ -257,13 +247,22 @@ public class Swagger {
             api.info = this.info;
             api.host = this.host;
             api.basePath = this.basePath;
+
             api.schemas = this.schemas.toArray(new String[this.schemas.size()]);
-            api.consumes = this.consumes.toArray(new String[this.consumes.size()]);
-            api.produces = this.produces.toArray(new String[this.produces.size()]);
+
+            if(!consumes.isEmpty()){
+                api.consumes = this.consumes.toArray(new String[consumes.size()]);
+            }
+
+            if(produces.isEmpty()) {
+                api.produces = this.produces.toArray(new String[produces.size()]);
+            }
 
             api.paths = this.paths;
 
-            api.tags = tags.toArray(new TagObject[tags.size()]);
+            if(tags.isEmpty()) {
+                api.tags = tags.toArray(new TagObject[tags.size()]);
+            }
 
             return api;
         }
@@ -286,8 +285,29 @@ public class Swagger {
             this.operation = new OperationObject(operationId);
         }
 
-        public PathBuilder addParameter() {
+        public SimpleParameterBuilder parameterBuilder(String name, String in, String description) {
+            return new SimpleParameterBuilder(this, name, in, description);
+        }
 
+        public BodyParameterBuilder bodyParameterBuilder(String name, String description) {
+            return new BodyParameterBuilder(this, name, description);
+        }
+
+        public PathBuilder consumes(String... consume) {
+            if(consume != null) {
+                for(String c: consume) {
+                    operation.consumes.add(c);
+                }
+            }
+            return this;
+        }
+
+        public PathBuilder produces(String... produces) {
+            if(produces != null) {
+                for(String p: produces) {
+                    operation.produces.add(p);
+                }
+            }
             return this;
         }
 
@@ -331,6 +351,151 @@ public class Swagger {
             }
 
             return owner;
+        }
+    }
+
+    static abstract class ParameterBuilder {
+        private Swagger.PathBuilder owner;
+
+        protected Swagger.ParameterObject parameterObject;
+
+        protected ParameterBuilder(Swagger.PathBuilder owner, String name, String in, String description) {
+            this.owner = owner;
+            this.parameterObject = new Swagger.ParameterObject(name, in, description);
+        }
+
+        public final Swagger.PathBuilder build() {
+            owner.parameterObjects.add(parameterObject);
+            return owner;
+        }
+    }
+
+    public static class SimpleParameterBuilder extends ParameterBuilder {
+
+        protected SimpleParameterBuilder(Swagger.PathBuilder owner, String name, String in, String description) {
+            super(owner, name, in, description);
+            if("query".equals(in)) {
+                parameterObject.required = true;
+            }
+        }
+
+        // For path level
+        public SimpleParameterBuilder forPath() {
+            parameterObject.forPath = true;
+            return this;
+        }
+
+        public SimpleParameterBuilder required() {
+            parameterObject.required = true;
+            return this;
+        }
+
+        public SimpleParameterBuilder description(String description) {
+            parameterObject.description = description;
+            return this;
+        }
+
+        public SimpleParameterBuilder setType(String type) {
+            parameterObject.type = type;
+            return this;
+        }
+
+        public SimpleParameterBuilder setFormat(String format) {
+            parameterObject.format = format;
+            return this;
+        }
+
+        public SimpleParameterBuilder setAllowEmptyValue(boolean allowEmptyValue) {
+            parameterObject.allowEmptyValue = allowEmptyValue;
+            return this;
+        }
+
+        public SimpleParameterBuilder setItems(Swagger.ItemsObject items) {
+            parameterObject.items = items;
+            return this;
+        }
+
+        public SimpleParameterBuilder setCollectionFormat(String collectionFormat) {
+            parameterObject.collectionFormat = collectionFormat;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMaximum(Double maximum) {
+            parameterObject.maximum = maximum;
+            return this;
+        }
+
+        public SimpleParameterBuilder setExclusiveMaximum(Boolean exclusiveMaximum) {
+            parameterObject.exclusiveMaximum = exclusiveMaximum;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMinimum(Double minimum) {
+            parameterObject.minimum = minimum;
+            return this;
+        }
+
+        public SimpleParameterBuilder setGetExclusiveMinimum(Boolean getExclusiveMinimum) {
+            parameterObject.getExclusiveMinimum = getExclusiveMinimum;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMaxLength(Integer maxLength) {
+            parameterObject.maxLength = maxLength;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMinLength(Integer minLength) {
+            parameterObject.minLength = minLength;
+            return this;
+        }
+
+        public SimpleParameterBuilder setPattern(String pattern) {
+            parameterObject.pattern = pattern;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMaxItems(Integer maxItems) {
+            parameterObject.maxItems = maxItems;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMinItems(Integer minItems) {
+            parameterObject.minItems = minItems;
+            return this;
+        }
+
+        public SimpleParameterBuilder setUniqueItems(Boolean uniqueItems) {
+            parameterObject.uniqueItems = uniqueItems;
+            return this;
+        }
+
+        public SimpleParameterBuilder setMultipleOf(Double multipleOf) {
+            parameterObject.multipleOf = multipleOf;
+            return this;
+        }
+    }
+
+    public static class BodyParameterBuilder extends ParameterBuilder {
+
+        protected BodyParameterBuilder(Swagger.PathBuilder owner, String name, String description) {
+            super(owner, name, "body", description);
+        }
+
+        // For path level
+        public BodyParameterBuilder forPath() {
+            parameterObject.forPath = true;
+            return this;
+        }
+
+        public BodyParameterBuilder required() {
+            parameterObject.required = true;
+            return this;
+        }
+
+        public BodyParameterBuilder description(String description) {
+            parameterObject.description = description;
+            return this;
         }
     }
 
@@ -407,8 +572,8 @@ public class Swagger {
         private String summary;
         private String description;
         private String operationId;
-        private List<String> consumes = new ArrayList<>();
-        private List<String> produces = new ArrayList<>();
+        private Set<String> consumes = new LinkedHashSet<>();
+        private Set<String> produces = new LinkedHashSet<>();
 
         private List<ParameterObject> parameters = new ArrayList<>();
 
@@ -432,11 +597,11 @@ public class Swagger {
             return operationId;
         }
 
-        public List<String> getConsumes() {
+        public Set<String> getConsumes() {
             return consumes;
         }
 
-        public List<String> getProduces() {
+        public Set<String> getProduces() {
             return produces;
         }
 
@@ -473,11 +638,10 @@ public class Swagger {
         // protected String[] enum;
         protected Double multipleOf;
 
-        public ParameterObject(String name, String in, String description, boolean required) {
+        public ParameterObject(String name, String in, String description) {
             this.name = name;
             this.in = in;
             this.description = description;
-            this.required = required;
         }
 
 
@@ -518,4 +682,6 @@ public class Swagger {
 
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, token);
     }
+
+
 }

@@ -37,7 +37,7 @@ public final class CommandParser {
                     options.addOption(Option.builder(commandOption.option())
                             .longOpt(longOption)
                             .hasArg(commandOption.hasArg())
-                            .required(commandOption.required())
+                            .required(!CommandOption.ParamType.ReferenceParam.equals(commandOption.paramType()) && commandOption.required())
                             .desc(commandOption.desc())
                             .build());
                 }
@@ -59,20 +59,13 @@ public final class CommandParser {
         }
 
         List<Field> list = new ArrayList<>();
-        Options options = new Options();
 
         Class superClass = cmd;
         while (!Object.class.equals(superClass)) {
             Field[] fields = superClass.getDeclaredFields();
             for (Field field : fields) {
                 CommandOption commandOption = field.getAnnotation(CommandOption.class);
-                if (commandOption != null && options.getOption(commandOption.option()) == null) {
-                    options.addOption(Option.builder(commandOption.option())
-                            .longOpt(longOption(field.getName()))
-                            .hasArg(commandOption.hasArg())
-                            .required(commandOption.required())
-                            .desc(commandOption.desc())
-                            .build());
+                if (commandOption != null ) {
                     list.add(field);
                 }
             }
@@ -81,6 +74,22 @@ public final class CommandParser {
         Collections.sort(list, new CommandFieldComparator());
 
         return list.toArray(new Field[list.size()]);
+    }
+
+    public static Field getDataInputField(Class<? extends CommandCallable> cmd) {
+        Field field = null;
+        Field[] fields = getOptionFields(cmd);
+        for(Field f: fields) {
+            CommandOption commandOption = f.getAnnotation(CommandOption.class);
+            if(commandOption.dataForProcessing()) {
+                if(field == null) {
+                    field = f;
+                } else {
+                    throw new IllegalArgumentException("Command has multiple data input field: " + cmd.getName());
+                }
+            }
+        }
+        return field;
     }
 
     public static CommandCallable<?> create(Class<? extends CommandCallable> cls, String[] args) throws Exception {

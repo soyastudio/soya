@@ -134,8 +134,10 @@ public class Resources {
         return fromFile(file);
     }
 
-    private static String fromFile(URI uri) {
-        return null;
+    private static String fromFile(URI uri) throws IOException {
+        String file = uri.toURL().getFile();
+
+        return IOUtils.toString(uri, Charset.defaultCharset());
     }
 
     private static String fromFile(File file) throws IOException {

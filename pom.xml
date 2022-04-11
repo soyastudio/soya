@@ -251,6 +251,7 @@
         <module>soya-framework-admin</module>
         <module>soya-framework-openbank</module>
         <module>soya-framework-openapi</module>
+        <module>soya-application-albertsons</module>
     </modules>
 
 </project>

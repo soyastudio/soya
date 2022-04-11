@@ -72,8 +72,6 @@ public class DispatchServlet extends HttpServlet {
 
     private void dispatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println("============== dispatching request: " + req.getPathInfo());
-
         String accept = req.getHeader("accept");
         int status = HttpServletResponse.SC_OK;
         Object result = null;
@@ -107,6 +105,7 @@ public class DispatchServlet extends HttpServlet {
         String command = null;
 
         List<String> pathParams = new ArrayList<>();
+
         StringTokenizer tokenizer = new StringTokenizer(req.getPathInfo(), "/");
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -126,9 +125,31 @@ public class DispatchServlet extends HttpServlet {
             Class<? extends CommandCallable> cls = context.getCommandType(uri);
             CommandCallable<?> cmd = cls.newInstance();
             Field[] fields = CommandParser.getOptionFields(cls);
+            int pathIndex = 0;
             for (Field field : fields) {
                 CommandOption option = field.getAnnotation(CommandOption.class);
-                String value = getValue(field, req);
+                String value = null;
+                if (CommandOption.ParamType.ReferenceParam.equals(option.paramType())) {
+                    value = context.getProperty(option.referenceKey());
+
+                } else if (option.dataForProcessing()) {
+                    value = req.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+
+                } else if (CommandOption.ParamType.PathParam.equals(option.paramType())) {
+                    value = pathParams.get(pathIndex);
+                    pathIndex++;
+
+                } else if (CommandOption.ParamType.HeaderParam.equals(option.paramType())) {
+                    value = req.getHeader(field.getName());
+
+                } else if (CommandOption.ParamType.QueryParam.equals(option.paramType()) || option.dataForProcessing()) {
+                    value = req.getParameter(option.option());
+                    if(value == null) {
+                        value = req.getParameter(field.getName());
+                    }
+
+                }
+
                 if (value != null && !value.isEmpty()) {
                     field.setAccessible(true);
                     field.set(cmd, value);
@@ -145,39 +166,6 @@ public class DispatchServlet extends HttpServlet {
         }
 
         return null;
-    }
-
-    private String getValue(Field field, HttpServletRequest request) throws IOException {
-        String value = null;
-
-        CommandOption option = field.getAnnotation(CommandOption.class);
-
-
-        if (option.dataForProcessing()) {
-            value = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-
-        } else {
-            value = request.getParameter(option.option());
-
-            if (value == null) {
-                value = request.getParameter(field.getName());
-            }
-
-            if (value == null) {
-                value = request.getHeader(option.option());
-            }
-
-            if (value == null) {
-                value = request.getHeader(field.getName());
-            }
-
-            if (value == null && !option.referenceKey().isEmpty()) {
-                value = context.getProperty(option.referenceKey());
-            }
-
-        }
-
-        return value;
     }
 
 }

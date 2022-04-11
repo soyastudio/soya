@@ -3,7 +3,7 @@ package soya.framework.core.commands.text;
 import soya.framework.core.CommandGroup;
 
 @CommandGroup(group = "text-util",
-        displayName = "Text Processing Tool",
+        title = "Text Processing Tool",
         description = "Toolkit for processing text.")
 public interface TextUtilsGroup {
 }

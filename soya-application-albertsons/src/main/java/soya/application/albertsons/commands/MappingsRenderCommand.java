@@ -1,0 +1,20 @@
+package soya.application.albertsons.commands;
+
+import soya.framework.commons.util.CodeBuilder;
+import soya.framework.core.Command;
+
+import java.util.Locale;
+
+@Command(group = "business-object-development", name = "mappings", httpMethod = Command.HttpMethod.GET)
+public class MappingsRenderCommand extends XPathMappingsCommand {
+    @Override
+    protected String execute() throws Exception {
+        CodeBuilder builder = CodeBuilder.newInstance();
+        mappings.entrySet().forEach(e -> {
+            String value = e.getValue().toString().toUpperCase(Locale.ROOT);
+            builder.append(e.getKey()).append("=").appendLine(e.getValue().toString());
+
+        });
+        return builder.toString();
+    }
+}

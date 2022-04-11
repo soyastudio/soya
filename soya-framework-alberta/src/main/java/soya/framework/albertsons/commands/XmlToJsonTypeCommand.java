@@ -2,8 +2,9 @@ package soya.framework.albertsons.commands;
 
 import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
-import soya.framework.transform.schema.KnowledgeTreeNode;
-import soya.framework.transform.schema.xs.XsNode;
+import soya.framework.document.xmlbeans.XsUtils;
+import soya.framework.kt.KnowledgeTreeNode;
+import soya.framework.document.xmlbeans.xs.XsNode;
 
 import java.util.Locale;
 

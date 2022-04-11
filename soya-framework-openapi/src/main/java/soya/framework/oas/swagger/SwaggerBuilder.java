@@ -23,7 +23,7 @@ public class SwaggerBuilder {
                 CommandExecutionContext.GroupDescription groupDescription = context.groupDescription(e);
                 Swagger.TagObject tagObject = Swagger.TagObject.instance();
                 builder.addTag(Swagger.TagObject.instance()
-                        .name(groupDescription.getDisplayName())
+                        .name(groupDescription.getTitle())
                         .description(groupDescription.getDescription())
                 );
 
@@ -45,7 +45,7 @@ public class SwaggerBuilder {
 
         Command command = cls.getAnnotation(Command.class);
         CommandExecutionContext.GroupDescription groupDescription = context.groupDescription(command.group());
-        String tag = groupDescription == null ? command.group() : groupDescription.getDisplayName();
+        String tag = groupDescription == null ? command.group() : groupDescription.getTitle();
 
         Field[] fields = CommandParser.getOptionFields(cls);
         String path = "/" + command.group() + "/" + command.name();
@@ -82,25 +82,30 @@ public class SwaggerBuilder {
 
                 parameterBuilder.build();
             }
+        }
 
-            for (Command.MediaType t : command.httpRequestTypes()) {
-                if (Command.MediaType.APPLICATION_JSON.equals(t)) {
-                    pathBuilder.consumes("application/json");
-                } else if (Command.MediaType.APPLICATION_XML.equals(t)) {
-                    pathBuilder.consumes("application/xml");
-                } else {
-                    pathBuilder.consumes("text/plain");
-                }
+        for (Command.MediaType t : command.httpRequestTypes()) {
+            if (Command.MediaType.APPLICATION_JSON.equals(t)) {
+                pathBuilder.consumes("application/json");
+
+            } else if (Command.MediaType.APPLICATION_XML.equals(t)) {
+                pathBuilder.consumes("application/xml");
+
+            } else {
+                pathBuilder.consumes("text/plain");
             }
+        }
 
-            for (Command.MediaType t : command.httpResponseTypes()) {
-                if (Command.MediaType.APPLICATION_JSON.equals(t)) {
-                    pathBuilder.produces("application/json");
-                } else if (Command.MediaType.APPLICATION_XML.equals(t)) {
-                    pathBuilder.produces("application/xml");
-                } else {
-                    pathBuilder.produces("text/plain");
-                }
+        for (Command.MediaType t : command.httpResponseTypes()) {
+
+            if (Command.MediaType.APPLICATION_JSON.equals(t)) {
+                pathBuilder.produces("application/json");
+
+            } else if (Command.MediaType.APPLICATION_XML.equals(t)) {
+                pathBuilder.produces("application/xml");
+
+            } else if (Command.MediaType.TEXT_PLAIN.equals(t)){
+                pathBuilder.produces("text/plain");
             }
         }
 

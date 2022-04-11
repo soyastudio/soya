@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface CommandGroup {
     String group();
 
-    String displayName();
+    String title();
 
     String description() default "";
 }

@@ -2,10 +2,10 @@ package soya.framework.transform.schema.converter;
 
 import org.apache.xmlbeans.SchemaType;
 import org.apache.xmlbeans.SchemaTypeSystem;
-import soya.framework.transform.schema.KnowledgeTree;
-import soya.framework.transform.schema.xs.XmlBeansUtils;
-import soya.framework.transform.schema.xs.XsKnowledgeBase;
-import soya.framework.transform.schema.xs.XsNode;
+import soya.framework.kt.KnowledgeTree;
+import soya.framework.document.xmlbeans.xs.XmlBeansUtils;
+import soya.framework.document.xmlbeans.xs.XsKnowledgeBase;
+import soya.framework.document.xmlbeans.xs.XsNode;
 
 import java.io.File;
 import java.util.Iterator;

@@ -1,0 +1,9 @@
+server:
+  port: 7833
+
+workspace:
+  home: C:/github/Workshop/AppBuild
+
+ant:
+  work:
+    home: C:/github/Workshop/Ant

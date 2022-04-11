@@ -34,14 +34,19 @@ public abstract class CommandExecutionContext {
                 Reflections scanner = new Reflections(pkg);
                 scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
                     CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
-                    GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.displayName(), commandGroup.description());
-                    groupDescriptions.put(groupDescription.getGroup(), groupDescription);
+                    if (commandGroup != null) {
+                        GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.title(), commandGroup.description());
+                        groupDescriptions.put(groupDescription.getGroup(), groupDescription);
+
+                    }
                 });
 
                 scanner.getTypesAnnotatedWith(Command.class).forEach(e -> {
                     Command command = e.getAnnotation(Command.class);
-                    String uri = command.group() + "://" + command.name();
-                    commands.put(uri, (Class<? extends CommandCallable>) e);
+                    if (command != null) {
+                        String uri = command.group() + "://" + command.name();
+                        commands.put(uri, (Class<? extends CommandCallable>) e);
+                    }
                 });
             });
 
@@ -49,17 +54,18 @@ public abstract class CommandExecutionContext {
             Reflections scanner = new Reflections();
             scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
                 CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
-                if(commandGroup != null) {
-                    GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.displayName(), commandGroup.description());
+                if (commandGroup != null) {
+                    GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.title(), commandGroup.description());
                     groupDescriptions.put(groupDescription.getGroup(), groupDescription);
-
                 }
             });
 
             scanner.getTypesAnnotatedWith(Command.class).forEach(e -> {
                 Command command = e.getAnnotation(Command.class);
-                String uri = command.group() + "://" + command.name();
-                commands.put(uri, (Class<? extends CommandCallable>) e);
+                if (command != null) {
+                    String uri = command.group() + "://" + command.name();
+                    commands.put(uri, (Class<? extends CommandCallable>) e);
+                }
             });
 
         }
@@ -148,12 +154,12 @@ public abstract class CommandExecutionContext {
 
     public static final class GroupDescription {
         private final String group;
-        private final String displayName;
+        private final String title;
         private final String description;
 
-        private GroupDescription(String group, String displayName, String description) {
+        private GroupDescription(String group, String title, String description) {
             this.group = group;
-            this.displayName = displayName;
+            this.title = title;
             this.description = description;
         }
 
@@ -161,8 +167,8 @@ public abstract class CommandExecutionContext {
             return group;
         }
 
-        public String getDisplayName() {
-            return displayName;
+        public String getTitle() {
+            return title;
         }
 
         public String getDescription() {
@@ -242,22 +248,7 @@ public abstract class CommandExecutionContext {
                 executorService = Executors.newSingleThreadExecutor();
             }
 
-            return new DefaultExecutionContext(properties, executorService, new DefaultServiceLocator(serviceLocator, services), scanPackages);
-        }
-
-        private Set<Class<? extends CommandCallable>> scanPackage(String pkg) {
-            Set<Class<? extends CommandCallable>> set = new HashSet<>();
-            Reflections reflections = new Reflections(pkg);
-            Set<Class<?>> subTypes =
-                    reflections.getTypesAnnotatedWith(Command.class);
-            subTypes.forEach(c -> {
-                Command command = c.getAnnotation(Command.class);
-                if (command != null) {
-                    set.add((Class<? extends CommandCallable>) c);
-                }
-            });
-
-            return set;
+            return new DefaultExecutionContext(properties, executorService, new DefaultServiceLocator(serviceLocator, services), this.scanPackages);
         }
     }
 

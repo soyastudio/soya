@@ -1,13 +1,13 @@
 package soya.application.albertsons.commands;
 
 import soya.framework.core.Command;
-import soya.framework.core.commands.reflect.CommandLineCommand;
+import soya.framework.core.commands.DispatchCommand;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Command(group = "business-object-management", name = "commandline", httpRequestTypes = Command.MediaType.TEXT_PLAIN)
-public class DispatchCommand extends CommandLineCommand {
+public class BusinessObjectDispatchCommand extends DispatchCommand {
     private static Map<String, String> mappings = new HashMap<>();
 
     static {

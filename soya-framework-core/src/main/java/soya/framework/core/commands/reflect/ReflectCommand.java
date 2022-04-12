@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import soya.framework.core.CommandCallable;
 
 public abstract class ReflectCommand<T> implements CommandCallable<T> {
-    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    protected static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     protected String toJson(Object o) {
         if (o == null) {

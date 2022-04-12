@@ -6,39 +6,65 @@ import org.apache.commons.cli.Options;
 import soya.framework.core.*;
 
 import java.lang.reflect.Field;
+import java.net.URI;
 
-@Command(group = "reflect", name = "command", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
-public class CommandCommand extends ReflectCommand<String> {
-    @CommandOption(option = "g", required = true)
-    private String group;
+@Command(group = "reflect", name = "overview", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
+public class OverviewCommand extends ReflectCommand<String> {
+    private CommandExecutionContext context = CommandExecutionContext.getInstance();
 
-    @CommandOption(option = "c", required = true)
-    private String command;
+    @CommandOption(option = "q")
+    private String filter;
 
     @Override
     public String call() throws Exception {
-        String uri = group + "://" + command;
-        Class<? extends CommandCallable> cls = CommandExecutionContext.getInstance().getCommandType(uri);
+        if(filter == null || filter.isEmpty()) {
+            JsonObject jsonObject = new JsonObject();
+            context.groups().forEach(group -> {
+                jsonObject.add(group, groupInfo(group));
+            });
+
+            return toJson(jsonObject);
+
+        } else if (filter.contains("://")) {
+            URI uri = new URI(filter);
+            String key = uri.getScheme() + "://" + uri.getHost();
+            Class<? extends CommandCallable> cls = context.getCommandType(key);
+
+            return GSON.toJson(commandInfo(cls));
+
+        } else {
+            return GSON.toJson(groupInfo(filter));
+        }
+    }
+
+    private JsonArray groupInfo(String group) {
+        JsonArray array = new JsonArray();
+        context.getCommands(group).forEach(uri -> {
+            Class<? extends CommandCallable> cls = context.getCommandType(uri);
+            if(cls.getAnnotation(Command.class) != null) {
+                array.add(commandInfo(cls));
+            }
+
+        });
+
+        return array;
+    }
+
+    private JsonObject commandInfo(Class<? extends CommandCallable> cls) {
         Command cmd = cls.getAnnotation(Command.class);
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("group", cmd.group());
         jsonObject.addProperty("name", cmd.name());
-
-        JsonArray desc = new JsonArray();
-        for(String ln: cmd.desc()) {
-            desc.add(desc);
-        }
-        jsonObject.add("description", desc);
+        jsonObject.addProperty("id", cmd.group() + "://" + cmd.name());
+        jsonObject.addProperty("type", cls.getName());
+        jsonObject.add("description", GSON.toJsonTree(cmd.desc()));
 
         JsonArray array = new JsonArray();
-
-        Class<?> superClass = cls;
         Field[] fields = CommandParser.getOptionFields(cls);
         Options options = CommandParser.parse(cls);
 
         StringBuilder builder = new StringBuilder();
-        StringBuilder uriBuilder = new StringBuilder(group).append("://").append(command);
+        StringBuilder uriBuilder = new StringBuilder(cmd.group()).append("://").append(cmd.name());
         if (fields.length > 0) {
             uriBuilder.append("?");
         }
@@ -50,6 +76,10 @@ public class CommandCommand extends ReflectCommand<String> {
                 JsonObject option = new JsonObject();
                 option.addProperty("option", commandOption.option());
                 option.addProperty("longOption", options.getOption(commandOption.option()).getLongOpt());
+                if(commandOption.dataForProcessing()) {
+                    option.addProperty("dataForProcessing", true);
+
+                }
                 option.addProperty("required", commandOption.required());
                 option.addProperty("hasArg", commandOption.hasArg());
                 option.addProperty("defaultValue", commandOption.defaultValue());
@@ -86,6 +116,6 @@ public class CommandCommand extends ReflectCommand<String> {
         jsonObject.addProperty("command-line", builder.toString().trim());
         jsonObject.addProperty("uri", uriBuilder.toString().trim());
 
-        return toJson(jsonObject);
+        return jsonObject;
     }
 }

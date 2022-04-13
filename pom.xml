@@ -252,6 +252,7 @@
         <module>soya-framework-alberta</module>
         <module>soya-framework-openbank</module>
         <module>soya-application-albertsons</module>
+        <module>soya-framework-quartz</module>
     </modules>
 
 </project>

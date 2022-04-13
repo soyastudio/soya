@@ -15,7 +15,7 @@ public class MappingsOverrideCommand extends MappingsRenderCommand {
     protected String override;
 
     @Override
-    protected String execute() throws Exception {
+    protected void annotate() throws Exception {
         if(override != null) {
             String contents = Resources.getResourceAsString(override);
             try {
@@ -48,7 +48,5 @@ public class MappingsOverrideCommand extends MappingsRenderCommand {
                 throw new RuntimeException(e);
             }
         }
-
-        return super.execute();
     }
 }

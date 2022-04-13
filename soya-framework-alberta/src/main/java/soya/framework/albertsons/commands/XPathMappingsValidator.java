@@ -1,8 +1,8 @@
 package soya.framework.albertsons.commands;
 
 import soya.framework.core.Command;
-import soya.framework.document.xmlbeans.XsUtils;
-import soya.framework.document.xmlbeans.xs.XsNode;
+import soya.framework.commands.transform.xmlbeans.XsUtils;
+import soya.framework.commands.transform.xmlbeans.xs.XsNode;
 
 @Command(group = "bod", name = "mappings-validation", httpMethod = Command.HttpMethod.GET)
 public class XPathMappingsValidator extends XPathMappingsCommand {

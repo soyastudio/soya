@@ -4,8 +4,8 @@ import com.google.gson.JsonParser;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import soya.framework.core.Command;
-import soya.framework.transform.schema.avro.SampleAvroGenerator;
-import soya.framework.transform.schema.converter.XsdToAvsc;
+import soya.framework.commands.transform.avro.SampleAvroGenerator;
+import soya.framework.commands.transform.converter.XsdToAvsc;
 
 import java.util.Random;
 

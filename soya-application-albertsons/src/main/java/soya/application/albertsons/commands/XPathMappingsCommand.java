@@ -2,8 +2,8 @@ package soya.application.albertsons.commands;
 
 import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.core.CommandOption;
-import soya.framework.document.xmlbeans.xs.XsKnowledgeBase;
-import soya.framework.document.xmlbeans.xs.XsNode;
+import soya.framework.commands.transform.xmlbeans.xs.XsKnowledgeBase;
+import soya.framework.commands.transform.xmlbeans.xs.XsNode;
 import soya.framework.kt.KnowledgeTree;
 
 import java.io.BufferedReader;
@@ -44,4 +44,15 @@ public abstract class XPathMappingsCommand extends BusinessObjectCommand {
         }
     }
 
+    @Override
+    protected String execute() throws Exception {
+        annotate();
+        return render();
+    }
+
+    protected void annotate() throws Exception {
+
+    }
+
+    protected abstract String render() throws Exception;
 }

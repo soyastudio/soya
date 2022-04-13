@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="soya-framework-openbank" />
+        <module name="soya-framework-quartz" />
+        <module name="soya-framework-alberta" />
+        <module name="soya-framework-core" />
+        <module name="soya-application-albertsons" />
+        <module name="soya-framework-boot" />
+        <module name="soya-framework-tool" />
+        <module name="soya-framework-openapi" />
+        <module name="soya-framework-servlet" />
+        <module name="soya-framework-ams" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="soya-framework-commons" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="soya-application-albertsons" options="-parameters" />
+      <module name="soya-framework-alberta" options="-parameters" />
+      <module name="soya-framework-boot" options="-parameters" />
+      <module name="soya-framework-quartz" options="-parameters" />
+    </option>
+  </component>
+</project>

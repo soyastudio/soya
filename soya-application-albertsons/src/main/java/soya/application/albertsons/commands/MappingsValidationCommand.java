@@ -1,16 +1,14 @@
 package soya.application.albertsons.commands;
 
-import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.core.Command;
-import soya.framework.document.xmlbeans.XsUtils;
-import soya.framework.document.xmlbeans.xs.XsNode;
-import soya.framework.kt.KnowledgeTree;
+import soya.framework.commands.transform.xmlbeans.XsUtils;
+import soya.framework.commands.transform.xmlbeans.xs.XsNode;
 
 @Command(group = "business-object-development", name = "mappings-validation", httpMethod = Command.HttpMethod.GET)
 public class MappingsValidationCommand extends XPathMappingsCommand {
 
     @Override
-    protected String execute() {
+    protected String render() {
         StringBuilder builder = new StringBuilder();
         mappings.entrySet().forEach(e -> {
             String path = e.getKey().trim();

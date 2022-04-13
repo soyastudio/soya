@@ -1,9 +1,9 @@
 package soya.framework.albertsons.commands;
 
 import org.apache.xmlbeans.SchemaTypeSystem;
-import soya.framework.document.xmlbeans.XsUtils;
+import soya.framework.commands.transform.xmlbeans.XsUtils;
 import soya.framework.kt.KnowledgeTree;
-import soya.framework.document.xmlbeans.xs.XsNode;
+import soya.framework.commands.transform.xmlbeans.xs.XsNode;
 
 import java.io.File;
 

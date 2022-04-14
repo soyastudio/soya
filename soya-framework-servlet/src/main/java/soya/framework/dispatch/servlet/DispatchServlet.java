@@ -70,6 +70,26 @@ public class DispatchServlet extends HttpServlet {
         dispatch(req, resp);
     }
 
+    @Override
+    protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        dispatch(req, resp);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        dispatch(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        dispatch(req, resp);
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        dispatch(req, resp);
+    }
+
     private void dispatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String accept = req.getHeader("accept");

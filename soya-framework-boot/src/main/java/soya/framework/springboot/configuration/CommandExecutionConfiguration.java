@@ -1,12 +1,14 @@
-package soya.framework.admin.configuration;
+package soya.framework.springboot.configuration;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import soya.framework.core.CommandExecutionContext;
+import soya.framework.dispatch.servlet.DispatchServlet;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +27,14 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
         return Executors.newFixedThreadPool(10);
     }
 
+    @Bean
+    ServletRegistrationBean dispatchServletBean() {
+        ServletRegistrationBean bean = new ServletRegistrationBean(new DispatchServlet(), "/api/*");
+        bean.setLoadOnStartup(10);
+
+        return bean;
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         CommandExecutionContext.builder()
@@ -32,7 +42,8 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
                 .serviceLocator(applicationContext)
                 .setProperty("workspace.home", workspaceHome)
                 .setProperty("ant.work.home", antWorkHome)
-                //.addScanPackages("soya.framework.core.commands")
+                //.addScanPackages("soya.framework.core.commands.reflect")
+                //.addScanPackages("soya.framework.commands.quartz")
                 .create();
     }
 

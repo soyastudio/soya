@@ -1,17 +1,38 @@
 package soya.framework.commands.quartz;
 
-import org.quartz.Scheduler;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import org.quartz.SchedulerMetaData;
 import soya.framework.core.Command;
-import soya.framework.core.CommandExecutionContext;
 
-@Command(group = "quartz-scheduler", name = "metadata", httpMethod = Command.HttpMethod.GET)
+@Command(group = "quartz-scheduler", name = "scheduler-metadata", httpMethod = Command.HttpMethod.GET, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
 public class SchedulerMetadataCommand extends QuartzSchedulerCommand {
 
     @Override
     public String call() throws Exception {
-        Scheduler scheduler = CommandExecutionContext.getInstance().getService(Scheduler.class);
+        JsonObject json = new JsonObject();
+        SchedulerMetaData metaData = scheduler.getMetaData();
 
-        System.out.println("============== " + scheduler.getClass().getName());
-        return null;
+        json.addProperty("version", metaData.getVersion());
+        json.addProperty("schedulerName", metaData.getSchedulerName());
+        json.addProperty("schedulerInstanceId", metaData.getSchedulerInstanceId());
+        json.addProperty("schedulerClass", metaData.getSchedulerClass().getName());
+
+        json.addProperty("startTime", metaData.getRunningSince().toString());
+        json.addProperty("jobsExecuted", metaData.getNumberOfJobsExecuted());
+        json.addProperty("remote", metaData.isSchedulerRemote());
+        json.addProperty("started", metaData.isStarted());
+        json.addProperty("stopped", metaData.isShutdown());
+        json.addProperty("standby", metaData.isInStandbyMode());
+
+        json.addProperty("threadPoolClass", metaData.getThreadPoolClass().getName());
+        json.addProperty("threadPoolSize", metaData.getThreadPoolSize());
+
+        json.addProperty("jobStoreClass", metaData.getJobStoreClass().getName());
+        json.addProperty("jobStoreClustered", metaData.isJobStoreClustered());
+        json.addProperty("jobStoreSupportsPersistence", metaData.isJobStoreSupportsPersistence());
+
+        return new GsonBuilder().setPrettyPrinting().create().toJson(json);
     }
+
 }

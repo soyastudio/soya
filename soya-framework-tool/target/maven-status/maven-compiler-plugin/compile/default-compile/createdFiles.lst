@@ -1,5 +1,6 @@
 soya\framework\commands\apache\camel\ApacheCamelCommand.class
 soya\framework\commands\apache\kafka\KafkaUtils.class
+soya\framework\commands\quartz\CreateCronTriggerCommand.class
 soya\framework\commands\apache\kafka\TopicListCommand.class
 soya\framework\commands\transform\poi\MappingService$OutputXmlCommand.class
 soya\framework\commands\transform\avro\SampleAvroGenerator$LengthBounds.class
@@ -15,13 +16,16 @@ soya\framework\commands\apache\kafka\PubAndSubCommand.class
 soya\framework\commands\transform\xmlbeans\xs\XmlBeansUtils$XMLBuildInType.class
 soya\framework\commands\apache\ant\AntTaskChain$DeleteProcessor.class
 soya\framework\commands\transform\xmlbeans\xs\XsNode.class
+soya\framework\commands\quartz\StopSchedulerCommand.class
 soya\framework\commands\service\DataSourceBuilder$HikariCPDataSourceBuilder.class
 soya\framework\commands\script\groovy\GroovyCallback.class
 soya\framework\commands\apache\kafka\KafkaCommands$OffsetInfo.class
 soya\framework\commands\transform\avro\SampleAvroGenerator$BooleanIterator.class
 soya\framework\commands\transform\xmlbeans\SampleXmlGenerator.class
+soya\framework\commands\quartz\PauseSchedulerCommand.class
 soya\framework\commands\transform\poi\MappingService$MismatchCommand.class
 soya\framework\commands\transform\converter\XmlToAvro.class
+soya\framework\commands\quartz\SchedulerMetadataCommand.class
 soya\framework\commands\markdown\SoyaCoderMarkdown.class
 soya\framework\commands\transform\xmlbeans\xs\XsKnowledgeBase.class
 soya\framework\commands\script\groovy\GroovyCallback$1.class
@@ -35,7 +39,10 @@ soya\framework\commands\transform\xmlbeans\xs\XsKnowledgeBase$XmlSchemaExtractor
 soya\framework\commands\transform\converter\XmlToAvro$1.class
 soya\framework\commands\apache\kafka\ProduceCommand.class
 soya\framework\commands\apache\kafka\KafkaCommand$OffsetInfo.class
+soya\framework\commands\quartz\MatcherCommand.class
 soya\framework\commands\transform\poi\MappingService$TreeNode.class
+soya\framework\commands\quartz\FindTriggersCommand.class
+soya\framework\commands\quartz\QuartzSchedulerCommand.class
 soya\framework\commands\transform\xmlbeans\XsUtils.class
 soya\framework\commands\apache\ant\AntTaskChain$MkdirProcessor.class
 soya\framework\commands\apache\kafka\KafkaCommands.class
@@ -62,6 +69,7 @@ soya\framework\commands\transform\xmlbeans\xs\XsNode$XsNodeType.class
 soya\framework\commands\transform\poi\MappingService$Array.class
 soya\framework\commands\transform\poi\MappingService$UnknownMappingsCommand.class
 soya\framework\commands\apache\ant\BuildCommand.class
+soya\framework\commands\quartz\GetTriggerCommand.class
 soya\framework\commands\transform\converter\XsdToAvsc$1.class
 soya\framework\commands\service\DataSourceBuilder.class
 soya\framework\commands\apache\ant\AntTaskChain$ZipProcessor.class
@@ -75,6 +83,7 @@ soya\framework\commands\transform\poi\MappingService$MappingTreeCommand.class
 soya\framework\commands\transform\avro\SampleAvroGenerator$IntegralIterator$Type.class
 soya\framework\commands\transform\poi\MappingService$AutoAdjustCommand.class
 soya\framework\commands\markdown\MarkdownCommand.class
+soya\framework\commands\quartz\RunSchedulerCommand.class
 soya\framework\commands\transform\poi\MappingService$Construction.class
 soya\framework\commands\transform\xmlbeans\AvroSchemaConverter.class
 soya\framework\commands\apache\kafka\KafkaCommand$RecordBuilder.class
@@ -117,6 +126,7 @@ soya\framework\commands\apache\ant\AntTaskChain$CopyDir.class
 soya\framework\commands\transform\xmlbeans\xs\XsKnowledgeBase$1.class
 soya\framework\commands\apache\ant\JavaTaskProcessors.class
 soya\framework\commands\apache\kafka\KafkaCommand.class
+soya\framework\commands\quartz\ResumeSchedulerCommand.class
 soya\framework\commands\transform\poi\MappingService$XPathMapping.class
 soya\framework\commands\apache\kafka\PollToEndCommand.class
 soya\framework\commands\transform\avro\SampleAvroGenerator$1.class
@@ -124,6 +134,7 @@ soya\framework\commands\markdown\HtmlCommand.class
 soya\framework\commands\transform\avro\SampleAvroGenerator.class
 soya\framework\commands\transform\poi\XlsxUtils.class
 soya\framework\commands\transform\avro\AvroSchemaIterator$1.class
+soya\framework\commands\quartz\CreateSimpleTriggerCommand.class
 soya\framework\commands\apache\ant\AntTaskChain$EchoProcessor.class
 soya\framework\commands\apache\ant\AntTaskChain$AntTaskProcessor.class
 soya\framework\commands\codegen\rest\RestApiGenerator$CommandMethodMapping.class
@@ -132,5 +143,6 @@ soya\framework\commands\apache\kafka\KafkaCommands$Command.class
 soya\framework\commands\transform\xmlbeans\SampleJsonGenerator.class
 soya\framework\commands\apache\ant\AntTaskChain.class
 soya\framework\commands\apache\kafka\KafkaCommands$RecordBuilder.class
+soya\framework\commands\quartz\CurrentExecutingJobsCommand.class
 soya\framework\commands\apache\ant\AntTaskChain$CopyFile.class
 soya\framework\commands\transform\xmlbeans\XmlBeansCommand.class

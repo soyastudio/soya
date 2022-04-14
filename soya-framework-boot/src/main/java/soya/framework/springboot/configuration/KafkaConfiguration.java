@@ -1,4 +1,4 @@
-package soya.framework.admin.configuration;
+package soya.framework.springboot.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import soya.framework.commands.apache.kafka.KafkaClientFactory;

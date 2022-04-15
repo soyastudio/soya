@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.xmlbeans.xs;
+package soya.framework.commands.apache.xmlbeans.xs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

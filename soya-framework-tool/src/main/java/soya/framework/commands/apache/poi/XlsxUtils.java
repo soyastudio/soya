@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.poi;
+package soya.framework.commands.apache.poi;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;

@@ -4,7 +4,7 @@ import com.google.common.base.CaseFormat;
 import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.kt.KnowledgeTreeNode;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 
 @Command(group = "bod", name = "esql-gen")
 public class EsqlGenCommand extends ConstructCommand {

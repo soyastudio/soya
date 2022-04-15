@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.xmlbeans;
+package soya.framework.commands.apache.xmlbeans;
 
 import com.google.gson.JsonParser;
 import org.apache.avro.Schema;

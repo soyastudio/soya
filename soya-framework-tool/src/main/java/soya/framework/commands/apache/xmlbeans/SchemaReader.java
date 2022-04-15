@@ -1,8 +1,8 @@
-package soya.framework.commands.transform.xmlbeans;
+package soya.framework.commands.apache.xmlbeans;
 
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.core.Command;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 import soya.framework.kt.KnowledgeTreeNode;
 
 @Command(group = "transform", name = "xmlbeans-schema-reader", httpRequestTypes = Command.MediaType.TEXT_PLAIN)

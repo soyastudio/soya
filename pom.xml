@@ -253,6 +253,7 @@
         <module>soya-framework-openbank</module>
         <module>soya-application-albertsons</module>
         <module>soya-framework-quartz</module>
+        <module>soya-framework-erm</module>
     </modules>
 
 </project>

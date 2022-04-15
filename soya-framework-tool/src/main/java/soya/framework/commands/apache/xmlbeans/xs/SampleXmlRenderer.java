@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.xmlbeans.xs;
+package soya.framework.commands.apache.xmlbeans.xs;
 
 import org.apache.xmlbeans.SchemaTypeSystem;
 import org.apache.xmlbeans.impl.xsd2inst.SampleXmlUtil;

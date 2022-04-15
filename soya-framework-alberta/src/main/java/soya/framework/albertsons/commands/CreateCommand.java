@@ -4,10 +4,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.core.Command;
 import soya.framework.commons.util.CodeBuilder;
-import soya.framework.commands.transform.xmlbeans.XsUtils;
+import soya.framework.commands.apache.xmlbeans.XsUtils;
 import soya.framework.kt.KnowledgeTree;
 import soya.framework.kt.KnowledgeTreeNode;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 
 import java.io.File;
 import java.io.FileReader;

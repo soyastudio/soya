@@ -1,13 +1,13 @@
-package soya.framework.commands.transform.xmlbeans;
+package soya.framework.commands.apache.xmlbeans;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.core.Resources;
 import soya.framework.core.commands.ResourceCommand;
-import soya.framework.commands.transform.TransformCommand;
-import soya.framework.commands.transform.xmlbeans.xs.XsKnowledgeBase;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.TransformCommand;
+import soya.framework.commands.apache.xmlbeans.xs.XsKnowledgeBase;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 import soya.framework.kt.KnowledgeTree;
 
 import java.io.File;

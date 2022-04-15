@@ -3,7 +3,7 @@ package soya.framework.commands.transform.converter;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.xmlbeans.*;
-import soya.framework.commands.transform.xmlbeans.xs.XmlBeansUtils;
+import soya.framework.commands.apache.xmlbeans.xs.XmlBeansUtils;
 
 import java.io.File;
 import java.io.IOException;

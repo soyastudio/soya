@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.xmlbeans;
+package soya.framework.commands.apache.xmlbeans;
 
 import soya.framework.core.Command;
 import soya.framework.commands.transform.converter.XsdToAvsc;

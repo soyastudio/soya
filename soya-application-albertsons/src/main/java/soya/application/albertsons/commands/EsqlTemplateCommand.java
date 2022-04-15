@@ -3,7 +3,7 @@ package soya.application.albertsons.commands;
 import com.google.common.base.CaseFormat;
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.core.Command;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 import soya.framework.kt.KnowledgeTreeNode;
 
 @Command(group = "business-object-development", name = "esql-template",

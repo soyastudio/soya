@@ -193,6 +193,7 @@ public abstract class CommandExecutionContext {
     public static class Builder {
 
         private Properties properties = new Properties();
+        private String home;
         private ExecutorService executorService;
         private Set<String> scanPackages = new HashSet<>();
         private ServiceLocator serviceLocator;
@@ -208,6 +209,11 @@ public abstract class CommandExecutionContext {
 
         public Builder setProperty(String propName, String propValue) {
             this.properties.setProperty(propName, propValue);
+            return this;
+        }
+
+        public Builder setHome(String home) {
+            this.home = home;
             return this;
         }
 

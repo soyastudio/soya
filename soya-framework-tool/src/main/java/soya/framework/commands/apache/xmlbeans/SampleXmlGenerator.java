@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.xmlbeans;
+package soya.framework.commands.apache.xmlbeans;
 
 import org.apache.xmlbeans.impl.xsd2inst.SampleXmlUtil;
 import soya.framework.core.Command;

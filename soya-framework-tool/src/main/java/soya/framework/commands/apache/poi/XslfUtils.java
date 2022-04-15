@@ -1,4 +1,4 @@
-package soya.framework.commands.transform.poi;
+package soya.framework.commands.apache.poi;
 
 import org.apache.poi.sl.usermodel.AutoNumberingScheme;
 import org.apache.poi.sl.usermodel.TableCell;

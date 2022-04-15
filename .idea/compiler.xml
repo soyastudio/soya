@@ -12,6 +12,7 @@
         <module name="soya-framework-alberta" />
         <module name="soya-framework-core" />
         <module name="soya-application-albertsons" />
+        <module name="soya-framework-erm" />
         <module name="soya-framework-boot" />
         <module name="soya-framework-tool" />
         <module name="soya-framework-openapi" />

@@ -42,6 +42,7 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
                 .serviceLocator(applicationContext)
                 .setProperty("workspace.home", workspaceHome)
                 .setProperty("ant.work.home", antWorkHome)
+                .addScanPackages("soya.framework")
                 //.addScanPackages("soya.framework.core.commands.reflect")
                 //.addScanPackages("soya.framework.commands.quartz")
                 .create();

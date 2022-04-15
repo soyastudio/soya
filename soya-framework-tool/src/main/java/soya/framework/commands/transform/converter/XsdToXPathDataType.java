@@ -3,9 +3,9 @@ package soya.framework.commands.transform.converter;
 import org.apache.xmlbeans.SchemaType;
 import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.kt.KnowledgeTree;
-import soya.framework.commands.transform.xmlbeans.xs.XmlBeansUtils;
-import soya.framework.commands.transform.xmlbeans.xs.XsKnowledgeBase;
-import soya.framework.commands.transform.xmlbeans.xs.XsNode;
+import soya.framework.commands.apache.xmlbeans.xs.XmlBeansUtils;
+import soya.framework.commands.apache.xmlbeans.xs.XsKnowledgeBase;
+import soya.framework.commands.apache.xmlbeans.xs.XsNode;
 
 import java.io.File;
 import java.util.Iterator;

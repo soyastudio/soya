@@ -9,9 +9,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Entity {
 
-    String name();
+    String name() default "";
 
     EntityType entityType();
+
+    String tableName();
 
     String description() default "";
 

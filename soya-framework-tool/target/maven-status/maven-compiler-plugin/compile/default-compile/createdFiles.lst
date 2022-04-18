@@ -54,6 +54,7 @@ soya\framework\commands\apache\ant\AntTaskChain$MkdirProcessor.class
 soya\framework\commands\apache\kafka\KafkaCommands.class
 soya\framework\commands\apache\poi\MappingService$EsqlCommand.class
 soya\framework\commands\apache\kafka\KafkaCommands$RecordInfo.class
+soya\framework\commands\apache\poi\xlsx\XlsxCommand.class
 soya\framework\commands\apache\kafka\AbstractProduceCommand.class
 soya\framework\commands\codegen\MustacheCodegenCommand.class
 soya\framework\commands\transform\avro\AvroSchemaGenerator$RecordCache.class

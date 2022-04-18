@@ -6,6 +6,7 @@ C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\codegen
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\http\SimpleHttpRequestCommand.java
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\quartz\CreateSimpleTriggerCommand.java
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\apache\kafka\KafkaCommands.java
+C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\apache\poi\xlsx\XlsxCommand.java
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\apache\ant\JavaTaskProcessors.java
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\apache\kafka\PubAndSubCommand.java
 C:\github\soya\soya-framework-tool\src\main\java\soya\framework\commands\apache\xmlbeans\xs\XmlBeansUtils.java

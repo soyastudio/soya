@@ -337,7 +337,7 @@ public abstract class BusinessObjectCommand implements CommandCallable<String> {
 
         public Function(String exp) {
             int first = exp.indexOf('(');
-            int last = exp.indexOf(')');
+            int last = exp.lastIndexOf(')');
 
             if (first < 1 || last < first) {
                 name = "unknown";

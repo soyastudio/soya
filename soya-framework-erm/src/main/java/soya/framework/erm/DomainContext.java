@@ -12,7 +12,5 @@ public @interface DomainContext {
 
     String description() default "";
 
-    String root();
-
     DataType[] dataTypes() default {};
- }
+}

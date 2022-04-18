@@ -24,27 +24,48 @@ public class EdmMasterMappingCommand extends EdmMappingsCommand {
     private int[] columnIndex = {1, 2, 3, 4, 8, 9, 10};
 
     protected void extract() throws Exception {
-        String boName = "Get" + businessObject;
+
         File file = new File(this.homeDir, edmMasterMappingFile);
         XSSFWorkbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheet(mappingSheet);
 
-        for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
-            Row row = sheet.getRow(i);
-            if (row != null && row.getCell(1) != null) {
-                String bod = cellValue(row.getCell(1));
-                if (bod != null && bod.equals(boName)) {
-                    EdmDataUnit unit = rowData(row, propName, columnIndex);
+        if(businessObject.equals("*") ) {
+            for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row != null && row.getCell(1) != null) {
+                    String bod = cellValue(row.getCell(1));
+                    if (bod != null && bod.startsWith("Get")) {
+                        EdmDataUnit unit = rowData(row, propName, columnIndex);
 
-                    EdmTable table = tables.get(unit.getTableName().toUpperCase());
-                    if (table == null) {
-                        table = new EdmTable();
-                        table.name = unit.getTableName();
-                        tables.put(table.name.toUpperCase(), table);
+                        EdmTable table = tables.get(unit.getTableName().toUpperCase());
+                        if (table == null) {
+                            table = new EdmTable();
+                            table.name = unit.getTableName();
+                            tables.put(table.name.toUpperCase(), table);
+                        }
                     }
+                }
+            }
 
-                    table.columns.put(unit.columnName.toUpperCase(), unit);
+        } else {
+            String boName = "Get" + businessObject;
+            for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row != null && row.getCell(1) != null) {
+                    String bod = cellValue(row.getCell(1));
+                    if (bod != null && bod.equals(boName)) {
+                        EdmDataUnit unit = rowData(row, propName, columnIndex);
 
+                        EdmTable table = tables.get(unit.getTableName().toUpperCase());
+                        if (table == null) {
+                            table = new EdmTable();
+                            table.name = unit.getTableName();
+                            tables.put(table.name.toUpperCase(), table);
+                        }
+
+                        table.columns.put(unit.columnName.toUpperCase(), unit);
+
+                    }
                 }
             }
         }
@@ -77,7 +98,6 @@ public class EdmMasterMappingCommand extends EdmMappingsCommand {
 
                 }
             });
-
 
             if(table.columns.containsKey(pk)) {
                 System.out.println("===================== " + table.columns.get(pk));

@@ -8,13 +8,16 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import soya.framework.commons.util.CodeBuilder;
 import soya.framework.core.Command;
+import soya.framework.core.CommandExecutionContext;
 import soya.framework.core.CommandOption;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Command(group = "business-object-edm", name = "edm-bods-creation",
         httpMethod = Command.HttpMethod.POST, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
@@ -49,26 +52,22 @@ public class EdmBusinessObjectsGenerationCommand extends EdmBusinessObjectsComma
                         Map<String, String> map = bods.get(name);
                         if (map == null) {
                             map = new LinkedHashMap<>();
-                            map.put(obj.get("tableName").getAsString(), "entity(?)");
                             bods.put(name, map);
                         }
 
                         if (obj.get("tableName") != null && obj.get("columnName") != null) {
                             String key = obj.get("tableName").getAsString() + "." + obj.get("columnName").getAsString();
-                            String value = "";
 
+                            String value = "";
                             if (obj.get("dataType") != null) {
                                 value = "dataType(" + obj.get("dataType").getAsString() + ")";
-
-                                if (obj.get("xpath") != null) {
-                                    value = "::xpath(" + obj.get("xpath").getAsString() + ")";
+                                if (obj.get("xpath") != null && obj.get("xpath").getAsString().trim().length() > 0) {
+                                    value = value + "::xpath(" + obj.get("xpath").getAsString() + ")";
                                 }
 
                             }
                             map.put(key, value);
-
                         }
-
                     }
 
                 }
@@ -83,6 +82,10 @@ public class EdmBusinessObjectsGenerationCommand extends EdmBusinessObjectsComma
 
         if (businessObject != null && bods.containsKey(businessObject)) {
             create(businessObject, bods.get(businessObject));
+        } else {
+            bods.entrySet().forEach(e -> {
+                create(e.getKey(), e.getValue());
+            });
         }
 
         return new GsonBuilder().setPrettyPrinting().create().toJson(bods.keySet());
@@ -104,23 +107,46 @@ public class EdmBusinessObjectsGenerationCommand extends EdmBusinessObjectsComma
         return object;
     }
 
-    protected void create(String businessObject, Map<String, String> mappings) throws IOException {
+    protected void create(String businessObject, Map<String, String> mappings) {
+        File cmm = new File(cmmDir, "Get" + businessObject + ".xsd");
+        if(!cmm.exists()) {
+            return;
+        }
+
         File dir = new File(edmDir, businessObject);
         if (!dir.exists()) {
-            dir.mkdirs();
+            CommandExecutionContext.getInstance().getExecutorService().execute(() -> {
+                try {
+                    dir.mkdirs();
 
-            File edmMapping = new File(dir, "edm-mappings.properties");
-            edmMapping.createNewFile();
+                    File edmMapping = new File(dir, "edm-mappings.properties");
+                    edmMapping.createNewFile();
 
-            CodeBuilder builder = CodeBuilder.newInstance();
-            mappings.entrySet().forEach(e -> {
-                builder.append(e.getKey()).append("=").appendLine(e.getValue());
+                    Set<String> tables = new HashSet<>();
+                    CodeBuilder builder = CodeBuilder.newInstance();
+                    mappings.entrySet().forEach(e -> {
+                        String tbl = e.getKey();
+                        tbl = tbl.substring(0, tbl.indexOf('.'));
+
+                        if (!tables.contains(tbl)) {
+                            if (tables.size() > 0) {
+                                builder.appendLine();
+                            }
+
+                            builder.append(tbl).append("=").appendLine("entityType(?)");
+                            tables.add(tbl);
+                        }
+
+                        builder.append(e.getKey()).append("=").appendLine(e.getValue());
+                    });
+
+                    builder.appendLine();
+
+                    FileUtils.write(edmMapping, builder.toString(), Charset.defaultCharset());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
-
-            builder.appendLine();
-            FileUtils.write(edmMapping, builder.toString(), Charset.defaultCharset());
-
-
         }
     }
 }

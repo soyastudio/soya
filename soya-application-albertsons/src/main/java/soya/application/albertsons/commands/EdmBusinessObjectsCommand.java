@@ -12,7 +12,7 @@ import soya.framework.core.CommandOption;
 import java.io.File;
 import java.util.*;
 
-@Command(group = "business-object-edm", name = "edm-bods",
+@Command(group = "business-object-edm", name = "edm-bod-list",
         httpMethod = Command.HttpMethod.GET, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
 public class EdmBusinessObjectsCommand implements CommandCallable<String> {
 

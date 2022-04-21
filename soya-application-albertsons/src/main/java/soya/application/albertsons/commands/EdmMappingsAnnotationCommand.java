@@ -1,21 +1,50 @@
 package soya.application.albertsons.commands;
 
-import com.google.common.base.CaseFormat;
+import com.google.gson.JsonParser;
 import soya.framework.core.Command;
 import soya.framework.core.CommandOption;
 
 @Command(group = "business-object-edm", name = "edm-mappings-annotation", httpResponseTypes = Command.MediaType.TEXT_PLAIN)
 public class EdmMappingsAnnotationCommand extends EdmMappingsCommand {
 
-    @CommandOption(option = "r")
-    protected String root;
-
     @CommandOption(option = "o", dataForProcessing = true)
     protected String override;
 
+    protected EdmDomainContext domainContext;
+
     @Override
     protected void annotate() throws Exception {
-        String mainTable = root == null ? root.toUpperCase() : CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, businessObject);
+        if (override == null) {
+            domainContext = EdmDomainContext.newInstance(businessObject);
+
+        } else {
+            domainContext = GSON.fromJson(JsonParser.parseString(override), EdmDomainContext.class);
+            String pk = domainContext.getRoot().getPrimaryKey();
+
+            tables.entrySet().forEach(e -> {
+                String tableName = e.getKey();
+                EdmTable table = e.getValue();
+
+                Entity entity = new Entity();
+                entity.tableName = tableName;
+
+                if(table.columns.containsKey(pk)) {
+                    if(!domainContext.getDependents().contains(entity)) {
+                        domainContext.getDependents().add(entity);
+                    }
+
+                }else {
+                    domainContext.getReferences().add(entity);
+                }
+
+            });
+
+        }
+    }
+/*
+
+    protected void _annotate() throws Exception {
+        String mainTable = root != null ? root.toUpperCase() : CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, businessObject);
         String mainTablePK = mainTable + "_ID";
 
         if (tables.containsKey(mainTable)) {
@@ -61,5 +90,11 @@ public class EdmMappingsAnnotationCommand extends EdmMappingsCommand {
             }
         });
 
+    }
+*/
+
+    @Override
+    protected String render() {
+        return GSON.toJson(domainContext);
     }
 }

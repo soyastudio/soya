@@ -1,5 +1,6 @@
 package soya.application.albertsons.commands;
 
+import com.google.common.base.CaseFormat;
 import soya.framework.commons.util.CodeBuilder;
 
 import java.io.BufferedReader;
@@ -64,7 +65,7 @@ public abstract class EdmMappingsCommand extends BusinessObjectCommand {
 
                     }
 
-                    table.columns.put(column.columnName, column);
+                    table.columns.put(column.columnName.toUpperCase(), column);
                     columns.put(key, column);
                 }
             }
@@ -167,8 +168,65 @@ public abstract class EdmMappingsCommand extends BusinessObjectCommand {
         }
     }
 
-    public static class Relation {
+    public static class EdmDomainContext {
 
+        String name;
+        Entity root = new Entity();
+
+        Set<Entity> dependents = new LinkedHashSet<>();
+        Set<Entity> references = new LinkedHashSet<>();
+
+        public EdmDomainContext(String name) {
+            this.name = name;
+            this.root = new Entity();
+            root.tableName = CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, name);
+            root.primaryKey = root.tableName + "_ID";
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Entity getRoot() {
+            return root;
+        }
+
+        public Set<Entity> getDependents() {
+            return dependents;
+        }
+
+        public Set<Entity> getReferences() {
+            return references;
+        }
+
+        public static EdmDomainContext newInstance(String name) {
+            return new EdmDomainContext(name);
+        }
     }
 
+    static class Entity {
+        String tableName;
+        String primaryKey;
+
+        public String getTableName() {
+            return tableName;
+        }
+
+        public String getPrimaryKey() {
+            return primaryKey;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Entity)) return false;
+            Entity entity = (Entity) o;
+            return Objects.equals(tableName, entity.tableName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(tableName);
+        }
+    }
 }

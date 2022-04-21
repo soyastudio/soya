@@ -42,7 +42,7 @@ public class Albertsons {
                 .serviceLocator(applicationContext)
                 .setProperty("workspace.home", workspaceHome)
                 .setProperty("ant.work.home", antWorkHome)
-                .addScanPackages("soya.application.albertsons")
+                .addScanPackages("soya.application.albertsons", "soya.framework.commands.apache.kafka")
                 .create();
     }
 

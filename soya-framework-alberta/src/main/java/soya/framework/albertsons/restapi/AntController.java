@@ -1,9 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.core.CommandDispatcher;
 import soya.framework.core.CommandMapping;
-import soya.framework.core.GroupMapping;
+import soya.framework.core.Dispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,8 +11,7 @@ import javax.ws.rs.core.Response;
 //@Controller
 @Path("/ant")
 @Api(value = "ant")
-@GroupMapping(value = "ant")
-public class AntController extends CommandDispatcher {
+public class AntController extends Dispatcher {
 
     public AntController() {
         super();

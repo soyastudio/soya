@@ -8,9 +8,13 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import soya.framework.core.CommandExecutionContext;
+import soya.framework.tasks.apache.kafka.KafkaClientFactory;
+import soya.framework.core.TaskExecutionContext;
 import soya.framework.dispatch.servlet.DispatchServlet;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,9 +22,6 @@ import java.util.concurrent.Executors;
 public class Albertsons {
     @Value("${workspace.home}")
     private String workspaceHome;
-
-    @Value("${ant.work.home}")
-    private String antWorkHome;
 
     @Bean
     ExecutorService commandExecutorService() {
@@ -36,12 +37,18 @@ public class Albertsons {
     }
 
     @Bean
-    public CommandExecutionContext commandExecutionContext(ExecutorService executorService, ApplicationContext applicationContext) throws BeansException {
-        return CommandExecutionContext.builder()
+    public TaskExecutionContext commandExecutionContext(ExecutorService executorService, ApplicationContext applicationContext) throws BeansException, IOException {
+
+        Properties properties = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("kafka-config.properties");
+        properties.load(inputStream);
+        KafkaClientFactory.configure(properties);
+
+
+        return TaskExecutionContext.builder()
                 .setExecutorService(executorService)
                 .serviceLocator(applicationContext)
                 .setProperty("workspace.home", workspaceHome)
-                .setProperty("ant.work.home", antWorkHome)
                 .addScanPackages("soya.application.albertsons", "soya.framework.commands.apache.kafka")
                 .create();
     }

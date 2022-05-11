@@ -4,6 +4,8 @@ server:
 workspace:
   home: C:/github/Workshop/AppBuild
 
-ant:
-  work:
-    home: C:/github/Workshop/Ant
+soya:
+  framework:
+    home: C:/github/Workshop
+    scanPackages: soya.application.albertsons, soya.framework.commands.apache.kafka
+    debug: true

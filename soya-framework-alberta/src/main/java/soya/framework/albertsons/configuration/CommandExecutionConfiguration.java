@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import soya.framework.core.CommandExecutionContext;
+import soya.framework.core.TaskExecutionContext;
 
 import javax.sql.DataSource;
 import java.util.concurrent.ExecutorService;
@@ -27,8 +27,8 @@ public class CommandExecutionConfiguration implements ApplicationContextAware {
     }
 
     @Bean
-    CommandExecutionContext commandExecutionContext(ExecutorService service) {
-        return CommandExecutionContext.builder()
+    TaskExecutionContext commandExecutionContext(ExecutorService service) {
+        return TaskExecutionContext.builder()
                 .setExecutorService(service)
                 .setProperty("workspace.home", workspaceHome)
                 .setProperty("ant.work.home", antWorkHome)

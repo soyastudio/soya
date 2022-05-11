@@ -2,12 +2,12 @@ package soya.framework.kt;
 
 import java.util.List;
 
-public interface KnowledgeTreeNode<T> extends TreeNode, Annotatable<T> {
+public interface KnowledgeTreeNode<T> extends TreeNode, KnowledgeNode<T> {
 
     KnowledgeTreeNode getParent();
 
     List<KnowledgeTreeNode> getChildren();
 
-    Annotatable<T> getData();
+    KnowledgeNode<T> getData();
 
 }

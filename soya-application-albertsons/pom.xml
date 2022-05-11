@@ -32,19 +32,7 @@
 
         <dependency>
             <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-erm</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>soya.framework</groupId>
             <artifactId>soya-framework-tool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-openapi</artifactId>
             <version>${project.version}</version>
         </dependency>
 

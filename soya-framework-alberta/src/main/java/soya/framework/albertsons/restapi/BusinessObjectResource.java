@@ -1,9 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.core.CommandDispatcher;
 import soya.framework.core.CommandMapping;
-import soya.framework.core.GroupMapping;
+import soya.framework.core.Dispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -13,8 +12,7 @@ import java.util.Base64;
 
 @Path("/edis")
 @Api(value = "Business Object Development Service")
-@GroupMapping(value = "bod")
-public class BusinessObjectResource extends CommandDispatcher {
+public class BusinessObjectResource extends Dispatcher {
 
     public BusinessObjectResource() {
         super();

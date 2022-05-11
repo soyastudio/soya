@@ -30,7 +30,7 @@
         <google.guice.version>4.2.2</google.guice.version>
         <google.findbugs.version>3.0.0</google.findbugs.version>
 
-        <reflections.version>0.9.11</reflections.version>
+        <reflections.version>0.10.2</reflections.version>
 
         <avro.version>1.9.1</avro.version>
 
@@ -120,6 +120,13 @@
                 <artifactId>guice</artifactId>
                 <version>${google.guice.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.apis</groupId>
+                <artifactId>google-api-services-drive</artifactId>
+                <version>v3-rev197-1.25.0</version>
+            </dependency>
+
 
             <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
             <dependency>
@@ -247,13 +254,17 @@
         <module>soya-framework-openapi</module>
         <module>soya-framework-servlet</module>
         <module>soya-framework-tool</module>
+        <module>soya-framework-starter</module>
+        <module>soya-framework-jersey-starter</module>
+
         <module>soya-framework-ams</module>
         <module>soya-framework-boot</module>
-        <module>soya-framework-alberta</module>
-        <module>soya-framework-openbank</module>
         <module>soya-application-albertsons</module>
-        <module>soya-framework-quartz</module>
-        <module>soya-framework-erm</module>
+        <module>soya-application-openbank</module>
+
+        <module>soya-framework-alberta</module>
+        <!--<module>soya-framework-quartz</module>
+        <module>soya-framework-erm</module>-->
     </modules>
 
 </project>

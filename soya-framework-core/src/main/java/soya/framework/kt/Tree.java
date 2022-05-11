@@ -1,7 +1,6 @@
 package soya.framework.kt;
 
 import java.util.Iterator;
-import java.util.Set;
 
 public interface Tree<N extends TreeNode> {
     N root();
@@ -15,14 +14,4 @@ public interface Tree<N extends TreeNode> {
     Iterator<String> paths();
 
     Iterator<N> nodes();
-
-    Set<N> find(Selector<N> selector);
-
-    Tree<N> filterIn(Selector<N> selector);
-
-    Tree<N> filterOut(Selector<N> selector);
-
-    interface Selector<N> {
-        Set<N> select();
-    }
 }

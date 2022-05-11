@@ -1,0 +1,15 @@
+server:
+  port: 8383
+
+
+workspace:
+  home: C:/github/Workshop/AppBuild
+
+soya:
+  framework:
+    home: C:/github/Workshop
+    scanPackages: soya.framework
+    debug: true
+
+  ant:
+    home: ${soya.framework.home}/Ant

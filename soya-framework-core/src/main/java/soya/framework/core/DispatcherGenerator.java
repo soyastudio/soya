@@ -14,10 +14,10 @@ import java.util.*;
 
 public class DispatcherGenerator {
 
-    private CommandExecutionContext context;
+    private TaskExecutionContext context;
     private Set<Class<?>> classes;
 
-    public DispatcherGenerator(CommandExecutionContext context) {
+    public DispatcherGenerator(TaskExecutionContext context) {
         this.context = context;
         this.classes = generate(context);
     }
@@ -26,12 +26,12 @@ public class DispatcherGenerator {
         return classes;
     }
 
-    private Set<Class<?>> generate(CommandExecutionContext context) {
+    private Set<Class<?>> generate(TaskExecutionContext context) {
         Set<Class<?>> set = new HashSet<>();
         context.groups().forEach(e -> {
-            List<Class<? extends CommandCallable>> commands = new ArrayList<>();
+            List<Class<? extends TaskCallable>> commands = new ArrayList<>();
             context.getCommands(e).forEach(c -> {
-                commands.add(context.getCommandType(c));
+                commands.add(context.getTaskType(c));
             });
 
             try {
@@ -49,10 +49,10 @@ public class DispatcherGenerator {
         return set;
     }
 
-    private Class<?> create(String group, List<Class<? extends CommandCallable>> commands) throws
+    private Class<?> create(String group, List<Class<? extends TaskCallable>> commands) throws
             CannotCompileException, IOException, NotFoundException {
         ClassPool cp = ClassPool.getDefault();
-        CtClass superClass = cp.get(CommandDispatcher.class.getName());
+        CtClass superClass = cp.get(Dispatcher.class.getName());
 
         CtClass cc = cp.makeClass(getDispatchClassName(group));
         cc.setSuperclass(superClass);
@@ -69,7 +69,7 @@ public class DispatcherGenerator {
         apiAnnotation.addMemberValue("value", new StringMemberValue("/" + group, classFile.getConstPool()));
         cAttr.addAnnotation(apiAnnotation);
 
-        Annotation mappingAnnotation = new Annotation(GroupMapping.class.getName(), classFile.getConstPool());
+        Annotation mappingAnnotation = new Annotation(Dispatcher.class.getName(), classFile.getConstPool());
         mappingAnnotation.addMemberValue("value", new StringMemberValue("/" + group, classFile.getConstPool()));
         cAttr.addAnnotation(mappingAnnotation);
 
@@ -333,12 +333,12 @@ public class DispatcherGenerator {
 
         private List<Field> arguments;
 
-        CommandMethodMapping(Class<? extends CommandCallable> cls) {
+        CommandMethodMapping(Class<? extends TaskCallable> cls) {
             this.cls = cls;
             Command command = cls.getAnnotation(Command.class);
 
             this.command = command.name();
-            this.fields = Arrays.asList(CommandParser.getOptionFields(cls));
+            this.fields = Arrays.asList(TaskParser.getOptionFields(cls));
 
             this.httpMethod = command.httpMethod().name();
 

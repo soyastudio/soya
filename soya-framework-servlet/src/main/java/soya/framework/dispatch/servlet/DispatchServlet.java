@@ -1,34 +1,37 @@
 package soya.framework.dispatch.servlet;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import soya.framework.core.CommandCallable;
-import soya.framework.core.CommandExecutionContext;
-import soya.framework.core.CommandOption;
-import soya.framework.core.CommandParser;
-import soya.framework.oas.swagger.Swagger;
-import soya.framework.oas.swagger.SwaggerBuilder;
+import soya.framework.core.*;
+import soya.framework.core.oas.swagger.Swagger;
+import soya.framework.core.oas.swagger.SwaggerBuilder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class DispatchServlet extends HttpServlet {
-    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private CommandExecutionContext context;
 
+    private TaskExecutionContext context;
     private Swagger swagger;
+
+    private Set<DispatchRequestEventListener> dispatchRequestEventListeners = new HashSet<>();
+    private boolean debug;
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public void addListener(DispatchRequestEventListener listener) {
+        this.dispatchRequestEventListeners.add(listener);
+    }
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -42,7 +45,12 @@ public class DispatchServlet extends HttpServlet {
             }
         }
 
-        this.context = CommandExecutionContext.getInstance();
+        this.context = TaskExecutionContext.getInstance();
+
+        if(debug) {
+            dispatchRequestEventListeners.add(new DispatcherRequestLogger());
+        }
+
         swagger = SwaggerBuilder.create(context);
         swagger.setBasePath(path);
 
@@ -52,9 +60,7 @@ public class DispatchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if ("/swagger.json".equals(req.getPathInfo())) {
             PrintWriter writer = resp.getWriter();
-            writer.print(GSON.toJson(swagger));
-
-            //writer.print(IOUtils.toString(Thread.currentThread().getContextClassLoader().getResourceAsStream("swagger.json")));
+            writer.print(swagger.toJson());
 
             writer.flush();
             writer.close();
@@ -94,9 +100,11 @@ public class DispatchServlet extends HttpServlet {
 
         String accept = req.getHeader("accept");
         int status = HttpServletResponse.SC_OK;
-        Object result = null;
+
+        TaskResult result = null;
         try {
             result = dispatch(req);
+            notify(DispatchRequestEvent.postDispatch(req, result));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,28 +112,25 @@ public class DispatchServlet extends HttpServlet {
 
         resp.setContentType(accept);
         resp.setStatus(status);
-        PrintWriter writer = resp.getWriter();
+
+        OutputStream out = resp.getOutputStream();
         if (result == null) {
 
-        } else if (result instanceof String) {
-            writer.print(result);
-
         } else {
-            writer.print(result);
+            out.write(result.toByteArray());
 
         }
-        writer.flush();
-
-        writer.close();
+        out.flush();
+        out.close();
 
     }
 
-    private Object dispatch(HttpServletRequest req) throws Exception {
+    private TaskResult dispatch(HttpServletRequest req) throws Exception {
+
         String group = null;
         String command = null;
 
         List<String> pathParams = new ArrayList<>();
-
         StringTokenizer tokenizer = new StringTokenizer(req.getPathInfo(), "/");
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
@@ -141,10 +146,9 @@ public class DispatchServlet extends HttpServlet {
 
         if (group != null && command != null) {
             String uri = group + "://" + command;
-
-            Class<? extends CommandCallable> cls = context.getCommandType(uri);
-            CommandCallable<?> cmd = cls.newInstance();
-            Field[] fields = CommandParser.getOptionFields(cls);
+            Class<? extends TaskCallable> cls = context.getTaskType(TaskName.fromURI(uri));
+            TaskCallable task = cls.newInstance();
+            Field[] fields = TaskParser.getOptionFields(cls);
             int pathIndex = 0;
             for (Field field : fields) {
                 CommandOption option = field.getAnnotation(CommandOption.class);
@@ -164,7 +168,7 @@ public class DispatchServlet extends HttpServlet {
 
                 } else if (CommandOption.ParamType.QueryParam.equals(option.paramType()) || option.dataForProcessing()) {
                     value = req.getParameter(option.option());
-                    if(value == null) {
+                    if (value == null) {
                         value = req.getParameter(field.getName());
                     }
 
@@ -172,11 +176,13 @@ public class DispatchServlet extends HttpServlet {
 
                 if (value != null && !value.isEmpty()) {
                     field.setAccessible(true);
-                    field.set(cmd, value);
+                    field.set(task, value);
                 }
             }
 
-            Future<?> future = context.getExecutorService().submit(cmd);
+            notify(DispatchRequestEvent.preDispatch(req, task));
+
+            Future<TaskResult> future = context.getExecutorService().submit(task);
             while (!future.isDone()) {
                 Thread.sleep(100l);
             }
@@ -186,6 +192,47 @@ public class DispatchServlet extends HttpServlet {
         }
 
         return null;
+    }
+
+    private void notify(DispatchRequestEvent event) {
+        dispatchRequestEventListeners.forEach(e -> {
+            e.onEvent(event);
+        });
+    }
+
+    static class DispatcherRequestLogger implements DispatchRequestEventListener {
+        private static Logger logger = Logger.getLogger("DispatchLogger");
+
+        @Override
+        public void onEvent(DispatchRequestEvent event) {
+            if(event instanceof DispatchRequestEvent.PreDispatchEvent) {
+                onPreDispatchEvent((DispatchRequestEvent.PreDispatchEvent) event);
+
+            } else if(event instanceof DispatchRequestEvent.PostDispatchEvent) {
+                onPostDispatchEvent((DispatchRequestEvent.PostDispatchEvent) event);
+
+            }
+        }
+
+        private void onPreDispatchEvent(DispatchRequestEvent.PreDispatchEvent event) {
+            TaskCallable task = event.getTask();
+
+            Command command = task.getClass().getAnnotation(Command.class);
+            String uri = command.group() + "://" + command.name();
+
+            logger.info("Dispatch to " + uri);
+        }
+
+        private void onPostDispatchEvent(DispatchRequestEvent.PostDispatchEvent event) {
+            TaskResult result = event.getResult();
+            if(result.successful()) {
+                logger.info("Task succeeded with result: \n" + result.toString());
+
+            } else {
+                Exception exception = (Exception) result.result();
+                exception.printStackTrace();
+            }
+        }
     }
 
 }

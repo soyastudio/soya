@@ -8,9 +8,6 @@ import org.apache.commons.cli.Options;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,150 +17,24 @@ public class Flow {
     private final static Evaluator DEFAULT_EVALUATOR = new DefaultEvaluator();
 
     private final String name;
-    private final CommandExecutor executor;
     private final ExceptionHandler exceptionHandler;
 
     private List<Task> tasks;
 
-    private Flow(String name, CommandExecutor executor, List<Task> tasks, ExceptionHandler exceptionHandler) {
+    private Flow(String name, List<Task> tasks, ExceptionHandler exceptionHandler) {
         this.name = name;
-        this.executor = executor;
         this.tasks = tasks;
         this.exceptionHandler = exceptionHandler;
     }
 
-    public void execute(Callback callback) {
-        Properties props = executor.context().properties();
-        Resources.compile(props);
+    public static FlowBuilder builder(String name) {
 
-        Enumeration<?> propNames = props.propertyNames();
-        while (propNames.hasMoreElements()) {
-            String propName = (String) propNames.nextElement();
-            String propValue = props.getProperty(propName);
-            if (propValue.contains("${") && propValue.contains("}")) {
-                throw new IllegalStateException("Property cannot evaluate: '" + propName + "=" + propValue + "'");
-            } else {
-                executor.context().setProperty(propName, propValue);
-            }
-        }
 
-        DefaultSession session = new DefaultSession(executor.context().properties());
-        execute(session, callback);
-    }
-
-    public void execute(Object input, Callback callback) throws Exception {
-        DefaultSession session = new DefaultSession(executor.context().properties());
-        if (input instanceof Properties) {
-            Properties props = (Properties) input;
-            session.properties.putAll(props);
-            session.evaluate();
-
-        } else if (input instanceof String) {
-            String source = (String) input;
-            if (Resources.isFile(source)) {
-                String extension = Resources.getFileExtension(source);
-                if ("properties".equalsIgnoreCase(extension)) {
-                    Properties props = new Properties();
-                    props.load(new FileInputStream(new File(source)));
-                    session.properties.putAll(props);
-                    session.evaluate();
-
-                } else if ("json".equalsIgnoreCase(extension)) {
-
-                } else if ("xml".equalsIgnoreCase(extension)) {
-
-                } else if ("xsd".equalsIgnoreCase(extension)) {
-
-                } else if ("yaml".equalsIgnoreCase(extension)
-                        || "yml".equalsIgnoreCase(extension)) {
-
-                }
-            }
-
-        }
-
-        execute(session, callback);
-    }
-
-    private void execute(DefaultSession session, Callback callback) {
-        long timestamp = System.currentTimeMillis();
-        for (Task task : tasks) {
-            session.executed.add(task.configuration.getName());
-            session.cursor = task.configuration.getName();
-
-            String cmd = task.configuration.getCommand();
-
-            String[] args = task.compiler.compile(task.configuration, session);
-
-            Future<String> future = executor.submit(cmd, args);
-            while (!future.isDone()) {
-                try {
-                    Thread.sleep(50l);
-                } catch (InterruptedException e) {
-                    session.onException(e, exceptionHandler);
-                }
-            }
-
-            try {
-                String result = future.get();
-                session.onSuccess(task.getName(), result, task.callback);
-
-            } catch (InterruptedException e) {
-                session.onException(e, exceptionHandler);
-
-            } catch (ExecutionException e) {
-                session.onException(e, exceptionHandler);
-
-            } catch (Exception e) {
-                session.onException(e, exceptionHandler);
-            }
-        }
-
-        if (callback != null) {
-            try {
-                callback.onSuccess(session);
-            } catch (Exception e) {
-                session.onException(e, exceptionHandler);
-            }
-        }
-
-        System.out.println("Flow executed in " + (System.currentTimeMillis() - timestamp) + "ms.");
-    }
-
-    public static FlowBuilder builder() {
-        return builder(null, null);
-    }
-
-    public static FlowBuilder builder(Properties properties) {
-        return builder(null, properties);
-    }
-
-    public static FlowBuilder builder(ExecutorService executorService, Properties properties) {
-        CommandExecutor.Builder builder = CommandExecutor.builder(CommandCallable.class)
-                .scan("soya.framework");
-
-        if (executorService != null) {
-            builder.setExecutorService(executorService);
-        }
-
-        if (properties != null) {
-            Enumeration<?> enumeration = properties.propertyNames();
-            while (enumeration.hasMoreElements()) {
-                String key = (String) enumeration.nextElement();
-                String value = properties.getProperty(key);
-                builder.setProperty(key, value);
-            }
-        }
-
-        return new FlowBuilder(builder.create());
-    }
-
-    public static FlowBuilder builder(CommandExecutor executor) {
-        return new FlowBuilder(executor);
+        return new FlowBuilder(name);
     }
 
     public static FlowBuilder builder(File file) throws IOException {
-        FlowBuilder builder = builder();
+        FlowBuilder builder = builder("");
         DefaultFlowLoader loader = new DefaultFlowLoader();
         loader.load(builder, new FileInputStream(file));
         return builder;
@@ -193,7 +64,7 @@ public class Flow {
 
         }
 
-        public static TaskBuilder builder(Class<? extends CommandCallable> commandType) {
+        public static TaskBuilder builder(Class<? extends TaskCallable> commandType) {
             return new TaskBuilder(commandType);
         }
 
@@ -252,17 +123,15 @@ public class Flow {
 
     public static class FlowBuilder {
         private String name;
-        private CommandExecutor executor;
         private ExceptionHandler exceptionHandler = DEFAULT_EXCEPTION_HANDLER;
         private List<Task> tasks = new ArrayList<>();
 
-        private FlowBuilder(CommandExecutor executor) {
-            this.executor = executor;
-            this.name = executor.context().name();
+        private FlowBuilder(String name) {
+            this.name = name;
         }
 
-        public Class<? extends CommandCallable> getCommandType(String uri) {
-            return executor.context().getCommandType(uri);
+        public Class<? extends TaskCallable> getCommandType(String uri) {
+            return TaskExecutionContext.getInstance().getTaskType(TaskName.fromURI(uri));
         }
 
         public FlowBuilder name(String name) {
@@ -276,7 +145,7 @@ public class Flow {
         }
 
         public FlowBuilder setProperty(String key, String value) {
-            executor.context().setProperty(key, value);
+
             return this;
         }
 
@@ -286,7 +155,7 @@ public class Flow {
         }
 
         public Flow create() {
-            return new Flow(name, executor, tasks, exceptionHandler);
+            return new Flow(name, tasks, exceptionHandler);
         }
     }
 
@@ -295,12 +164,12 @@ public class Flow {
     }
 
     public static class TaskBuilder {
-        private Class<? extends CommandCallable> commandType;
+        private Class<? extends TaskCallable> commandType;
         private Configuration configuration;
         private Compiler compiler;
         private Callback callback;
 
-        private TaskBuilder(Class<? extends CommandCallable> commandType) {
+        private TaskBuilder(Class<? extends TaskCallable> commandType) {
             this.commandType = commandType;
             this.configuration = new DefaultConfiguration(commandType);
         }
@@ -424,7 +293,7 @@ public class Flow {
     }
 
     static class DefaultConfiguration implements Configuration {
-        private Class<? extends CommandCallable> commandType;
+        private Class<? extends TaskCallable> commandType;
         private String name;
         private String command;
         private Options options;
@@ -432,12 +301,12 @@ public class Flow {
         private Map<String, String> expressions = new HashMap<>();
         private Map<String, Evaluator> evaluators = new HashMap<>();
 
-        DefaultConfiguration(Class<? extends CommandCallable> commandType) {
+        DefaultConfiguration(Class<? extends TaskCallable> commandType) {
             this.commandType = commandType;
             Command command = commandType.getAnnotation(Command.class);
             this.command = command.name();
             this.name = command.name();
-            this.options = CommandParser.parse(commandType);
+            this.options = TaskParser.parse(commandType);
         }
 
         @Override
@@ -669,7 +538,7 @@ public class Flow {
                     JsonElement je = jsonObject.get("uri");
                     if (je != null) {
                         String uri = je.getAsString();
-                        Class<? extends CommandCallable> cls = builder.getCommandType(uri);
+                        Class<? extends TaskCallable> cls = builder.getCommandType(uri);
                         if (cls == null) {
                             throw new IllegalArgumentException("Cannot find command type with uri: " + uri);
                         }

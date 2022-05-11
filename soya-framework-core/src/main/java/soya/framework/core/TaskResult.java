@@ -5,9 +5,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.nio.charset.StandardCharsets;
+
 public abstract class TaskResult {
 
-    private static GsonRenderer gsonRenderer = new GsonRenderer();
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
+    private String uri;
+
+    protected TaskResult(TaskCallable taskCallable) {
+        Command command = taskCallable.getClass().getAnnotation(Command.class);
+        this.uri = command.group() + "://" + command.name();
+    }
 
     public abstract boolean successful();
 
@@ -22,32 +31,28 @@ public abstract class TaskResult {
             return (String) result;
 
         } else {
-            // FIXME:
-            return result.toString();
+            return GSON.toJson(result);
 
         }
     }
 
-    public String toJson() {
-        return gsonRenderer.render(result());
+    public byte[] toByteArray() {
+        return toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    public <T> T render(Renderer<T> renderer) {
-        return renderer.render(result());
+    public static TaskResult completed(TaskCallable task, Object object) {
+        return new SuccessResult(task, object);
     }
 
-    public static TaskResult completed(Object object) {
-        return new SuccessResult(object);
-    }
-
-    public static TaskResult failed(Throwable exception) {
-        return new FailureResult(exception);
+    public static TaskResult failed(TaskCallable task, Throwable exception) {
+        return new FailureResult(task, exception);
     }
 
     static class SuccessResult extends TaskResult {
         private final Object result;
 
-        public SuccessResult(Object result) {
+        protected SuccessResult(TaskCallable task, Object result) {
+            super(task);
             this.result = result;
         }
 
@@ -66,7 +71,8 @@ public abstract class TaskResult {
 
         private final Throwable exception;
 
-        public FailureResult(Throwable exception) {
+        protected FailureResult(TaskCallable task, Throwable exception) {
+            super(task);
             this.exception = exception;
         }
 
@@ -82,10 +88,12 @@ public abstract class TaskResult {
     }
 
     interface Renderer<T> {
-        T render(Object object);
+        String render(T object);
+
+        byte[] renderAsByteArray(T object);
     }
 
-    static class GsonRenderer implements Renderer<String> {
+    static class GsonRenderer implements Renderer {
         private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
         GsonRenderer() {
@@ -118,6 +126,11 @@ public abstract class TaskResult {
                 return GSON.toJson(object);
 
             }
+        }
+
+        @Override
+        public byte[] renderAsByteArray(Object object) {
+            return new byte[0];
         }
     }
 }

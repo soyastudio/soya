@@ -15,7 +15,7 @@ import javax.ws.rs.ApplicationPath;
 public class JerseyConfiguration extends ResourceConfig {
 
     public JerseyConfiguration() {
-        register(soya.framework.albertsons.configuration.GsonMessageBodyHandler.class);
+        register(GsonMessageBodyHandler.class);
         register(MultiPartFeature.class);
         packages("soya.framework.albertsons.restapi");
 

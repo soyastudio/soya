@@ -1,9 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.core.CommandDispatcher;
 import soya.framework.core.CommandMapping;
-import soya.framework.core.GroupMapping;
+import soya.framework.core.Dispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,8 +10,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/bod")
 @Api(value = "bod")
-@GroupMapping(value = "bod")
-public class BodController extends CommandDispatcher {
+public class BodController extends Dispatcher {
 
     public BodController() {
         super();

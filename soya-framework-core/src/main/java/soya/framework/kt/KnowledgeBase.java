@@ -1,7 +1,7 @@
 package soya.framework.kt;
 
-public interface KnowledgeBase<T, K extends Annotatable> {
-    T tao();
+public interface KnowledgeBase<K extends KnowledgeNode> {
+    Object getSource();
 
-    K knowledge();
+    K getKnowledge();
 }

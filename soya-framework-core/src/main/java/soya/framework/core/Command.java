@@ -15,15 +15,15 @@ public @interface Command {
 
     String summary() default "";
 
-    String[] desc() default {};
-
-    String[] tags() default {};
+    String description() default "";
 
     HttpMethod httpMethod() default HttpMethod.POST;
 
     MediaType[] httpRequestTypes() default {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML};
 
     MediaType[] httpResponseTypes() default {MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML};
+
+    String[] tags() default {};
 
     enum HttpMethod {
         GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS;

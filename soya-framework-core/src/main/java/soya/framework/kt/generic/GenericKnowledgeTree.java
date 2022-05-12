@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import soya.framework.kt.KnowledgeNode;
 import soya.framework.kt.KnowledgeTree;
 import soya.framework.kt.KnowledgeTreeNode;
+import soya.framework.kt.TreePath;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -73,6 +74,52 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
     @Override
     public <A> A getAnnotation(String namespace, Class<A> annotationType) {
         return knowledgeNode.getAnnotation(namespace, annotationType);
+    }
+
+    static final class DefaultTreePath implements TreePath {
+        private final String id;
+        private final DefaultTreePath parent;
+        private final int level;
+
+        public DefaultTreePath(DefaultTreePath parent) {
+            this.parent = parent;
+            this.id = UUID.randomUUID().toString();
+            this.level = parent == null? 0 : parent.getLevel() + 1;
+        }
+
+        public DefaultTreePath(DefaultTreePath parent, String id) {
+            this.parent = parent;
+            this.id = id == null? UUID.randomUUID().toString() : id;
+            this.level = parent == null? 0 : parent.getLevel() + 1;
+        }
+
+        @Override
+        public TreePath getParent() {
+            return parent;
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public int getLevel() {
+            return level;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            DefaultTreePath that = (DefaultTreePath) o;
+            return id.equals(that.getId());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
     }
 
     static class DefaultTreeNode<T> implements KnowledgeTreeNode<T> {

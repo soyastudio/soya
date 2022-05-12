@@ -1,23 +1,14 @@
 package soya.framework.kt;
 
-public final class TreePath implements Comparable<TreePath> {
+import java.io.Serializable;
 
-    private TreePath parent;
-    private String name;
-    private int depth;
+public interface TreePath extends Serializable {
 
+    TreePath getParent();
 
+    String getId();
 
-    public TreePath(TreePath parent, String name) {
-        this.parent = parent;
-        this.name = name;
-        this.depth = parent.depth + 1;
-    }
-
-    @Override
-    public int compareTo(TreePath o) {
-        return 0;
-    }
+    int getLevel();
 
 
 

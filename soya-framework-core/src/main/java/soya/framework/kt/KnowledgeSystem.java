@@ -4,6 +4,10 @@ import java.io.IOException;
 
 public interface KnowledgeSystem<K, N> extends KnowledgeBase<KnowledgeTree<K, N>> {
 
+    KnowledgeSystem<K, N> annotate(KnowledgeAnnotator annotator) throws KnowledgeProcessException;
+
+    <T> T render(KnowledgeRenderer<T> renderer) throws KnowledgeProcessException;
+
     interface KnowledgeSystemBuilder<K, N> {
 
         KnowledgeSystemBuilder<K, N> knowledgeExtractor(KnowledgeExtractor<K> knowledgeExtractor);

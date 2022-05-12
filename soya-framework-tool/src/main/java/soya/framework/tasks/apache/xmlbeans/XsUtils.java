@@ -13,7 +13,7 @@ import java.io.File;
 public class XsUtils {
 
     public static KnowledgeTree<SchemaTypeSystem, XsNode> createKnowledgeTree(File xsd) throws KnowledgeBuildException {
-        return XsKnowledgeSystem.create(xsd);
+        return XsKnowledgeSystem.knowledgeTree(xsd);
     }
 
     public static String cardinality(XsNode xsNode) {

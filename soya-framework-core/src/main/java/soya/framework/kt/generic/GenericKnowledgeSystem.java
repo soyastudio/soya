@@ -1,6 +1,7 @@
 package soya.framework.kt.generic;
 
 import soya.framework.kt.KnowledgeBuildException;
+import soya.framework.kt.KnowledgeProcessException;
 import soya.framework.kt.KnowledgeTree;
 import soya.framework.kt.KnowledgeSystem;
 
@@ -28,6 +29,17 @@ public class GenericKnowledgeSystem<K, N> implements KnowledgeSystem<K, N> {
 
     public static Builder builder(Object source) {
         return new Builder(source);
+    }
+
+    @Override
+    public GenericKnowledgeSystem<K, N> annotate(KnowledgeAnnotator annotator) throws KnowledgeProcessException {
+        annotator.annotate(knowledge);
+        return this;
+    }
+
+    @Override
+    public <T> T render(KnowledgeRenderer<T> renderer) throws KnowledgeProcessException {
+        return renderer.render(knowledge);
     }
 
     public static class Builder<K, N> implements KnowledgeSystemBuilder<K, N> {

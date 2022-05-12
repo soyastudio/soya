@@ -29,10 +29,10 @@ public abstract class XmlBeansTask extends TransformTask<String> {
     protected KnowledgeTree<SchemaTypeSystem, XsNode> extract(Resource resource) throws Exception {
         if (source.startsWith("file:///")) {
             String fileName = URI.create(source).toURL().getFile();
-            return XsKnowledgeSystem.create(new File(fileName));
+            return XsKnowledgeSystem.knowledgeTree(new File(fileName));
 
         } else {
-            return XsKnowledgeSystem.create(Resource.create(source).getAsInputStream());
+            return XsKnowledgeSystem.knowledgeTree(Resource.create(source).getAsInputStream());
 
         }
     }

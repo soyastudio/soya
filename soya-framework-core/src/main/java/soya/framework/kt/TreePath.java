@@ -6,6 +6,8 @@ public final class TreePath implements Comparable<TreePath> {
     private String name;
     private int depth;
 
+
+
     public TreePath(TreePath parent, String name) {
         this.parent = parent;
         this.name = name;

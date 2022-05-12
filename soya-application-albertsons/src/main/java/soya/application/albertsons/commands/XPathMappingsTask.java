@@ -23,7 +23,7 @@ public abstract class XPathMappingsTask extends BusinessObjectTask {
     @Override
     protected void init() throws Exception {
         super.init();
-        this.tree = XsKnowledgeSystem.create(new File(cmmFile));
+        this.tree = XsKnowledgeSystem.knowledgeTree(new File(cmmFile));
 
         File file = new File(workDir, mappingFile);
         BufferedReader reader = new BufferedReader(new FileReader(file));

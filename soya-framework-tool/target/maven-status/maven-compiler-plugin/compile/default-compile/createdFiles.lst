@@ -3,6 +3,7 @@ soya\framework\tasks\markdown\HtmlTask.class
 soya\framework\tasks\apache\poi\MappingService$TreeNode.class
 soya\framework\tasks\apache\xmlbeans\xs\XsNode$XsNodeType.class
 soya\framework\tasks\apache\poi\MappingService$MappingTreeCommand.class
+soya\framework\tasks\markdown\MarkdownNode.class
 soya\framework\tasks\apache\kafka\KafkaCommands$1.class
 soya\framework\tasks\script\groovy\GroovyCallback$1.class
 soya\framework\tasks\apache\poi\MappingService$TransformCommand.class
@@ -24,7 +25,6 @@ soya\framework\tasks\transform\avro\AvroSchemaGenerator$RecordCache.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator$IntegralIterator.class
 soya\framework\tasks\apache\ant\JavaTaskProcessors$WarProcessor.class
 soya\framework\tasks\apache\ant\AntProjectHelper$TargetHandler.class
-soya\framework\tasks\markdown\model\MarkdownNode.class
 soya\framework\tasks\apache\kafka\AbstractProduceTask.class
 soya\framework\tasks\apache\poi\MappingService$UnknownMappingsCommand.class
 soya\framework\tasks\apache\ant\AntTaskChain$AntTaskProcessor.class
@@ -37,6 +37,7 @@ soya\framework\tasks\quartz\CreateCronTriggerTask.class
 soya\framework\tasks\script\javascript\JavaScriptCallback.class
 soya\framework\tasks\codegen\JavaPoetBuilderTask.class
 soya\framework\tasks\apache\ant\AntTaskChain$MkdirProcessor.class
+soya\framework\tasks\markdown\MarkdownKnowledgeSystem$DefaultMarkdownDigester.class
 soya\framework\tasks\quartz\StopSchedulerTask.class
 soya\framework\tasks\transform\avro\AvroSerializer.class
 soya\framework\tasks\apache\poi\MappingService$TreeBasedCommand.class
@@ -66,7 +67,6 @@ soya\framework\tasks\markdown\MarkdownEvent.class
 soya\framework\tasks\service\DataSourceBuilder$DBCPDataSourceBuilder.class
 soya\framework\tasks\apache\ant\JavaTaskProcessors.class
 soya\framework\tasks\markdown\MarkdownEventListener.class
-soya\framework\tasks\markdown\model\MarkdownTreeNode.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator$2.class
 soya\framework\tasks\codegen\rest\RestApiGenerator$CommandMethodMapping.class
 soya\framework\tasks\apache\ant\AntProjectHelper.class
@@ -107,9 +107,9 @@ soya\framework\tasks\apache\poi\MappingService$MappingCommand.class
 soya\framework\tasks\apache\poi\MappingService$EsqlCommand.class
 soya\framework\tasks\apache\xmlbeans\SampleJsonGenerator.class
 soya\framework\tasks\apache\ant\AntTaskChain.class
-soya\framework\tasks\markdown\model\MarkdownTree.class
 soya\framework\tasks\apache\poi\SoyaCoderMarkdown$Buffer.class
 soya\framework\tasks\quartz\FindTriggersTask.class
+soya\framework\tasks\markdown\MarkdownKnowledgeSystem.class
 soya\framework\tasks\apache\kafka\KafkaCommands$Command.class
 soya\framework\tasks\transform\avro\AvroSchemaGenerator$1.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator.class
@@ -120,6 +120,7 @@ soya\framework\tasks\apache\poi\MappingService$1.class
 soya\framework\tasks\apache\poi\Table$1.class
 soya\framework\tasks\service\DataSourceBuilder.class
 soya\framework\tasks\apache\kafka\AbstractConsumeTask.class
+soya\framework\tasks\markdown\MarkdownKnowledgeSystem$1.class
 soya\framework\tasks\apache\ant\AntProjectHelper$MainHandler.class
 soya\framework\tasks\apache\kafka\KafkaTask$PartitionStatus.class
 soya\framework\tasks\apache\xmlbeans\xs\XmlBeansUtils$XMLBuildInType.class

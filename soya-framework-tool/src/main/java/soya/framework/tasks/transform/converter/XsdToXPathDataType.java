@@ -19,7 +19,7 @@ public class XsdToXPathDataType {
 
     public static String convert(File xsd) throws KnowledgeBuildException {
 
-        KnowledgeTree<SchemaTypeSystem, XsNode> knowledgeTree = XsKnowledgeSystem.create(xsd);
+        KnowledgeTree<SchemaTypeSystem, XsNode> knowledgeTree = XsKnowledgeSystem.knowledgeTree(xsd);
 
         StringBuilder builder = new StringBuilder();
         Iterator<String> iterator = knowledgeTree.paths();

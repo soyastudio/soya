@@ -22,7 +22,7 @@ public class XsKnowledgeSystem extends GenericKnowledgeSystem<SchemaTypeSystem, 
         super(source, knowledge);
     }
 
-    public static KnowledgeTree<SchemaTypeSystem, XsNode> create(Object source) throws KnowledgeBuildException {
+    public static KnowledgeTree<SchemaTypeSystem, XsNode> knowledgeTree(Object source) throws KnowledgeBuildException {
         return (KnowledgeTree<SchemaTypeSystem, XsNode>) builder(source)
                 .knowledgeExtractor(new XmlSchemaExtractor())
                 .knowledgeDigester(new XsKnowledgeTreeDigester())

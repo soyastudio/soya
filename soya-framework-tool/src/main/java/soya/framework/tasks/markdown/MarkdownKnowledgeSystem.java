@@ -2,185 +2,188 @@ package soya.framework.tasks.markdown;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
-import soya.framework.core.CommandGroup;
-import soya.framework.core.CommandOption;
-import soya.framework.core.Task;
+import soya.framework.kt.KnowledgeBuildException;
+import soya.framework.kt.KnowledgeTree;
+import soya.framework.kt.generic.GenericKnowledgeSystem;
+import soya.framework.kt.generic.GenericKnowledgeTree;
 
-@CommandGroup(group = "markdown",
-        title = "Markdown Tool",
-        description = "Markdown parsing and conversion toolkit.")
-public abstract class MarkdownTask<T> extends Task<T> implements MarkdownEventListener {
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.util.Stack;
 
-    @CommandOption(option = "m", required = true, dataForProcessing = true)
-    protected String markdown;
+public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, MarkdownNode> {
 
-    protected Node document;
-
-    @Override
-    protected void init() throws Exception {
-
-        MarkdownKnowledgeSystem.knowledgeTree(markdown);
-        this.document = Parser.builder().build().parse(markdown);
+    protected MarkdownKnowledgeSystem(Object source, KnowledgeTree knowledge) {
+        super(source, knowledge);
     }
 
-    @Override
-    public T execute() throws Exception {
-        document.accept(new MarkdownVisitor(this));
-        return process();
+    public static KnowledgeTree<Document, MarkdownNode> knowledgeTree(Object source) throws KnowledgeBuildException {
+        return (KnowledgeTree<Document, MarkdownNode>) builder(source)
+                .knowledgeExtractor(new KnowledgeExtractor<Document>() {
+                    @Override
+                    public Document extract(Object src) throws IOException, KnowledgeBuildException {
+                        if (src instanceof String) {
+                            return (Document) Parser.builder().build().parse((String) src);
+
+                        } else if (src instanceof Reader) {
+                            return (Document) Parser.builder().build().parseReader((Reader) src);
+
+                        } else if (src instanceof InputStream) {
+                            return (Document) Parser.builder().build().parseReader(new InputStreamReader((InputStream) src));
+
+                        } else {
+                            throw new KnowledgeBuildException("Cannot parse source type: " + src.getClass().getName());
+                        }
+                    }
+                })
+                .knowledgeDigester(new DefaultMarkdownDigester())
+                .create()
+                .getKnowledge();
     }
 
-    protected abstract T process() throws Exception;
+    static class DefaultMarkdownDigester extends AbstractVisitor implements KnowledgeDigester<Document, MarkdownNode> {
 
-    static class MarkdownVisitor extends AbstractVisitor {
+        private Stack<MarkdownNode> stack = new Stack<>();
 
-        private MarkdownEventListener listener;
+        @Override
+        public KnowledgeTree<Document, MarkdownNode> digester(Document knowledge) throws KnowledgeBuildException {
+            MarkdownNode root = new MarkdownNode(knowledge);
+            stack.push(root);
 
-        MarkdownVisitor(MarkdownEventListener listener) {
-            this.listener = listener;
+            KnowledgeTree<Document, MarkdownNode> tree = GenericKnowledgeTree.newInstance(knowledge, "", root);
+            knowledge.accept(this);
+
+            stack.clear();
+            return tree;
         }
 
         @Override
         public void visit(BlockQuote blockQuote) {
-            listener.onEvent(new MarkdownEvent(blockQuote));
             super.visit(blockQuote);
-
         }
 
         @Override
         public void visit(BulletList bulletList) {
-            listener.onEvent(new MarkdownEvent(bulletList));
             super.visit(bulletList);
         }
 
         @Override
         public void visit(Code code) {
-            listener.onEvent(new MarkdownEvent(code));
             super.visit(code);
         }
 
         @Override
         public void visit(Document document) {
-            listener.onEvent(new MarkdownEvent(document));
             super.visit(document);
         }
 
         @Override
         public void visit(Emphasis emphasis) {
-            listener.onEvent(new MarkdownEvent(emphasis));
             super.visit(emphasis);
         }
 
         @Override
         public void visit(FencedCodeBlock fencedCodeBlock) {
-            listener.onEvent(new MarkdownEvent(fencedCodeBlock));
             super.visit(fencedCodeBlock);
         }
 
         @Override
         public void visit(HardLineBreak hardLineBreak) {
-            listener.onEvent(new MarkdownEvent(hardLineBreak));
             super.visit(hardLineBreak);
         }
 
         @Override
         public void visit(Heading heading) {
-            listener.onEvent(new MarkdownEvent(heading));
+            MarkdownNode node = new MarkdownNode(heading);
+
+            MarkdownNode last = stack.peek();
+            while (last.getLevel() <= node.getLevel()) {
+                last = stack.pop();
+            }
+
+            stack.push(node);
             super.visit(heading);
         }
 
         @Override
         public void visit(ThematicBreak thematicBreak) {
-            listener.onEvent(new MarkdownEvent(thematicBreak));
             super.visit(thematicBreak);
         }
 
         @Override
         public void visit(HtmlInline htmlInline) {
-            listener.onEvent(new MarkdownEvent(htmlInline));
             super.visit(htmlInline);
         }
 
         @Override
         public void visit(HtmlBlock htmlBlock) {
-            listener.onEvent(new MarkdownEvent(htmlBlock));
             super.visit(htmlBlock);
         }
 
         @Override
         public void visit(Image image) {
-            listener.onEvent(new MarkdownEvent(image));
             super.visit(image);
         }
 
         @Override
         public void visit(IndentedCodeBlock indentedCodeBlock) {
-            listener.onEvent(new MarkdownEvent(indentedCodeBlock));
             super.visit(indentedCodeBlock);
         }
 
         @Override
         public void visit(Link link) {
-            listener.onEvent(new MarkdownEvent(link));
             super.visit(link);
         }
 
         @Override
         public void visit(ListItem listItem) {
-            listener.onEvent(new MarkdownEvent(listItem));
             super.visit(listItem);
         }
 
         @Override
         public void visit(OrderedList orderedList) {
-            listener.onEvent(new MarkdownEvent(orderedList));
             super.visit(orderedList);
         }
 
         @Override
         public void visit(Paragraph paragraph) {
-            listener.onEvent(new MarkdownEvent(paragraph));
             super.visit(paragraph);
 
         }
 
         @Override
         public void visit(SoftLineBreak softLineBreak) {
-            listener.onEvent(new MarkdownEvent(softLineBreak));
             super.visit(softLineBreak);
         }
 
         @Override
         public void visit(StrongEmphasis strongEmphasis) {
-            listener.onEvent(new MarkdownEvent(strongEmphasis));
             super.visit(strongEmphasis);
         }
 
         @Override
         public void visit(Text text) {
-            listener.onEvent(new MarkdownEvent(text));
             super.visit(text);
-
-
-            System.out.println("----------------- " + text.getParent());
         }
 
         @Override
         public void visit(LinkReferenceDefinition linkReferenceDefinition) {
-            listener.onEvent(new MarkdownEvent(linkReferenceDefinition));
             super.visit(linkReferenceDefinition);
         }
 
         @Override
         public void visit(CustomBlock customBlock) {
-            listener.onEvent(new MarkdownEvent(customBlock));
             super.visit(customBlock);
         }
 
         @Override
         public void visit(CustomNode customNode) {
-            listener.onEvent(new MarkdownEvent(customNode));
             super.visit(customNode);
         }
+
     }
+
 
 }

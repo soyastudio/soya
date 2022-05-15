@@ -1,10 +1,10 @@
 package soya.framework.kt.generic;
 
 import com.google.gson.Gson;
+import org.apache.commons.lang3.RandomStringUtils;
 import soya.framework.kt.KnowledgeNode;
 import soya.framework.kt.KnowledgeTree;
 import soya.framework.kt.KnowledgeTreeNode;
-import soya.framework.kt.TreePath;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, KnowledgeNode<K> {
 
     private DefaultKnowledgeNode<K> knowledgeNode;
-    private KnowledgeTreeNode root;
+    private KnowledgeTreeNode<T> root;
     private Map<String, KnowledgeTreeNode<T>> treeNodeMap;
 
     protected GenericKnowledgeTree(K knowledge, DefaultTreeNode<T> root) {
@@ -20,12 +20,22 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
         this.root = root;
         this.treeNodeMap = new LinkedHashMap<>();
         treeNodeMap.put(root.path, root);
-
     }
 
     @Override
     public KnowledgeTreeNode<T> root() {
         return root;
+    }
+
+    @Override
+    public KnowledgeTreeNode<T> create(KnowledgeTreeNode<T> parent, Object data) {
+        DefaultTreeNode node = new DefaultTreeNode(parent, data);
+        while (treeNodeMap.containsKey(node.path)) {
+            node = new DefaultTreeNode(parent, RandomStringUtils.randomAlphanumeric(10), data);
+        }
+
+        treeNodeMap.put(node.path, node);
+        return node;
     }
 
     @Override
@@ -52,6 +62,10 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
         return treeNodeMap.values().iterator();
     }
 
+    public static <K, T> GenericKnowledgeTree<K, T> newInstance(K k, T t) {
+        return new GenericKnowledgeTree<>(k, new DefaultTreeNode<T>(null, t));
+    }
+
     public static <K, T> GenericKnowledgeTree<K, T> newInstance(K k, String name, T t) {
         return new GenericKnowledgeTree<>(k, new DefaultTreeNode<T>(null, name, t));
     }
@@ -76,52 +90,6 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
         return knowledgeNode.getAnnotation(namespace, annotationType);
     }
 
-    static final class DefaultTreePath implements TreePath {
-        private final String id;
-        private final DefaultTreePath parent;
-        private final int level;
-
-        public DefaultTreePath(DefaultTreePath parent) {
-            this.parent = parent;
-            this.id = UUID.randomUUID().toString();
-            this.level = parent == null? 0 : parent.getLevel() + 1;
-        }
-
-        public DefaultTreePath(DefaultTreePath parent, String id) {
-            this.parent = parent;
-            this.id = id == null? UUID.randomUUID().toString() : id;
-            this.level = parent == null? 0 : parent.getLevel() + 1;
-        }
-
-        @Override
-        public TreePath getParent() {
-            return parent;
-        }
-
-        @Override
-        public String getId() {
-            return id;
-        }
-
-        @Override
-        public int getLevel() {
-            return level;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            DefaultTreePath that = (DefaultTreePath) o;
-            return id.equals(that.getId());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-    }
-
     static class DefaultTreeNode<T> implements KnowledgeTreeNode<T> {
 
         private KnowledgeTreeNode parent;
@@ -132,6 +100,19 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
 
         private DefaultKnowledgeNode<T> defaultKnowledgeNode;
         private Map<String, Object> annotations = new LinkedHashMap<>();
+
+        protected DefaultTreeNode(KnowledgeTreeNode parent, T data) {
+            this.parent = parent;
+            this.name = RandomStringUtils.randomAlphanumeric(10);
+            this.defaultKnowledgeNode = new DefaultKnowledgeNode<>(data);
+
+            if (parent != null) {
+                parent.getChildren().add(this);
+                this.path = parent.getPath() + "/" + name;
+            } else {
+                this.path = name;
+            }
+        }
 
         protected DefaultTreeNode(KnowledgeTreeNode parent, String name, T data) {
             this.parent = parent;
@@ -197,6 +178,7 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
 
         private final T origin;
         protected Map<String, Object> annotations = new ConcurrentHashMap<>();
+
         protected DefaultKnowledgeNode(T origin) {
             this.origin = origin;
         }
@@ -221,7 +203,7 @@ public class GenericKnowledgeTree<K, T> implements KnowledgeTree<K, T>, Knowledg
 
         @Override
         public <A> A getAnnotation(String namespace, Class<A> annotationType) {
-            if(!annotations.containsKey(namespace)) {
+            if (!annotations.containsKey(namespace)) {
                 return null;
             }
 

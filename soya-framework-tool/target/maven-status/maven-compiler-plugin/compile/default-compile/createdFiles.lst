@@ -63,10 +63,8 @@ soya\framework\tasks\apache\poi\Table.class
 soya\framework\tasks\transform\converter\XmlToAvro.class
 soya\framework\tasks\transform\converter\XsdToAvsc$1.class
 soya\framework\tasks\markdown\SoyaCoderMarkdown.class
-soya\framework\tasks\markdown\MarkdownEvent.class
 soya\framework\tasks\service\DataSourceBuilder$DBCPDataSourceBuilder.class
 soya\framework\tasks\apache\ant\JavaTaskProcessors.class
-soya\framework\tasks\markdown\MarkdownEventListener.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator$2.class
 soya\framework\tasks\codegen\rest\RestApiGenerator$CommandMethodMapping.class
 soya\framework\tasks\apache\ant\AntProjectHelper.class
@@ -83,7 +81,6 @@ soya\framework\tasks\apache\ant\AntTaskChain$EchoProcessor.class
 soya\framework\tasks\http\SimpleHttpRequestTask.class
 soya\framework\tasks\markdown\MarkdownToXMLSlideShow.class
 soya\framework\tasks\apache\xmlbeans\XmlBeansTask.class
-soya\framework\tasks\markdown\MarkdownTask$MarkdownVisitor.class
 soya\framework\tasks\quartz\MatcherTask.class
 soya\framework\tasks\script\groovy\GroovyCallback.class
 soya\framework\tasks\apache\ant\AntTask.class

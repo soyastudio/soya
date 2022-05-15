@@ -27,11 +27,6 @@ public class MarkdownToXMLSlideShow extends MarkdownTask<XMLSlideShow> {
         return ppt;
     }
 
-    @Override
-    public void onEvent(MarkdownEvent event) {
-
-    }
-
 
     static class MarkdownVisitor extends AbstractVisitor {
 

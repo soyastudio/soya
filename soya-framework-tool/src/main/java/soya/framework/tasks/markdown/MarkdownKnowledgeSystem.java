@@ -3,7 +3,9 @@ package soya.framework.tasks.markdown;
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import soya.framework.kt.KnowledgeBuildException;
+import soya.framework.kt.KnowledgeNode;
 import soya.framework.kt.KnowledgeTree;
+import soya.framework.kt.KnowledgeTreeNode;
 import soya.framework.kt.generic.GenericKnowledgeSystem;
 import soya.framework.kt.generic.GenericKnowledgeTree;
 
@@ -45,14 +47,13 @@ public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, Ma
 
     static class DefaultMarkdownDigester extends AbstractVisitor implements KnowledgeDigester<Document, MarkdownNode> {
 
-        private Stack<MarkdownNode> stack = new Stack<>();
+        private KnowledgeTree<Document, MarkdownNode> tree;
+        private Stack<KnowledgeTreeNode<MarkdownNode>> stack = new Stack<>();
 
         @Override
         public KnowledgeTree<Document, MarkdownNode> digester(Document knowledge) throws KnowledgeBuildException {
-            MarkdownNode root = new MarkdownNode(knowledge);
-            stack.push(root);
-
-            KnowledgeTree<Document, MarkdownNode> tree = GenericKnowledgeTree.newInstance(knowledge, "", root);
+            this.tree = GenericKnowledgeTree.newInstance(knowledge, new MarkdownNode(knowledge));
+            stack.push(tree.root());
             knowledge.accept(this);
 
             stack.clear();
@@ -61,16 +62,19 @@ public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, Ma
 
         @Override
         public void visit(BlockQuote blockQuote) {
+            stack.peek().origin().add(blockQuote);
             super.visit(blockQuote);
         }
 
         @Override
         public void visit(BulletList bulletList) {
+            stack.peek().origin().add(bulletList);
             super.visit(bulletList);
         }
 
         @Override
         public void visit(Code code) {
+            stack.peek().origin().add(code);
             super.visit(code);
         }
 
@@ -81,16 +85,19 @@ public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, Ma
 
         @Override
         public void visit(Emphasis emphasis) {
+            stack.peek().origin().add(emphasis);
             super.visit(emphasis);
         }
 
         @Override
         public void visit(FencedCodeBlock fencedCodeBlock) {
+            stack.peek().origin().add(fencedCodeBlock);
             super.visit(fencedCodeBlock);
         }
 
         @Override
         public void visit(HardLineBreak hardLineBreak) {
+            stack.peek().origin().add(hardLineBreak);
             super.visit(hardLineBreak);
         }
 
@@ -98,88 +105,106 @@ public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, Ma
         public void visit(Heading heading) {
             MarkdownNode node = new MarkdownNode(heading);
 
-            MarkdownNode last = stack.peek();
-            while (last.getLevel() <= node.getLevel()) {
-                last = stack.pop();
+            KnowledgeTreeNode<MarkdownNode> last = stack.peek();
+            while (last.origin().getLevel() >= node.getLevel()) {
+                stack.pop();
+                last = stack.peek();
             }
 
-            stack.push(node);
+            stack.push(tree.create(last, node));
             super.visit(heading);
         }
 
         @Override
         public void visit(ThematicBreak thematicBreak) {
+            stack.peek().origin().add(thematicBreak);
             super.visit(thematicBreak);
         }
 
         @Override
         public void visit(HtmlInline htmlInline) {
+            stack.peek().origin().add(htmlInline);
             super.visit(htmlInline);
         }
 
         @Override
         public void visit(HtmlBlock htmlBlock) {
+            stack.peek().origin().add(htmlBlock);
             super.visit(htmlBlock);
         }
 
         @Override
         public void visit(Image image) {
+            stack.peek().origin().add(image);
             super.visit(image);
         }
 
         @Override
         public void visit(IndentedCodeBlock indentedCodeBlock) {
+            stack.peek().origin().add(indentedCodeBlock);
             super.visit(indentedCodeBlock);
         }
 
         @Override
         public void visit(Link link) {
+            stack.peek().origin().add(link);
             super.visit(link);
         }
 
         @Override
         public void visit(ListItem listItem) {
+            stack.peek().origin().add(listItem);
             super.visit(listItem);
         }
 
         @Override
         public void visit(OrderedList orderedList) {
+            stack.peek().origin().add(orderedList);
             super.visit(orderedList);
         }
 
         @Override
         public void visit(Paragraph paragraph) {
+            stack.peek().origin().add(paragraph);
             super.visit(paragraph);
 
         }
 
         @Override
         public void visit(SoftLineBreak softLineBreak) {
+            stack.peek().origin().add(softLineBreak);
             super.visit(softLineBreak);
         }
 
         @Override
         public void visit(StrongEmphasis strongEmphasis) {
+            stack.peek().origin().add(strongEmphasis);
             super.visit(strongEmphasis);
         }
 
         @Override
         public void visit(Text text) {
+            MarkdownNode node = stack.peek().origin();
+            stack.peek().origin().add(text);
+
             super.visit(text);
         }
 
         @Override
         public void visit(LinkReferenceDefinition linkReferenceDefinition) {
+            stack.peek().origin().add(linkReferenceDefinition);
             super.visit(linkReferenceDefinition);
         }
 
         @Override
         public void visit(CustomBlock customBlock) {
+            stack.peek().origin().add(customBlock);
             super.visit(customBlock);
         }
 
         @Override
         public void visit(CustomNode customNode) {
+            stack.peek().origin().add(customNode);
             super.visit(customNode);
         }
 

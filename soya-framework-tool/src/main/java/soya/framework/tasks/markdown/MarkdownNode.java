@@ -11,7 +11,7 @@ import java.util.List;
 public class MarkdownNode {
     private final int level;
 
-    private Title title = new Title();
+    private HeadingPart headingPart = new HeadingPart();
     private List<Node> children = new ArrayList<>();
 
     public MarkdownNode(Document document) {
@@ -26,14 +26,14 @@ public class MarkdownNode {
         return level;
     }
 
-    public Title getTitle() {
-        return title;
+    public HeadingPart getTitle() {
+        return headingPart;
     }
 
     public void add(Node node) {
 
         if (isHeadingPart(node)) {
-            title.add(node);
+            headingPart.add(node);
         } else {
             children.add(node);
         }
@@ -57,7 +57,7 @@ public class MarkdownNode {
         return false;
     }
 
-    public static class Title {
+    public static class HeadingPart {
         private Text text;
         private List<Node> nodes = new ArrayList<>();
 

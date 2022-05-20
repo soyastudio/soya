@@ -1,6 +1,5 @@
-package soya.framework.kt.generic;
+package soya.framework.kt.renderers;
 
-import org.checkerframework.checker.units.qual.C;
 import soya.framework.kt.KnowledgeNode;
 import soya.framework.kt.KnowledgeProcessException;
 import soya.framework.kt.KnowledgeSystem;

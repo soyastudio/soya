@@ -3,7 +3,6 @@ package soya.framework.tasks.markdown;
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import soya.framework.kt.KnowledgeBuildException;
-import soya.framework.kt.KnowledgeNode;
 import soya.framework.kt.KnowledgeTree;
 import soya.framework.kt.KnowledgeTreeNode;
 import soya.framework.kt.generic.GenericKnowledgeSystem;

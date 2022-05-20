@@ -151,11 +151,7 @@ public class KafkaClientFactory {
 
     public static KafkaClientFactory getInstance(String env) {
         String name = env == null ? "LOCAL" : env.toUpperCase();
-        if (!factories.containsKey(name)) {
-            factories.put(name, new KafkaClientFactory(name));
-        }
-
-        return factories.get(name);
+        return new KafkaClientFactory(name);
     }
 
     private String getProperty(String propName) {

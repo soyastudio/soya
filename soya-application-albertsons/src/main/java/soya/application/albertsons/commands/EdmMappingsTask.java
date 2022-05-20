@@ -43,6 +43,7 @@ public abstract class EdmMappingsTask extends BusinessObjectTask {
                     if (!tables.containsKey(table)) {
                         tables.put(key.toUpperCase(), table);
                     }
+
                 } else {
                     String tbl = key.substring(0, key.indexOf('.')).toUpperCase();
                     String cln = key.substring(key.indexOf('.') + 1).trim();

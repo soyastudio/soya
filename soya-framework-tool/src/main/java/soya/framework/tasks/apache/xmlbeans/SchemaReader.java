@@ -1,6 +1,6 @@
 package soya.framework.tasks.apache.xmlbeans;
 
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.Command;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
 import soya.framework.kt.KnowledgeTreeNode;

@@ -139,6 +139,7 @@ public class KafkaClientFactory {
         if(consumer == null) {
             consumer = new KafkaConsumer(consumerProperties);
         }
+
         return consumer;
     }
 

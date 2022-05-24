@@ -1,6 +1,6 @@
 package soya.framework.core.tasks.reflect;
 
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.*;
 
 import java.net.URI;

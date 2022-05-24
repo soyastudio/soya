@@ -2,7 +2,7 @@ package soya.framework.tasks.codegen.rest;
 
 import com.google.common.base.CaseFormat;
 import org.reflections.Reflections;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.Command;
 import soya.framework.core.TaskCallable;
 import soya.framework.core.CommandOption;

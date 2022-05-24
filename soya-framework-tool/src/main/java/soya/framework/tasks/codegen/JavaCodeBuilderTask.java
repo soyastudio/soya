@@ -1,6 +1,6 @@
 package soya.framework.tasks.codegen;
 
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 
 public abstract class JavaCodeBuilderTask extends JavaCodegenTask {
     protected int indent;

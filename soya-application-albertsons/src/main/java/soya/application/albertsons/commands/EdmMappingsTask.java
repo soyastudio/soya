@@ -1,7 +1,7 @@
 package soya.application.albertsons.commands;
 
 import com.google.common.base.CaseFormat;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;

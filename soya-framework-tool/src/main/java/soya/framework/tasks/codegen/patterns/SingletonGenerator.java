@@ -2,7 +2,7 @@ package soya.framework.tasks.codegen.patterns;
 
 import soya.framework.core.Command;
 import soya.framework.tasks.codegen.JavaCodeBuilderTask;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 
 @Command(group = "java-codegen", name = "singleton")
 public class SingletonGenerator extends JavaCodeBuilderTask {

@@ -48,6 +48,7 @@ C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\kaf
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\quartz\ResumeSchedulerTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\ant\MkdirTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\codegen\JavaCodeBuilderTask.java
+C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\markdown\HtmlTreeRendererTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\quartz\MatcherTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\transform\avro\AvroSchemaGenerator.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\codegen\TaskDelegateGenerator.java
@@ -63,7 +64,6 @@ C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\ant
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\quartz\StopSchedulerTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\transform\avro\SampleAvroGenerator.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\kafka\ProduceTask.java
-C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\markdown\HtmlTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\kafka\PubAndSubTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\transform\converter\XmlToAvro.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\xmlbeans\XmlBeansTask.java

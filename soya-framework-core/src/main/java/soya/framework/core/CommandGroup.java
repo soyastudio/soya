@@ -14,4 +14,6 @@ public @interface CommandGroup {
     String title();
 
     String description() default "";
+
+    String[] tags() default {};
 }

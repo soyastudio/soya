@@ -1,8 +1,9 @@
 package soya.framework.tasks.markdown;
 
-import org.apache.poi.sl.usermodel.AutoNumberingScheme;
-import org.apache.poi.sl.usermodel.PictureData;
-import org.apache.poi.xslf.usermodel.*;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFPictureData;
+import org.apache.poi.xslf.usermodel.XSLFRelation;
+import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.commonmark.node.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTBlip;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTBlipFillProperties;
@@ -10,7 +11,6 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTRelativeRect;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTBackgroundProperties;
 import soya.framework.core.Command;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;

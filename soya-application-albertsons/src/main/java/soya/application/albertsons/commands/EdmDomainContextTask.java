@@ -2,7 +2,7 @@ package soya.application.albertsons.commands;
 
 import com.google.common.base.CaseFormat;
 import org.apache.commons.beanutils.BeanComparator;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.Command;
 
 import java.util.ArrayList;

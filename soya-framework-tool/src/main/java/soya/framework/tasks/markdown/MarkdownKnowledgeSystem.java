@@ -209,5 +209,4 @@ public class MarkdownKnowledgeSystem extends GenericKnowledgeSystem<Document, Ma
 
     }
 
-
 }

@@ -1,7 +1,7 @@
 package soya.framework.tasks.apache.ant;
 
 import org.apache.tools.ant.*;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.Command;
 import soya.framework.core.CommandOption;
 import soya.framework.core.TaskCallable;

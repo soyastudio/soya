@@ -6,7 +6,7 @@ import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.annotation.Annotation;
 import javassist.bytecode.annotation.StringMemberValue;
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

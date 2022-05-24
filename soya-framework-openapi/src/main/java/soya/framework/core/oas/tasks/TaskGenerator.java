@@ -1,6 +1,6 @@
 package soya.framework.core.oas.tasks;
 
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.core.Command;
 import soya.framework.core.Task;
 import soya.framework.core.CommandOption;

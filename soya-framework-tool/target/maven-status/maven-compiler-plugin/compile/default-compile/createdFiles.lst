@@ -1,5 +1,4 @@
 soya\framework\tasks\codegen\TaskDelegateGenerator.class
-soya\framework\tasks\markdown\HtmlTask.class
 soya\framework\tasks\apache\poi\MappingService$TreeNode.class
 soya\framework\tasks\apache\xmlbeans\xs\XsNode$XsNodeType.class
 soya\framework\tasks\apache\poi\MappingService$MappingTreeCommand.class
@@ -98,6 +97,7 @@ soya\framework\tasks\quartz\PauseSchedulerTask.class
 soya\framework\tasks\transform\converter\XmlToAvro$1.class
 soya\framework\tasks\apache\kafka\KafkaTask$OffsetInfo.class
 soya\framework\tasks\apache\poi\Table$Row.class
+soya\framework\tasks\markdown\MarkdownNode$HeadingPart.class
 soya\framework\tasks\quartz\SchedulerMetadataTask.class
 soya\framework\tasks\apache\kafka\KafkaClientFactory.class
 soya\framework\tasks\apache\poi\MappingService$MappingCommand.class
@@ -110,6 +110,7 @@ soya\framework\tasks\markdown\MarkdownKnowledgeSystem.class
 soya\framework\tasks\apache\kafka\KafkaCommands$Command.class
 soya\framework\tasks\transform\avro\AvroSchemaGenerator$1.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator.class
+soya\framework\tasks\markdown\HtmlTreeRendererTask.class
 soya\framework\tasks\transform\avro\AvroUtils.class
 soya\framework\tasks\apache\ant\AntProjectHelper$ElementHandler.class
 soya\framework\tasks\apache\ant\AntTaskChain$CopyFile.class

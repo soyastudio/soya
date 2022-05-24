@@ -1,6 +1,6 @@
 package soya.framework.kt.renderers;
 
-import soya.framework.commons.util.CodeBuilder;
+import soya.framework.util.CodeBuilder;
 import soya.framework.kt.*;
 
 public abstract class HtmlTreeRenderer implements KnowledgeSystem.KnowledgeRenderer<String> {

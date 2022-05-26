@@ -1,12 +1,12 @@
 package soya.framework.tasks.apache.xmlbeans.xs;
 
 import org.apache.xmlbeans.*;
-import soya.framework.kt.KnowledgeBuildException;
-import soya.framework.kt.KnowledgeTree;
-import soya.framework.kt.Tree;
-import soya.framework.kt.TreeNode;
-import soya.framework.kt.generic.GenericKnowledgeSystem;
-import soya.framework.kt.generic.GenericKnowledgeTree;
+import soya.framework.knowledge.KnowledgeBuildException;
+import soya.framework.knowledge.KnowledgeTree;
+import soya.framework.knowledge.Tree;
+import soya.framework.knowledge.TreeNode;
+import soya.framework.knowledge.generic.GenericKnowledgeSystem;
+import soya.framework.knowledge.generic.GenericKnowledgeTree;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;

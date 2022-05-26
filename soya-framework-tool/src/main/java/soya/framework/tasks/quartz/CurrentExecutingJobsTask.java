@@ -1,7 +1,7 @@
 package soya.framework.tasks.quartz;
 
 import org.quartz.JobExecutionContext;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 import java.util.List;
 

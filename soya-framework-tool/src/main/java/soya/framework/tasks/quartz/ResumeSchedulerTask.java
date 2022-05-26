@@ -1,6 +1,6 @@
 package soya.framework.tasks.quartz;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "quartz-scheduler", name = "scheduler-resume", httpMethod = Command.HttpMethod.PUT, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
 public class ResumeSchedulerTask extends QuartzSchedulerTask {

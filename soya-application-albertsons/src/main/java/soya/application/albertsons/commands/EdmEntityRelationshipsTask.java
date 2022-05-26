@@ -1,6 +1,6 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 import java.util.ArrayList;
 import java.util.List;

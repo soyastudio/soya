@@ -1,10 +1,10 @@
 package soya.application.albertsons.commands;
 
 import org.apache.xmlbeans.SchemaTypeSystem;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.CommandOption;
 import soya.framework.tasks.apache.xmlbeans.xs.XsKnowledgeSystem;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
-import soya.framework.kt.KnowledgeTree;
+import soya.framework.knowledge.KnowledgeTree;
 
 import java.io.BufferedReader;
 import java.io.File;

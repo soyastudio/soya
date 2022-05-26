@@ -1,9 +1,9 @@
 package soya.framework.tasks.apache.xmlbeans;
 
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
-import soya.framework.kt.KnowledgeTreeNode;
+import soya.framework.knowledge.KnowledgeTreeNode;
 
 @Command(group = "transform", name = "xmlbeans-schema-reader", httpRequestTypes = Command.MediaType.TEXT_PLAIN)
 public class SchemaReader extends XmlBeansTask {

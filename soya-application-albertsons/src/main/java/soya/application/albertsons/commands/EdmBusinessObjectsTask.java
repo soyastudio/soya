@@ -5,10 +5,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import soya.framework.core.Command;
-import soya.framework.core.Task;
-import soya.framework.core.TaskCallable;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.Task;
+import soya.framework.commandline.CommandOption;
 
 import java.io.File;
 import java.util.*;

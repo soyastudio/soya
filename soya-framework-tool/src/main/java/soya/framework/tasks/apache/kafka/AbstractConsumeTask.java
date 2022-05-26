@@ -1,6 +1,6 @@
 package soya.framework.tasks.apache.kafka;
 
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.CommandOption;
 
 public abstract class AbstractConsumeTask extends KafkaTask {
 

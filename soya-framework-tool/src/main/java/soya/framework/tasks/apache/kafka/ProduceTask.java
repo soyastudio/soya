@@ -1,7 +1,7 @@
 package soya.framework.tasks.apache.kafka;
 
 import org.apache.kafka.clients.producer.RecordMetadata;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 import java.util.UUID;
 

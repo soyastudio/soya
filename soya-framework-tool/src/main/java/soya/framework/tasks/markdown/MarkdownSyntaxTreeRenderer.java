@@ -1,7 +1,7 @@
 package soya.framework.tasks.markdown;
 
-import soya.framework.core.Command;
-import soya.framework.kt.renderers.JsonTreeStructureRenderer;
+import soya.framework.commandline.Command;
+import soya.framework.knowledge.renderers.JsonTreeStructureRenderer;
 
 @Command(group = "markdown", name = "syntax-tree", httpMethod = Command.HttpMethod.POST)
 public class MarkdownSyntaxTreeRenderer extends MarkdownTask<String> {

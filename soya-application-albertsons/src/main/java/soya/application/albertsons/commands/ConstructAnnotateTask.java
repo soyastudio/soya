@@ -1,9 +1,9 @@
 package soya.application.albertsons.commands;
 
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
-import soya.framework.kt.KnowledgeTreeNode;
+import soya.framework.knowledge.KnowledgeTreeNode;
 
 import java.math.BigInteger;
 

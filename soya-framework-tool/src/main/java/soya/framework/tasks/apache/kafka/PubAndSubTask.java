@@ -1,8 +1,8 @@
 package soya.framework.tasks.apache.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 @Command(group = "kafka", name = "pub-and-sub")
 public class PubAndSubTask extends AbstractProduceTask {

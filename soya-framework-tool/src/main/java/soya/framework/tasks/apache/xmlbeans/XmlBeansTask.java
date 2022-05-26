@@ -6,9 +6,9 @@ import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.tasks.TransformTask;
 import soya.framework.tasks.apache.xmlbeans.xs.XsKnowledgeSystem;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
-import soya.framework.core.CommandOption;
-import soya.framework.core.Resource;
-import soya.framework.kt.KnowledgeTree;
+import soya.framework.commandline.CommandOption;
+import soya.framework.commandline.Resource;
+import soya.framework.knowledge.KnowledgeTree;
 
 import java.io.File;
 import java.net.URI;

@@ -1,6 +1,6 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "business-object-management", name = "bod-create",
         httpMethod = Command.HttpMethod.POST,

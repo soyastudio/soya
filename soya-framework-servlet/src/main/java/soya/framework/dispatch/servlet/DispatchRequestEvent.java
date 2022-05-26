@@ -1,8 +1,8 @@
 package soya.framework.dispatch.servlet;
 
 
-import soya.framework.core.TaskCallable;
-import soya.framework.core.TaskResult;
+import soya.framework.commandline.TaskCallable;
+import soya.framework.commandline.TaskResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.EventObject;

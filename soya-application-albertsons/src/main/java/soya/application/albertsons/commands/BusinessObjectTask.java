@@ -2,11 +2,10 @@ package soya.application.albertsons.commands;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.CommandOption;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 public abstract class BusinessObjectTask extends AbsTaskBase {

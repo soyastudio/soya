@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import soya.framework.core.TaskExecutionContext;
+import soya.framework.commandline.TaskExecutionContext;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.ApplicationPath;

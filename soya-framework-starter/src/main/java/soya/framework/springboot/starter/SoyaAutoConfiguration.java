@@ -9,11 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import soya.framework.core.TaskExecutionContext;
-import soya.framework.core.tasks.reflect.ReflectionTask;
+import soya.framework.commandline.TaskExecutionContext;
+import soya.framework.commandline.tasks.reflect.ReflectionTask;
 import soya.framework.dispatch.servlet.DispatchServlet;
 
-import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

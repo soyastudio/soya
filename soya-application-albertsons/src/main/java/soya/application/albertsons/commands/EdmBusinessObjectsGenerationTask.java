@@ -7,9 +7,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
-import soya.framework.core.TaskExecutionContext;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.TaskExecutionContext;
+import soya.framework.commandline.CommandOption;
 
 import java.io.File;
 import java.io.IOException;

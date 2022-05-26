@@ -10,8 +10,8 @@ import org.apache.tools.ant.taskdefs.Ant;
 import org.apache.tools.ant.util.JAXPUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

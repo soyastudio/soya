@@ -3,10 +3,10 @@ package soya.framework.tasks.codegen.rest;
 import com.google.common.base.CaseFormat;
 import org.reflections.Reflections;
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
-import soya.framework.core.TaskCallable;
-import soya.framework.core.CommandOption;
-import soya.framework.core.TaskParser;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.TaskCallable;
+import soya.framework.commandline.CommandOption;
+import soya.framework.commandline.TaskParser;
 import soya.framework.tasks.codegen.JavaCodeBuilderTask;
 
 import java.lang.reflect.Field;

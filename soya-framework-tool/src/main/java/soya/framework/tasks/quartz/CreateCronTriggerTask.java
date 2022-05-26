@@ -1,6 +1,6 @@
 package soya.framework.tasks.quartz;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "quartz-scheduler", name = "trigger-create-cron", httpMethod = Command.HttpMethod.POST, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
 public class CreateCronTriggerTask extends QuartzSchedulerTask {

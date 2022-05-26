@@ -1,11 +1,10 @@
 package soya.framework.tasks.markdown;
 
 import org.commonmark.node.*;
-import org.commonmark.parser.Parser;
-import soya.framework.core.CommandGroup;
-import soya.framework.core.CommandOption;
-import soya.framework.core.Task;
-import soya.framework.kt.KnowledgeTree;
+import soya.framework.commandline.CommandGroup;
+import soya.framework.commandline.CommandOption;
+import soya.framework.commandline.Task;
+import soya.framework.knowledge.KnowledgeTree;
 
 @CommandGroup(group = "markdown",
         title = "Markdown Tool",

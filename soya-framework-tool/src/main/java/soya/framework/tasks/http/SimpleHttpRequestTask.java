@@ -1,8 +1,8 @@
 package soya.framework.tasks.http;
 
-import soya.framework.core.Command;
-import soya.framework.core.Task;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.Task;
+import soya.framework.commandline.CommandOption;
 
 @Command(group = "http-client", name = "simple")
 public class SimpleHttpRequestTask extends Task<String> {

@@ -2,10 +2,10 @@ package soya.framework.tasks.apache.ant;
 
 import org.apache.tools.ant.*;
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
-import soya.framework.core.TaskCallable;
-import soya.framework.core.TaskResult;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
+import soya.framework.commandline.TaskCallable;
+import soya.framework.commandline.TaskResult;
 
 import java.io.File;
 import java.lang.reflect.ParameterizedType;

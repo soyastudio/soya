@@ -23,6 +23,7 @@ C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\transform\
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\poi\SoyaCoderMarkdown.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\quartz\QuartzSchedulerTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\kafka\KafkaUtils.java
+C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\markdown\MarkdownBuilder.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\apache\xmlbeans\SampleJsonGenerator.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\quartz\GetTriggerTask.java
 C:\github\Soya\soya-framework-tool\src\main\java\soya\framework\tasks\transform\converter\XsdToXPathDataType.java

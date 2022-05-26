@@ -1,7 +1,7 @@
 package soya.application.albertsons.commands;
 
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "business-object-development", name = "deprecation",
         httpMethod = Command.HttpMethod.GET, httpResponseTypes = Command.MediaType.TEXT_PLAIN)

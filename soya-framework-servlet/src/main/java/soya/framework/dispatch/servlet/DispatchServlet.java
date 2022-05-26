@@ -1,8 +1,8 @@
 package soya.framework.dispatch.servlet;
 
-import soya.framework.core.*;
-import soya.framework.core.oas.swagger.Swagger;
-import soya.framework.core.oas.swagger.SwaggerBuilder;
+import soya.framework.commandline.*;
+import soya.framework.commandline.oas.swagger.Swagger;
+import soya.framework.commandline.oas.swagger.SwaggerBuilder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

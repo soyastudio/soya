@@ -3,8 +3,8 @@ package soya.application.albertsons.commands;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.everit.json.schema.Schema;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 import java.io.File;
 import java.io.FileReader;

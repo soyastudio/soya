@@ -1,6 +1,6 @@
 package soya.framework.tasks.apache.kafka;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "kafka", name = "metrics", httpMethod = Command.HttpMethod.GET)
 public class MetricsTask extends KafkaTask {

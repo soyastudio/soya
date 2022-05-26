@@ -9,7 +9,7 @@ import org.openxmlformats.schemas.drawingml.x2006.main.CTBlip;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTBlipFillProperties;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTRelativeRect;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTBackgroundProperties;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 import java.util.ArrayList;
 import java.util.List;

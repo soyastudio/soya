@@ -1,7 +1,7 @@
 package soya.framework.tasks.script.groovy;
 
-import soya.framework.core.Flow;
-import soya.framework.core.Resources;
+import soya.framework.commandline.Flow;
+import soya.framework.commandline.Resources;
 
 public class GroovyCallback implements Flow.Callback {
 

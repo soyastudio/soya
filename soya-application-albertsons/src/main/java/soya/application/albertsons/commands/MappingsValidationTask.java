@@ -1,6 +1,6 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.apache.xmlbeans.XsUtils;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
 

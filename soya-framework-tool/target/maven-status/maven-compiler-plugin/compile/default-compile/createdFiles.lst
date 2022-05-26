@@ -14,6 +14,7 @@ soya\framework\tasks\apache\ant\BuildTask.class
 soya\framework\tasks\quartz\CurrentExecutingJobsTask.class
 soya\framework\tasks\apache\kafka\KafkaCommands$PartitionStatus.class
 soya\framework\tasks\apache\ant\AntTaskChain$CopyDir.class
+soya\framework\tasks\markdown\MarkdownBuilder$HeadingBuilder.class
 soya\framework\tasks\apache\kafka\ProduceTask.class
 soya\framework\tasks\apache\xmlbeans\xs\XsKnowledgeSystem$XsKnowledgeTreeDigester.class
 soya\framework\tasks\transform\avro\AvroSchemaGenerator.class
@@ -52,6 +53,7 @@ soya\framework\tasks\apache\poi\MappingService$JsonTypeMappingsCommand.class
 soya\framework\tasks\apache\poi\MappingService$UnknownPathsCommand.class
 soya\framework\tasks\codegen\JavaCodeBuilderTask.class
 soya\framework\tasks\apache\kafka\KafkaTask$RecordInfo.class
+soya\framework\tasks\markdown\MarkdownBuilder.class
 soya\framework\tasks\apache\poi\MappingService$OutputXmlCommand.class
 soya\framework\tasks\markdown\MarkdownTask.class
 soya\framework\tasks\apache\poi\MappingService$Array.class
@@ -65,6 +67,7 @@ soya\framework\tasks\markdown\SoyaCoderMarkdown.class
 soya\framework\tasks\service\DataSourceBuilder$DBCPDataSourceBuilder.class
 soya\framework\tasks\apache\ant\JavaTaskProcessors.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator$2.class
+soya\framework\tasks\markdown\MarkdownBuilder$1.class
 soya\framework\tasks\codegen\rest\RestApiGenerator$CommandMethodMapping.class
 soya\framework\tasks\apache\ant\AntProjectHelper.class
 soya\framework\tasks\transform\avro\SampleAvroGenerator$IntegralIterator$Type.class
@@ -105,7 +108,9 @@ soya\framework\tasks\apache\poi\MappingService$EsqlCommand.class
 soya\framework\tasks\apache\xmlbeans\SampleJsonGenerator.class
 soya\framework\tasks\apache\ant\AntTaskChain.class
 soya\framework\tasks\apache\poi\SoyaCoderMarkdown$Buffer.class
+soya\framework\tasks\markdown\MarkdownBuilder$FencedCodeBlockBuilder.class
 soya\framework\tasks\quartz\FindTriggersTask.class
+soya\framework\tasks\markdown\MarkdownBuilder$ParagraphBuilder.class
 soya\framework\tasks\markdown\MarkdownKnowledgeSystem.class
 soya\framework\tasks\apache\kafka\KafkaCommands$Command.class
 soya\framework\tasks\transform\avro\AvroSchemaGenerator$1.class

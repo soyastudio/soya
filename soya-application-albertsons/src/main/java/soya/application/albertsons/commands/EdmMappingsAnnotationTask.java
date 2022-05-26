@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
 import com.google.gson.JsonParser;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 @Command(group = "business-object-edm", name = "edm-mappings-annotation", httpResponseTypes = Command.MediaType.TEXT_PLAIN)
 public class EdmMappingsAnnotationTask extends EdmMappingsTask {

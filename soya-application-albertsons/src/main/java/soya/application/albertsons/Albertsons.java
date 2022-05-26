@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import soya.framework.tasks.apache.kafka.KafkaClientFactory;
-import soya.framework.core.TaskExecutionContext;
+import soya.framework.commandline.TaskExecutionContext;
 import soya.framework.dispatch.servlet.DispatchServlet;
 
 import java.io.IOException;

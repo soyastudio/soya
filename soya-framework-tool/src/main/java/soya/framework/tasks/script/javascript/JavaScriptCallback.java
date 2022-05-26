@@ -1,6 +1,6 @@
 package soya.framework.tasks.script.javascript;
 
-import soya.framework.core.Flow;
+import soya.framework.commandline.Flow;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

@@ -3,7 +3,7 @@ package soya.framework.tasks.apache.xmlbeans;
 import com.google.gson.JsonParser;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.transform.avro.SampleAvroGenerator;
 import soya.framework.tasks.transform.converter.XsdToAvsc;
 

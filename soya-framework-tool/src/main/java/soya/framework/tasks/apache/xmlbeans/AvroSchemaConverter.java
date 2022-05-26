@@ -1,6 +1,6 @@
 package soya.framework.tasks.apache.xmlbeans;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.transform.converter.XsdToAvsc;
 
 @Command(group = "transform", name = "xmlbeans-avsc-converter", httpRequestTypes = Command.MediaType.APPLICATION_JSON)

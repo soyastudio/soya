@@ -3,9 +3,9 @@ package soya.framework.tasks.apache.ant;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.*;
-import soya.framework.core.Flow;
-import soya.framework.core.Resources;
-import soya.framework.core.tasks.text.FileSystemProcessChain;
+import soya.framework.commandline.Flow;
+import soya.framework.commandline.Resources;
+import soya.framework.commandline.tasks.text.FileSystemProcessChain;
 
 import java.io.File;
 import java.io.FileInputStream;

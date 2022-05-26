@@ -1,6 +1,6 @@
 package soya.framework.tasks.codegen.patterns;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 import soya.framework.tasks.codegen.JavaCodeBuilderTask;
 import soya.framework.util.CodeBuilder;
 

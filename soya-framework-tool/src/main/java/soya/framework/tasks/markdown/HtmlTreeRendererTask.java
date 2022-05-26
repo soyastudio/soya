@@ -1,8 +1,8 @@
 package soya.framework.tasks.markdown;
 
 import soya.framework.util.CodeBuilder;
-import soya.framework.core.Command;
-import soya.framework.kt.KnowledgeTreeNode;
+import soya.framework.commandline.Command;
+import soya.framework.knowledge.KnowledgeTreeNode;
 
 @Command(group = "markdown", name = "html-tree", httpMethod = Command.HttpMethod.POST, httpResponseTypes = Command.MediaType.APPLICATION_XML)
 public class HtmlTreeRendererTask extends MarkdownTask {

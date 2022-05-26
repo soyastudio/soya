@@ -1,8 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.core.CommandMapping;
-import soya.framework.core.Dispatcher;
+import soya.framework.commandline.CommandMapping;
+import soya.framework.commandline.Dispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

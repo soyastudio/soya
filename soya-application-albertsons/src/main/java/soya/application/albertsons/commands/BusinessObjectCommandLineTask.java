@@ -1,9 +1,8 @@
 package soya.application.albertsons.commands;
 
-import org.reflections.Reflections;
-import soya.framework.core.Command;
-import soya.framework.core.TaskName;
-import soya.framework.core.tasks.CommandLineTask;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.TaskName;
+import soya.framework.commandline.tasks.CommandLineTask;
 
 import java.util.HashMap;
 import java.util.Map;

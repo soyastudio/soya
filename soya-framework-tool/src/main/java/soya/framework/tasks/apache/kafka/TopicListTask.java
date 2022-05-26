@@ -1,7 +1,7 @@
 package soya.framework.tasks.apache.kafka;
 
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 @Command(group = "kafka", name = "topics", httpMethod = Command.HttpMethod.GET)
 public class TopicListTask extends KafkaTask {

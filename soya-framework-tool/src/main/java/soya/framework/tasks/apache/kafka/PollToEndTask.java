@@ -1,6 +1,6 @@
 package soya.framework.tasks.apache.kafka;
 
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "kafka", name = "poll-to-end", httpMethod = Command.HttpMethod.GET)
 public class PollToEndTask extends KafkaTask {

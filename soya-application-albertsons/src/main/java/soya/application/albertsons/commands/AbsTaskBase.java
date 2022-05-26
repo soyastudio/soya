@@ -1,10 +1,9 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.core.CommandOption;
-import soya.framework.core.Task;
+import soya.framework.commandline.CommandOption;
+import soya.framework.commandline.Task;
 
 import java.io.File;
-import java.io.IOException;
 
 public abstract class AbsTaskBase extends Task<String> {
 

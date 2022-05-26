@@ -1,7 +1,7 @@
 package soya.framework.tasks.quartz;
 
 import org.quartz.impl.matchers.GroupMatcher;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.CommandOption;
 
 public abstract class MatcherTask extends QuartzSchedulerTask {
 

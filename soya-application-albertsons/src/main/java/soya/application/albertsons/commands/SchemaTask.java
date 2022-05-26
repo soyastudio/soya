@@ -3,7 +3,7 @@ package soya.application.albertsons.commands;
 import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.tasks.apache.xmlbeans.XmlBeansTask;
 import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
-import soya.framework.kt.KnowledgeTree;
+import soya.framework.knowledge.KnowledgeTree;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

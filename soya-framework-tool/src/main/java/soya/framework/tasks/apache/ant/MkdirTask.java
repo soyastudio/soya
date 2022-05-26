@@ -1,8 +1,8 @@
 package soya.framework.tasks.apache.ant;
 
 import org.apache.tools.ant.taskdefs.Mkdir;
-import soya.framework.core.Command;
-import soya.framework.core.CommandOption;
+import soya.framework.commandline.Command;
+import soya.framework.commandline.CommandOption;
 
 import java.io.File;
 

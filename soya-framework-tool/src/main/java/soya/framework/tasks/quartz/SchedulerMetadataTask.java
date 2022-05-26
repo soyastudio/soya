@@ -3,7 +3,7 @@ package soya.framework.tasks.quartz;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.quartz.SchedulerMetaData;
-import soya.framework.core.Command;
+import soya.framework.commandline.Command;
 
 @Command(group = "quartz-scheduler", name = "scheduler-metadata", httpMethod = Command.HttpMethod.GET, httpResponseTypes = Command.MediaType.APPLICATION_JSON)
 public class SchedulerMetadataTask extends QuartzSchedulerTask {

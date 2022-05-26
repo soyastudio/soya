@@ -26,3 +26,6 @@ soya:
 
   ant:
     home: ${soya.framework.home}/Ant
+
+  git:
+    home: C:/github/jgit

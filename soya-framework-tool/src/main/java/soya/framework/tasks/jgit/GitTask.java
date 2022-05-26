@@ -1,22 +1,31 @@
 package soya.framework.tasks.jgit;
 
+import org.eclipse.jgit.api.GitCommand;
 import org.eclipse.jgit.lib.BatchingProgressMonitor;
 import soya.framework.commandline.CommandGroup;
 import soya.framework.commandline.CommandOption;
 import soya.framework.commandline.TaskCallable;
+import soya.framework.commandline.TaskResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @CommandGroup(group = "git", title = "Git Service", description = "Toolkit for git commands.")
-public abstract class GitTask implements TaskCallable {
+public abstract class GitTask<T extends GitCommand> implements TaskCallable {
 
     @CommandOption(option = "h", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.git.home")
     protected String localHome;
-
 
     //@CommandOption(option = "s", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.git.ssh_dir")
     protected String sshDir;
 
     @CommandOption(option = "u")
     protected String url;
+
+    @Override
+    public TaskResult call() throws Exception {
+        return TaskResult.completed(this, "TODO");
+    }
 
 
     /*protected void sshSetUp() {
@@ -31,6 +40,7 @@ public abstract class GitTask implements TaskCallable {
 
 
     static class ProgressLogger extends BatchingProgressMonitor {
+        private List<String> messages = new ArrayList<>();
 
         protected void onUpdate(String taskName, int workCurr) {
             StringBuilder s = new StringBuilder();
@@ -102,8 +112,7 @@ public abstract class GitTask implements TaskCallable {
         }
 
         private void send(StringBuilder s) {
-            System.out.println(s.toString());
-
+            messages.add(s.toString());
         }
     }
 }

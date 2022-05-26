@@ -10,9 +10,11 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public abstract class TaskExecutionContext {
 
+    private static Logger logger = Logger.getLogger(TaskExecutionContext.class.getName());
     private static TaskExecutionContext INSTANCE;
 
     private final ExecutorService executorService;
@@ -289,7 +291,11 @@ public abstract class TaskExecutionContext {
 
         @Override
         public void setRequiredProperty(String propName, String propValue) {
-            properties.setProperty(propName, propValue);
+            if(propName != null && propValue != null) {
+                properties.setProperty(propName, propValue);
+            } else {
+                logger.warning("Required property '" + propName + "' is not set.");
+            }
         }
     }
 

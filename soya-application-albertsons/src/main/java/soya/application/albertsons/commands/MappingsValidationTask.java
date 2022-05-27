@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
 import soya.framework.commandline.Command;
-import soya.framework.tasks.apache.xmlbeans.XsUtils;
-import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
+import soya.framework.commandline.tasks.apache.xmlbeans.XsUtils;
+import soya.framework.commandline.tasks.apache.xmlbeans.xs.XsNode;
 
 @Command(group = "business-object-development", name = "mappings-validation", httpMethod = Command.HttpMethod.GET)
 public class MappingsValidationTask extends XPathMappingsTask {

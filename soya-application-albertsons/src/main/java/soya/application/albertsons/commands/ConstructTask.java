@@ -2,7 +2,7 @@ package soya.application.albertsons.commands;
 
 import com.google.common.base.CaseFormat;
 import soya.framework.commandline.CommandOption;
-import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
+import soya.framework.commandline.tasks.apache.xmlbeans.xs.XsNode;
 import soya.framework.knowledge.KnowledgeTreeNode;
 
 import java.io.BufferedReader;

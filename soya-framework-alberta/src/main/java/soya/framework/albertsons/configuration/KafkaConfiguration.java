@@ -1,7 +1,7 @@
 package soya.framework.albertsons.configuration;
 
 import org.springframework.context.annotation.Configuration;
-import soya.framework.tasks.apache.kafka.KafkaClientFactory;
+import soya.framework.commandline.tasks.kafka.KafkaClientFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
 import org.apache.xmlbeans.SchemaTypeSystem;
-import soya.framework.tasks.apache.xmlbeans.XmlBeansTask;
-import soya.framework.tasks.apache.xmlbeans.xs.XsNode;
+import soya.framework.commandline.tasks.apache.xmlbeans.XmlBeansTask;
+import soya.framework.commandline.tasks.apache.xmlbeans.xs.XsNode;
 import soya.framework.knowledge.KnowledgeTree;
 
 import java.lang.reflect.Field;

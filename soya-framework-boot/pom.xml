@@ -59,6 +59,18 @@
 
 		<dependency>
 			<groupId>soya.framework</groupId>
+			<artifactId>soya-framework-tasks-ant</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>soya.framework</groupId>
+			<artifactId>soya-framework-tasks-git</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>soya.framework</groupId>
 			<artifactId>soya-framework-tasks-kafka</artifactId>
 			<version>${project.version}</version>
 		</dependency>

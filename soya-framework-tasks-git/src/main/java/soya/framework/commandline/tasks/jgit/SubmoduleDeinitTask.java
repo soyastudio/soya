@@ -1,4 +1,8 @@
 package soya.framework.commandline.tasks.jgit;
 
-public class SubmoduleDeinitTask {
+import org.eclipse.jgit.api.SubmoduleDeinitCommand;
+import soya.framework.commandline.Command;
+
+@Command(group = "git", name = "sub-module-deinit")
+public class SubmoduleDeinitTask extends GitTask<SubmoduleDeinitCommand> {
 }

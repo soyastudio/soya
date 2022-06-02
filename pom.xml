@@ -257,22 +257,25 @@
         <module>soya-framework-starter</module>
 
         <module>soya-framework-tool</module>
-
         <module>soya-framework-tasks-ant</module>
         <module>soya-framework-tasks-document</module>
         <module>soya-framework-tasks-dropbox</module>
         <module>soya-framework-tasks-git</module>
         <module>soya-framework-tasks-kafka</module>
 
+        <module>soya-framework-tasks</module>
+        <module>soya-framework-boot</module>
+
         <module>soya-framework-jersey-starter</module>
 
         <module>soya-framework-ams</module>
-        <module>soya-framework-boot</module>
 
         <module>soya-application-albertsons</module>
         <module>soya-application-openbank</module>
 
         <module>soya-framework-alberta</module>
+        <module>soya-framework-tasks-javacodegen</module>
+        <module>soya-framework-tasks-quartz</module>
         <!--<module>soya-framework-quartz</module>
         <module>soya-framework-erm</module>-->
     </modules>

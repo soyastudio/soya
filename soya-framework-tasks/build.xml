@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<project name="AppBuild" default="import" basedir=".">
+
+    <property name="base.dir" location="../"/>
+    <property name="java.dir" location="./src/main/java"/>
+    <property name="resources.dir" location="./src/main/resources"/>
+
+    <target name="clean"
+            description="clean up">
+        <delete dir="${java.dir}" failonerror="false"/>
+        <delete dir="${resources.dir}" failonerror="false"/>
+
+        <mkdir dir="${java.dir}"/>
+        <mkdir dir="${resources.dir}"/>
+    </target>
+
+    <target name="import" depends="clean">
+        <antcall target="import-ant"/>
+        <antcall target="import-document"/>
+        <antcall target="import-dropbox"/>
+        <antcall target="import-git"/>
+        <antcall target="import-javacodegen"/>
+        <antcall target="import-kafka"/>
+    </target>
+
+    <target name="import-ant">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-ant/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-ant/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+    <target name="import-document">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-document/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-document/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+    <target name="import-dropbox">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-dropbox/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-dropbox/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+    <target name="import-git">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-git/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-git/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+    <target name="import-javacodegen">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-javacodegen/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-javacodegen/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+    <target name="import-kafka">
+        <copy todir="${java.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-kafka/src/main/java" includes="**/*.java"></fileset>
+        </copy>
+        <copy todir="${resources.dir}">
+            <fileset dir="${base.dir}/soya-framework-tasks-kafka/src/main/resources" includes="**/*.*"></fileset>
+        </copy>
+    </target>
+
+</project>

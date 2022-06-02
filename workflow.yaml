@@ -1,0 +1,8 @@
+task:
+  name: Base64EncodeTask
+  uri: text-util://base64-encode
+  options:
+    encoding: <String>		# (optional)
+    source: <String>		# (required)
+  onSuccess:
+  onFailure:

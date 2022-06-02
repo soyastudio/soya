@@ -7,8 +7,8 @@ import soya.framework.commandline.Task;
 import java.nio.charset.Charset;
 
 @CommandGroup(group = "text-util",
-        title = "Text Processing Tool",
-        description = "Toolkit for processing text.")
+        title = "Text Processing Commands",
+        description = "Commands for processing text.")
 public abstract class TextUtilTask extends Task<String> {
 
     @CommandOption(option = "c")

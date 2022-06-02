@@ -10,7 +10,7 @@ import soya.framework.commandline.TaskResult;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandGroup(group = "git", title = "Git Service", description = "Toolkit for git commands.")
+@CommandGroup(group = "git", title = "Git Tasks", description = "Toolkit for git commands, based on eclipse jgit project.")
 public abstract class GitTask<T extends GitCommand> implements TaskCallable {
 
     @CommandOption(option = "h", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.git.home")

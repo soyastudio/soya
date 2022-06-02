@@ -1,18 +1,29 @@
 package soya.framework.commandline.tasks.ant;
 
+import org.apache.tools.ant.Task;
 import org.apache.tools.ant.*;
+import org.apache.tools.ant.helper.AntXMLContext;
+import org.apache.tools.ant.helper.ProjectHelper2;
+import org.apache.tools.ant.taskdefs.Typedef;
+import org.apache.tools.ant.util.JAXPUtils;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import soya.framework.commandline.*;
 import soya.framework.util.CodeBuilder;
-import soya.framework.commandline.Command;
-import soya.framework.commandline.CommandOption;
-import soya.framework.commandline.TaskCallable;
-import soya.framework.commandline.TaskResult;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandGroup(group = "apache-ant", title = "Apache Ant", description = "Toolkit for apache ant task and script.")
 public abstract class AntTask<T extends Task> implements TaskCallable {
+
+    public static final String ANTLIB = "soya/framework/commandline/tasks/ant/antlib.xml";
 
     @CommandOption(option = "h", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.ant.home")
     protected String home;
@@ -23,7 +34,7 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
     protected File antHome;
     protected File workDir;
 
-    protected Project project = new Project();
+    protected ProjectSession project;
     protected Class<T> taskType;
     protected Listener listener;
 
@@ -56,7 +67,6 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
             }
 
             this.project = createProject();
-
             project.executeTarget(project.getDefaultTarget());
 
             return TaskResult.completed(this, render(listener));
@@ -67,9 +77,16 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
         }
     }
 
-    protected Project createProject() throws Exception {
+    protected ProjectSession createProject() throws Exception {
         Command command = getClass().getAnnotation(Command.class);
-        Project project = new Project();
+
+        ProjectSession project = new ProjectSession();
+
+        Typedef typedef = new Typedef();
+        typedef.setProject(project);
+        typedef.setResource(ANTLIB);
+        typedef.execute();
+
         project.setName(command.group());
         project.setDefault(command.name());
         project.addBuildListener(listener);
@@ -155,6 +172,48 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
         public void messageLogged(BuildEvent buildEvent) {
             events.add(buildEvent);
         }
+    }
+
+    public static class DefaultProjectHelper extends ProjectHelper2 {
+        public DefaultProjectHelper() {
+        }
+
+        @Override
+        public void parse(Project project, Object source) throws BuildException {
+            super.parse(project, source);
+        }
+
+        @Override
+        public void parse(Project project, Object source, ProjectHelper2.RootHandler handler) throws BuildException {
+            if (source instanceof String) {
+                String script = (String) source;
+                AntXMLContext context = null;
+                try {
+                    Field field = RootHandler.class.getDeclaredField("context");
+                    field.setAccessible(true);
+                    context = (AntXMLContext) field.get(handler);
+
+                    InputStream inputStream = new ByteArrayInputStream(script.getBytes(StandardCharsets.UTF_8));
+                    InputSource inputSource = new InputSource(inputStream);
+
+                    XMLReader parser = JAXPUtils.getNamespaceXMLReader();
+                    parser.setContentHandler(handler);
+                    parser.setEntityResolver(handler);
+                    parser.setErrorHandler(handler);
+                    parser.setDTDHandler(handler);
+                    parser.parse(inputSource);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                } finally {
+
+                }
+            } else {
+                super.parse(project, source, handler);
+            }
+        }
+
     }
 
 }

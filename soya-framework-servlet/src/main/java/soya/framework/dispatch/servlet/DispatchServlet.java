@@ -1,5 +1,6 @@
 package soya.framework.dispatch.servlet;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import soya.framework.commandline.*;
 import soya.framework.commandline.oas.swagger.Swagger;
 import soya.framework.commandline.oas.swagger.SwaggerBuilder;
@@ -176,7 +177,7 @@ public class DispatchServlet extends HttpServlet {
 
                 if (value != null && !value.isEmpty()) {
                     field.setAccessible(true);
-                    field.set(task, value);
+                    field.set(task, convert(value, field.getType()));
                 }
             }
 
@@ -192,6 +193,10 @@ public class DispatchServlet extends HttpServlet {
         }
 
         return null;
+    }
+
+    private Object convert(String value, Class<?> type) {
+        return ConvertUtils.convert(value, type);
     }
 
     private void notify(DispatchRequestEvent event) {

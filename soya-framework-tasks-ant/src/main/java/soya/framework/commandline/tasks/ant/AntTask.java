@@ -80,7 +80,7 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
     protected ProjectSession createProject() throws Exception {
         Command command = getClass().getAnnotation(Command.class);
 
-        ProjectSession project = new ProjectSession();
+        ProjectSession project = new ProjectSession(workDir);
 
         Typedef typedef = new Typedef();
         typedef.setProject(project);
@@ -172,48 +172,6 @@ public abstract class AntTask<T extends Task> implements TaskCallable {
         public void messageLogged(BuildEvent buildEvent) {
             events.add(buildEvent);
         }
-    }
-
-    public static class DefaultProjectHelper extends ProjectHelper2 {
-        public DefaultProjectHelper() {
-        }
-
-        @Override
-        public void parse(Project project, Object source) throws BuildException {
-            super.parse(project, source);
-        }
-
-        @Override
-        public void parse(Project project, Object source, ProjectHelper2.RootHandler handler) throws BuildException {
-            if (source instanceof String) {
-                String script = (String) source;
-                AntXMLContext context = null;
-                try {
-                    Field field = RootHandler.class.getDeclaredField("context");
-                    field.setAccessible(true);
-                    context = (AntXMLContext) field.get(handler);
-
-                    InputStream inputStream = new ByteArrayInputStream(script.getBytes(StandardCharsets.UTF_8));
-                    InputSource inputSource = new InputSource(inputStream);
-
-                    XMLReader parser = JAXPUtils.getNamespaceXMLReader();
-                    parser.setContentHandler(handler);
-                    parser.setEntityResolver(handler);
-                    parser.setErrorHandler(handler);
-                    parser.setDTDHandler(handler);
-                    parser.parse(inputSource);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-
-                } finally {
-
-                }
-            } else {
-                super.parse(project, source, handler);
-            }
-        }
-
     }
 
 }

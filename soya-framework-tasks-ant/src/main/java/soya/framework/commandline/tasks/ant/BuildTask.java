@@ -21,34 +21,12 @@ public class BuildTask extends AntTask<Ant> {
 
     @Override
     protected ProjectSession createProject() throws Exception {
-        ProjectHelperRepository.getInstance().registerProjectHelper(DefaultProjectHelper.class);
-        DefaultProjectHelper helper = (DefaultProjectHelper) ProjectHelper.getProjectHelper();
-        ProjectSession project = new ProjectSession();
-
         if (script == null) {
             return super.createProject();
 
         } else {
-            project.setBaseDir(workDir);
-            try {
-                helper.parse(project, script);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            project.addBuildListener(listener);
-
-            if (target != null) {
-                project.setDefault(target);
-            }
-
-            Typedef typedef = new Typedef();
-            typedef.setProject(project);
-            typedef.setResource(ANTLIB);
-            //typedef.setURI( TASK_URI );
-            typedef.execute();
-
-            return project;
+            return new ProjectSession(script, workDir);
         }
     }
 

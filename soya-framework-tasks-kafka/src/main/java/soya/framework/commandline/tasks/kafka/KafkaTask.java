@@ -35,9 +35,6 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
-@CommandGroup(group = "kafka",
-        title = "Kafka Tool",
-        description = "Kafka toolkit for executing kafka commands in multiple kafka environments.")
 public abstract class KafkaTask extends Task<String> {
 
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

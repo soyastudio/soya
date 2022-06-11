@@ -38,15 +38,12 @@ public class Export extends AntTaskExtension {
     }
 
     public void execute() throws BuildException {
-
         if (this.name == null) {
             throw new BuildException("'name' attribute is required", this.getLocation());
-
         }
 
         if (this.todir == null) {
             throw new BuildException("'todir' attribute is required", this.getLocation());
-
         }
 
         TaskResult taskResult = getProject().getResult(name);
@@ -63,12 +60,6 @@ public class Export extends AntTaskExtension {
             throw new BuildException(e, this.getLocation());
         }
 
-
-    }
-
-    @Override
-    public ProjectSession getProject() {
-        return (ProjectSession) super.getProject();
     }
 
     private void prepareDest() throws BuildException {

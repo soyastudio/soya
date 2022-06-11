@@ -1,7 +1,7 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.commandline.CommandMapping;
+import soya.framework.commandline.DispatchMethod;
 import soya.framework.commandline.Dispatcher;
 
 import javax.ws.rs.*;
@@ -20,7 +20,7 @@ public class ResourceController extends Dispatcher {
     @Path("/gzip")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "gzip", template = "-s {0}")
+    @DispatchMethod(command = "gzip", template = "-s {0}")
     public Response gzip(String source) throws Exception {
         return Response
                 .ok(_dispatch("gzip",
@@ -32,7 +32,7 @@ public class ResourceController extends Dispatcher {
     @Path("/aes-encrypt")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "aes-encrypt", template = "-k {0} -s {1}")
+    @DispatchMethod(command = "aes-encrypt", template = "-k {0} -s {1}")
     public Response aesEncrypt(@HeaderParam("secret") String secret, String source) throws Exception {
         return Response
                 .ok(_dispatch("aesEncrypt",
@@ -44,7 +44,7 @@ public class ResourceController extends Dispatcher {
     @Path("/aes-decrypt")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "aes-decrypt", template = "-k {0} -s {1}")
+    @DispatchMethod(command = "aes-decrypt", template = "-k {0} -s {1}")
     public Response aesDecrypt(@HeaderParam("secret") String secret, String source) throws Exception {
         return Response
                 .ok(_dispatch("aesDecrypt",
@@ -56,7 +56,7 @@ public class ResourceController extends Dispatcher {
     @Path("/mustache-attribute")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "mustache-attribute", template = "-s {0}")
+    @DispatchMethod(command = "mustache-attribute", template = "-s {0}")
     public Response mustacheAttribute(String source) throws Exception {
         return Response
                 .ok(_dispatch("mustacheAttribute",
@@ -68,7 +68,7 @@ public class ResourceController extends Dispatcher {
     @Path("/base64-encode")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "base64-encode", template = "-s {0}")
+    @DispatchMethod(command = "base64-encode", template = "-s {0}")
     public Response base64Encode(String source) throws Exception {
         return Response
                 .ok(_dispatch("base64Encode",
@@ -80,7 +80,7 @@ public class ResourceController extends Dispatcher {
     @Path("/echo")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "echo", template = "-s {0}")
+    @DispatchMethod(command = "echo", template = "-s {0}")
     public Response echo(String source) throws Exception {
         return Response
                 .ok(_dispatch("echo",
@@ -92,7 +92,7 @@ public class ResourceController extends Dispatcher {
     @Path("/unzip")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "unzip", template = "-s {0}")
+    @DispatchMethod(command = "unzip", template = "-s {0}")
     public Response unzip(String source) throws Exception {
         return Response
                 .ok(_dispatch("unzip",
@@ -104,7 +104,7 @@ public class ResourceController extends Dispatcher {
     @Path("/base64-decode")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "base64-decode", template = "-s {0}")
+    @DispatchMethod(command = "base64-decode", template = "-s {0}")
     public Response base64Decode(String source) throws Exception {
         return Response
                 .ok(_dispatch("base64Decode",
@@ -116,7 +116,7 @@ public class ResourceController extends Dispatcher {
     @Path("/json-format")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "json-format", template = "-s {0}")
+    @DispatchMethod(command = "json-format", template = "-s {0}")
     public Response jsonFormat(String source) throws Exception {
         return Response
                 .ok(_dispatch("jsonFormat",
@@ -128,7 +128,7 @@ public class ResourceController extends Dispatcher {
     @Path("/extract")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @CommandMapping(command = "extract", template = "-s {0}")
+    @DispatchMethod(command = "extract", template = "-s {0}")
     public Response extract(String source) throws Exception {
         return Response
                 .ok(_dispatch("extract",

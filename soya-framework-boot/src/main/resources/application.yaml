@@ -16,11 +16,11 @@ spring:
     console.enabled: true
 
 workspace:
-  home: D:/github/Workshop/AppBuild
+  home: C:/github/Workshop/AppBuild
 
 soya:
   framework:
-    home: D:/github/Workshop
+    home: C:/github/Workshop
     scanPackages: soya.framework
     debug: true
 
@@ -28,4 +28,4 @@ soya:
     home: ${soya.framework.home}/Ant
 
   git:
-    home: D:/github/jgit
+    home: C:/github/jgit

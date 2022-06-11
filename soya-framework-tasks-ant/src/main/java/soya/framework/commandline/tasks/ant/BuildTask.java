@@ -1,17 +1,16 @@
 package soya.framework.commandline.tasks.ant;
 
-import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.ProjectHelperRepository;
-import org.apache.tools.ant.taskdefs.Ant;
-import org.apache.tools.ant.taskdefs.Typedef;
 import soya.framework.commandline.Command;
 import soya.framework.commandline.CommandOption;
 
-@Command(group = "apache-ant", name = "build", httpMethod = Command.HttpMethod.POST)
-public class BuildTask extends AntTask<Ant> {
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
-    @CommandOption(option = "f")
-    protected String file = "build.xml";
+@Command(group = "apache-ant", name = "build", httpMethod = Command.HttpMethod.POST, httpRequestTypes = {Command.MediaType.APPLICATION_XML})
+public class BuildTask extends AntTask {
 
     @CommandOption(option = "t")
     protected String target;
@@ -19,25 +18,47 @@ public class BuildTask extends AntTask<Ant> {
     @CommandOption(option = "s", dataForProcessing = true)
     protected String script;
 
+    @CommandOption(option = "l")
+    protected boolean printLog;
+
+
     @Override
-    protected ProjectSession createProject() throws Exception {
-        if (script == null) {
-            return super.createProject();
+    protected void configure(ProjectSession project) throws Exception {
+        if(script != null) {
+            project.configure(script);
 
         } else {
-
-            return new ProjectSession(script, workDir);
+            project.configure(new File(project.getBaseDir(), "build.xml"));
         }
     }
 
     @Override
-    protected void prepare(Ant task) throws Exception {
-        String buildFile = file != null ? file : "build.xml";
-        task.setDir(workDir);
-        task.setAntfile(buildFile);
-        if (target != null) {
-            task.setTarget(target);
+    protected void execute(ProjectSession project) throws Exception {
+        try {
+            if(target != null) {
+                project.executeTarget(target);
+
+            } else {
+                project.executeTarget(project.getDefaultTarget());
+
+            }
+        } catch (Exception ex) {
+
+        } finally {
+
+            if(printLog) {
+                printLog(project);
+            }
         }
+    }
+
+    protected void printLog(ProjectSession project) throws IOException {
+        File logFile = new File(project.getBaseDir(), "build.log");
+        if(!logFile.exists()) {
+            logFile.createNewFile();
+        }
+
+        Files.write(Paths.get(logFile.toURI()), project.printEvents().getBytes(StandardCharsets.UTF_8));
 
     }
 }

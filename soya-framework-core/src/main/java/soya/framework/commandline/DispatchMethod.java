@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CommandMapping {
+public @interface DispatchMethod {
     String command();
 
     String template() default "";

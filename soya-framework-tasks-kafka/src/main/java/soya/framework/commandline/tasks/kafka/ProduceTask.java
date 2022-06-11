@@ -5,7 +5,7 @@ import soya.framework.commandline.Command;
 
 import java.util.UUID;
 
-@Command(group = "kafka", name = "produce")
+
 public class ProduceTask extends AbstractProduceTask {
 
     @Override

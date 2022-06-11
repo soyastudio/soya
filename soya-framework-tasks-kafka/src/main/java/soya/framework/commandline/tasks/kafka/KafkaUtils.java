@@ -219,4 +219,30 @@ public class KafkaUtils {
         return KafkaClientFactory.getInstance(environment).createAdminClient();
     }
 
+    // ====================================
+    public static String[] topics(AdminClient adminClient) {
+        List<String> results = new ArrayList<>();
+        Future<Set<String>> future = adminClient.listTopics().names();
+        while (!future.isDone()) {
+            try {
+                Thread.sleep(100L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            List<String> topics = new ArrayList<>(future.get());
+            Collections.sort(topics);
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+
+        }
+
+        return results.toArray(new String[results.size()]);
+    }
+
 }

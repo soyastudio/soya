@@ -1,5 +1,7 @@
 package soya.framework.commandline;
 
+import org.apache.commons.lang3.text.StrSubstitutor;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -13,6 +15,7 @@ import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 
 public abstract class Resource {
+    public static final String SCHEMA_SYSTEM = "system";
 
     public static final String SCHEMA_BASE64 = "base64";
 
@@ -87,6 +90,32 @@ public abstract class Resource {
     public abstract InputStream getAsInputStream() throws IOException;
 
     public abstract byte[] getAsByteArray() throws IOException;
+
+    static class SystemResource extends Resource {
+        private String key;
+        private String value;
+
+        protected SystemResource(URI uri) {
+            super(uri);
+            this.key = uri.getHost();
+
+        }
+
+        @Override
+        public String getAsString(Charset encoding) throws IOException {
+            return null;
+        }
+
+        @Override
+        public InputStream getAsInputStream() throws IOException {
+            return null;
+        }
+
+        @Override
+        public byte[] getAsByteArray() throws IOException {
+            return new byte[0];
+        }
+    }
 
     static class Base64EncodedResource extends Resource {
         private final String raw;
@@ -209,7 +238,12 @@ public abstract class Resource {
 
         @Override
         public InputStream getAsInputStream() throws IOException {
-            return null;
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            if(classLoader == null) {
+                classLoader = getClass().getClassLoader();
+            }
+
+            return classLoader.getResourceAsStream(path);
         }
 
         @Override

@@ -1,16 +1,16 @@
 package soya.framework.commandline.tasks.ant;
 
-import com.google.common.io.LineReader;
-import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.util.FileUtils;
 import soya.framework.commandline.TaskResult;
 import soya.framework.commandline.TaskResultExporter;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Locale;
 
 public class SimpleJavaExporter implements TaskResultExporter {
 
@@ -22,27 +22,27 @@ public class SimpleJavaExporter implements TaskResultExporter {
         String line = br.readLine();
         String packageName = null;
         String className = null;
-        while(line != null) {
+        while (line != null) {
             String ln = line.trim();
-            if(ln.startsWith("package ")) {
+            if (ln.startsWith("package ")) {
                 packageName = ln.substring("package ".length(), ln.indexOf(";")).trim();
             }
 
-            if(ln.startsWith("class ") || ln.contains(" class ")) {
+            if (ln.startsWith("class ") || ln.contains(" class ")) {
                 className = ln.substring(ln.indexOf("class ") + "class ".length()).trim();
 
-            } else if(ln.startsWith("enum ") || ln.contains(" enum ")) {
+            } else if (ln.startsWith("enum ") || ln.contains(" enum ")) {
                 className = ln.substring(ln.indexOf("enum ") + "enum ".length()).trim();
 
-            } else if(ln.startsWith("interface ") || ln.contains(" interface ")) {
+            } else if (ln.startsWith("interface ") || ln.contains(" interface ")) {
                 className = ln.substring(ln.indexOf("interface ") + "interface ".length()).trim();
 
-            }else if(ln.startsWith("@interface ") || ln.contains(" @interface ")) {
+            } else if (ln.startsWith("@interface ") || ln.contains(" @interface ")) {
                 className = ln.substring(ln.indexOf("@interface ") + "@interface ".length()).trim();
 
             }
 
-            if(className != null) {
+            if (className != null) {
                 className = className.substring(0, className.indexOf(" "));
                 break;
 
@@ -56,7 +56,7 @@ public class SimpleJavaExporter implements TaskResultExporter {
         File pkg = new File(dir, path);
         pkg.mkdirs();
         File file = new File(pkg, className + ".java");
-        if(!file.exists()) {
+        if (!file.exists()) {
             FileUtils.getFileUtils().createNewFile(file);
         }
 

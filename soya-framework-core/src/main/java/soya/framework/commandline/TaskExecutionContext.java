@@ -42,6 +42,8 @@ public abstract class TaskExecutionContext {
 
         }
 
+        proxyCache = new ProxyCache();
+
         INSTANCE = this;
     }
 
@@ -49,6 +51,7 @@ public abstract class TaskExecutionContext {
         Reflections scanner = new Reflections(new ConfigurationBuilder()
                 .forPackages(packageName)
                 .setScanners(Scanners.TypesAnnotated, Scanners.MethodsAnnotated));
+
         scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
             CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
             if (commandGroup != null) {
@@ -64,9 +67,12 @@ public abstract class TaskExecutionContext {
             }
         });
 
-        Set<Method> methods = scanner.getMethodsAnnotatedWith(CommandMapping.class);
-        methods.forEach(m -> {
-            System.out.println("----------- " + m.toString());
+        Set<Class<?>> dispatchClasses = scanner.getTypesAnnotatedWith(CommandDispatcher.class);
+        dispatchClasses.forEach(e -> {
+            if(e.isInterface()) {
+                proxyCache.add(e);
+
+            }
         });
 
     }
@@ -94,6 +100,10 @@ public abstract class TaskExecutionContext {
 
     public <T> T getService(Class<T> type) {
         return serviceLocator.getService(type);
+    }
+
+    public <T> T getProxy(Class<T> type) {
+        return proxyCache.get(type);
     }
 
     protected ServiceLocator getServiceLocator() {
@@ -392,6 +402,15 @@ public abstract class TaskExecutionContext {
     }
 
     static class ProxyCache {
+        private Map<Class<?>, Object> proxies = new HashMap<>();
+
+        void add(Class<?> cls) {
+            System.out.println("===================== " + cls.getName());
+        }
+
+        <T> T get(Class<T> type) {
+            return (T) proxies.get(type);
+        }
 
     }
 

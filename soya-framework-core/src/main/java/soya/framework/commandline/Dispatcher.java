@@ -184,7 +184,7 @@ public abstract class Dispatcher {
 
             this.fields = TaskParser.getOptionFields(type);
             this.options = TaskParser.parse(type);
-            template = method.getAnnotation(CommandMapping.class).template();
+            template = method.getAnnotation(DispatchMethod.class).template();
         }
 
         public T create(Object[] args) throws Exception {

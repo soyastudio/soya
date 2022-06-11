@@ -4,7 +4,7 @@ import com.google.gson.JsonParser;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -270,10 +270,11 @@ public class Resources {
                         throw new IllegalArgumentException("Self referenced for " + "${" + key + "}");
                     }
 
-                    value = StrSubstitutor.replace(value, values);
+
+                    value = StringSubstitutor.replace(value, values);
 
                     if (value.contains("${")) {
-                        value = StrSubstitutor.replace(value, System.getProperties());
+                        value = StringSubstitutor.replace(value, System.getProperties());
                     }
 
                     properties.setProperty(key, value);

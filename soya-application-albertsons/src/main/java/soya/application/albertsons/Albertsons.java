@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import soya.framework.commandline.tasks.kafka.KafkaClientFactory;
 import soya.framework.commandline.TaskExecutionContext;
 import soya.framework.dispatch.servlet.DispatchServlet;
 
@@ -42,7 +41,6 @@ public class Albertsons {
         Properties properties = new Properties();
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("kafka-config.properties");
         properties.load(inputStream);
-        KafkaClientFactory.configure(properties);
 
 
         return TaskExecutionContext.builder()

@@ -1,7 +1,5 @@
 package soya.framework.commandline;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
-
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -12,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public abstract class Resource {
@@ -233,13 +232,16 @@ public abstract class Resource {
 
         @Override
         public String getAsString(Charset encoding) throws IOException {
-            return null;
+            return new BufferedReader(
+                    new InputStreamReader(getAsInputStream(), encoding))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
         }
 
         @Override
         public InputStream getAsInputStream() throws IOException {
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            if(classLoader == null) {
+            if (classLoader == null) {
                 classLoader = getClass().getClassLoader();
             }
 
@@ -248,7 +250,18 @@ public abstract class Resource {
 
         @Override
         public byte[] getAsByteArray() throws IOException {
-            return new byte[0];
+            InputStream in = getAsInputStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int r = in.read(buffer);
+                if (r == -1) {
+                    break;
+                }
+                out.write(buffer, 0, r);
+            }
+
+            return out.toByteArray();
         }
     }
 

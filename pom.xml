@@ -276,6 +276,7 @@
         <module>soya-framework-alberta</module>
         <module>soya-framework-tasks-javacodegen</module>
         <module>soya-framework-tasks-quartz</module>
+        <module>soya-framework-tasks-maven</module>
         <!--<module>soya-framework-quartz</module>
         <module>soya-framework-erm</module>-->
     </modules>

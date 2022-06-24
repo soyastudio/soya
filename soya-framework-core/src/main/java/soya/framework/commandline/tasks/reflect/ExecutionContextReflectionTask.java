@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import soya.framework.commandline.Command;
 import soya.framework.commandline.TaskExecutionContext;
 
-@Command(group = "reflect", name = "context",
+@Command(group = "reflect", name = "execution-context",
         httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
 public class ExecutionContextReflectionTask extends ReflectionTask<String> {
 

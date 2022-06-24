@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Command(group = "reflect", name = "discover-types", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
+@Command(group = "reflect", name = "type-discover", httpMethod = Command.HttpMethod.GET, httpResponseTypes = {Command.MediaType.APPLICATION_JSON})
 public class TypeDiscoveryTask extends ReflectionTask<String[]> {
 
     @CommandOption(option = "t", required = true)

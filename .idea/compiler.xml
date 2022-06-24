@@ -10,6 +10,7 @@
         <module name="soya-framework-tasks-git" />
         <module name="soya-framework-alberta" />
         <module name="soya-framework-tasks-quartz" />
+        <module name="soya-framework-tasks-maven" />
         <module name="soya-application-albertsons" />
         <module name="soya-framework-tasks-document" />
         <module name="soya-framework-boot" />

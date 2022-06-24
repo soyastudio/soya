@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 public abstract class TaskResult {
 
-    private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
 
     private String uri;
 

@@ -1,4 +1,4 @@
-package soya.framework.commandline.tasks.kafkaya;
+package soya.framework.commandline.tasks.kafka;
 
 import org.apache.kafka.common.Metric;
 import soya.framework.commandline.Command;

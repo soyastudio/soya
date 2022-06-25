@@ -68,7 +68,7 @@ public class ProduceAndConsumeTask extends ProduceTask {
 
         while (results.isEmpty()) {
             if (isTimeout(timestamp)) {
-                throw new RuntimeException("Process timeout over " + timeout + "ms");
+                throw new RuntimeException("Process timeout over " + timeout() + " ms");
             }
 
             Thread.sleep(100l);

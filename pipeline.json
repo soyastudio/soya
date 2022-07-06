@@ -1,0 +1,33 @@
+{
+  "parameters": [
+    {
+      "name": "text",
+      "type": "java.lang.String"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "encode",
+      "uri": "text-util://base64-encode",
+      "options": [
+        {
+          "option": "s",
+          "parameter": "text"
+        }
+      ],
+      "stopOnFailure": true
+    },
+    {
+      "name": "decode",
+      "uri": "text-util://base64-decode",
+      "options": [
+        {
+          "option": "s",
+          "expression": "encode"
+        }
+      ],
+      "stopOnFailure": true
+    }
+  ],
+  "result": "encode"
+}

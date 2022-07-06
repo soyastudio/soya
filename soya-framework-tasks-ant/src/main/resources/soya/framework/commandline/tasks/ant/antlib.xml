@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<antlib>
-
-    <taskdef name="dispatch" classname="soya.framework.commandline.tasks.ant.Dispatch"/>
-    <taskdef name="export" classname="soya.framework.commandline.tasks.ant.Export"/>
-
-</antlib>

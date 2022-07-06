@@ -1,8 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.commandline.DispatchMethod;
-import soya.framework.commandline.Dispatcher;
+import soya.framework.action.dispatch.ActionForward;
+import soya.framework.action.dispatch.ActionDispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/kafka")
 @Api(value = "kafka")
-public class KafkaController extends Dispatcher {
+public class KafkaController extends ActionDispatcher {
 
     public KafkaController() {
         super();
@@ -20,7 +20,7 @@ public class KafkaController extends Dispatcher {
     @Path("/poll-to-end/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "poll-to-end", template = "-e {0} -t {1}")
+    @ActionForward(command = "poll-to-end -e {0} -t {1}")
     public Response pollToEnd(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
         return Response
                 .ok(_dispatch("pollToEnd",
@@ -32,7 +32,7 @@ public class KafkaController extends Dispatcher {
     @Path("/produce/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "produce", template = "-e {0} -t {1} -p {2} -m {3}")
+    @ActionForward(command = "produce -e {0} -t {1} -p {2} -m {3}")
     public Response produce(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("produceTopic") String produceTopic, String message) throws Exception {
         return Response
                 .ok(_dispatch("produce",
@@ -44,7 +44,7 @@ public class KafkaController extends Dispatcher {
     @Path("/topics/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "topics", template = "-e {0} -t {1} -q {2}")
+    @ActionForward(command = "topics -e {0} -t {1} -q {2}")
     public Response topics(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("query") String query) throws Exception {
         return Response
                 .ok(_dispatch("topics",
@@ -56,7 +56,7 @@ public class KafkaController extends Dispatcher {
     @Path("/topic/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "topic", template = "-e {0} -t {1} -c {2}")
+    @ActionForward(command = "topic -e {0} -t {1} -c {2}")
     public Response topic(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("topicName") String topicName) throws Exception {
         return Response
                 .ok(_dispatch("topic",
@@ -68,7 +68,7 @@ public class KafkaController extends Dispatcher {
     @Path("/consume/{environment}/{consumeTopic}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "consume", template = "-e {0} -c {1} -t {2} -f {3}")
+    @ActionForward(command = "consume -e {0} -c {1} -t {2} -f {3}")
     public Response consume(@PathParam("environment") String environment, @PathParam("consumeTopic") String consumeTopic, @HeaderParam("timeout") String timeout, @HeaderParam("format") String format) throws Exception {
         return Response
                 .ok(_dispatch("consume",
@@ -80,7 +80,7 @@ public class KafkaController extends Dispatcher {
     @Path("/pub-and-sub/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "pub-and-sub", template = "-e {0} -t {1} -p {2} -c {3} -m {4}")
+    @ActionForward(command = "pub-and-sub -e {0} -t {1} -p {2} -c {3} -m {4}")
     public Response pubAndSub(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout, @HeaderParam("produceTopic") String produceTopic, @HeaderParam("consumeTopic") String consumeTopic, String message) throws Exception {
         return Response
                 .ok(_dispatch("pubAndSub",
@@ -92,7 +92,7 @@ public class KafkaController extends Dispatcher {
     @Path("/metrics/{environment}")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "metrics", template = "-e {0} -t {1}")
+    @ActionForward(command = "metrics -e {0} -t {1}")
     public Response metrics(@PathParam("environment") String environment, @HeaderParam("timeout") String timeout) throws Exception {
         return Response
                 .ok(_dispatch("metrics",

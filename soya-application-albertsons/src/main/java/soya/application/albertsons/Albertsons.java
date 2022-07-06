@@ -8,8 +8,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
-import soya.framework.commandline.TaskExecutionContext;
-import soya.framework.dispatch.servlet.DispatchServlet;
+import soya.framework.action.ActionContext;
+import soya.framework.action.servlet.ActionServlet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,20 +30,20 @@ public class Albertsons {
     @Bean
     @DependsOn({"commandExecutionContext"})
     public ServletRegistrationBean dispatchServletBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new DispatchServlet(), "/api/*");
+        ServletRegistrationBean bean = new ServletRegistrationBean(new ActionServlet(), "/api/*");
         bean.setLoadOnStartup(-1);
         return bean;
     }
 
     @Bean
-    public TaskExecutionContext commandExecutionContext(ExecutorService executorService, ApplicationContext applicationContext) throws BeansException, IOException {
+    public ActionContext commandExecutionContext(ExecutorService executorService, ApplicationContext applicationContext) throws BeansException, IOException {
 
         Properties properties = new Properties();
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("kafka-config.properties");
         properties.load(inputStream);
 
 
-        return TaskExecutionContext.builder()
+        return ActionContext.builder()
                 .setExecutorService(executorService)
                 .serviceLocator(applicationContext)
                 .setProperty("workspace.home", workspaceHome)

@@ -10,14 +10,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import soya.framework.commandline.TaskExecutionContext;
+import soya.framework.action.ActionContext;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.ApplicationPath;
 
 @Configuration
 @EnableConfigurationProperties(JerseyProperties.class)
-@ConditionalOnClass(TaskExecutionContext.class)
+@ConditionalOnClass(ActionContext.class)
 @ApplicationPath("/api")
 public class JerseyAutoConfiguration extends ResourceConfig {
 

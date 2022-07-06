@@ -1,8 +1,8 @@
 package soya.framework.albertsons.restapi;
 
 import io.swagger.annotations.Api;
-import soya.framework.commandline.DispatchMethod;
-import soya.framework.commandline.Dispatcher;
+import soya.framework.action.dispatch.ActionForward;
+import soya.framework.action.dispatch.ActionDispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/resource")
 @Api(value = "resource")
-public class ResourceController extends Dispatcher {
+public class ResourceController extends ActionDispatcher {
 
     public ResourceController() {
         super();
@@ -20,7 +20,7 @@ public class ResourceController extends Dispatcher {
     @Path("/gzip")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "gzip", template = "-s {0}")
+    @ActionForward(command = "gzip -s {0}")
     public Response gzip(String source) throws Exception {
         return Response
                 .ok(_dispatch("gzip",
@@ -32,7 +32,7 @@ public class ResourceController extends Dispatcher {
     @Path("/aes-encrypt")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "aes-encrypt", template = "-k {0} -s {1}")
+    @ActionForward(command = "aes-encrypt -k {0} -s {1}")
     public Response aesEncrypt(@HeaderParam("secret") String secret, String source) throws Exception {
         return Response
                 .ok(_dispatch("aesEncrypt",
@@ -44,7 +44,7 @@ public class ResourceController extends Dispatcher {
     @Path("/aes-decrypt")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "aes-decrypt", template = "-k {0} -s {1}")
+    @ActionForward(command = "aes-decrypt -k {0} -s {1}")
     public Response aesDecrypt(@HeaderParam("secret") String secret, String source) throws Exception {
         return Response
                 .ok(_dispatch("aesDecrypt",
@@ -56,7 +56,7 @@ public class ResourceController extends Dispatcher {
     @Path("/mustache-attribute")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "mustache-attribute", template = "-s {0}")
+    @ActionForward(command = "mustache-attribute -s {0}")
     public Response mustacheAttribute(String source) throws Exception {
         return Response
                 .ok(_dispatch("mustacheAttribute",
@@ -68,7 +68,7 @@ public class ResourceController extends Dispatcher {
     @Path("/base64-encode")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "base64-encode", template = "-s {0}")
+    @ActionForward(command = "base64-encode -s {0}")
     public Response base64Encode(String source) throws Exception {
         return Response
                 .ok(_dispatch("base64Encode",
@@ -80,7 +80,7 @@ public class ResourceController extends Dispatcher {
     @Path("/echo")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "echo", template = "-s {0}")
+    @ActionForward(command = "echo -s {0}")
     public Response echo(String source) throws Exception {
         return Response
                 .ok(_dispatch("echo",
@@ -92,7 +92,7 @@ public class ResourceController extends Dispatcher {
     @Path("/unzip")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "unzip", template = "-s {0}")
+    @ActionForward(command = "unzip -s {0}")
     public Response unzip(String source) throws Exception {
         return Response
                 .ok(_dispatch("unzip",
@@ -104,7 +104,7 @@ public class ResourceController extends Dispatcher {
     @Path("/base64-decode")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "base64-decode", template = "-s {0}")
+    @ActionForward(command = "base64-decode -s {0}")
     public Response base64Decode(String source) throws Exception {
         return Response
                 .ok(_dispatch("base64Decode",
@@ -116,7 +116,7 @@ public class ResourceController extends Dispatcher {
     @Path("/json-format")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "json-format", template = "-s {0}")
+    @ActionForward(command = "json-format -s {0}")
     public Response jsonFormat(String source) throws Exception {
         return Response
                 .ok(_dispatch("jsonFormat",
@@ -128,7 +128,7 @@ public class ResourceController extends Dispatcher {
     @Path("/extract")
     @Consumes({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @DispatchMethod(command = "extract", template = "-s {0}")
+    @ActionForward(command = "extract -s {0}")
     public Response extract(String source) throws Exception {
         return Response
                 .ok(_dispatch("extract",

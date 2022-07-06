@@ -9,16 +9,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import soya.framework.commandline.TaskExecutionContext;
-import soya.framework.commandline.tasks.reflect.ReflectionTask;
-import soya.framework.dispatch.servlet.DispatchServlet;
+import soya.framework.action.ActionContext;
+import soya.framework.action.actions.reflect.ReflectionAction;
+import soya.framework.action.servlet.ActionServlet;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
 @EnableConfigurationProperties(SoyaProperties.class)
-@ConditionalOnClass(TaskExecutionContext.class)
+@ConditionalOnClass(ActionContext.class)
 public class SoyaAutoConfiguration {
 
     @Autowired
@@ -35,7 +35,7 @@ public class SoyaAutoConfiguration {
 
         ExecutorService executorService = Executors.newFixedThreadPool(properties.getExecutorThreadPoolSize());
 
-        String[] scanPackages = new String[]{ReflectionTask.class.getPackage().getName()};
+        String[] scanPackages = new String[]{ReflectionAction.class.getPackage().getName()};
         if (properties.getScanPackages() != null) {
             scanPackages = properties.getScanPackages().split(",");
             for (int i = 0; i < scanPackages.length; i++) {
@@ -43,13 +43,13 @@ public class SoyaAutoConfiguration {
             }
         }
 
-        TaskExecutionContext context = TaskExecutionContext.builder()
+        ActionContext context = ActionContext.builder()
                 .setExecutorService(executorService)
                 .serviceLocator(applicationContext)
                 .addScanPackages(scanPackages)
                 .create();
 
-        TaskExecutionContext.ExecutionContextHandler handler = (TaskExecutionContext.ExecutionContextHandler) context;
+        ActionContext.ExecutionContextHandler handler = (ActionContext.ExecutionContextHandler) context;
         handler.setRequiredProperty("ant.framework.home", properties.getHome());
 
         for (String propName : handler.getRequiredProperties()) {
@@ -60,7 +60,7 @@ public class SoyaAutoConfiguration {
             }
         }
 
-        DispatchServlet servlet = new DispatchServlet();
+        ActionServlet servlet = new ActionServlet();
         servlet.setDebug(properties.isDebug());
 
         ServletRegistrationBean bean = new ServletRegistrationBean(servlet, "/api/*");

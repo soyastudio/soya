@@ -23,6 +23,14 @@ public final class Pipeline implements Executable {
         this.result = result;
     }
 
+    public String[] parameterNames() {
+        return parameterTypes.keySet().toArray(new String[parameterTypes.size()]);
+    }
+
+    public Class<?> parameterType(String name) {
+        return parameterTypes.get(name);
+    }
+
     public ActionResult execute(Object[] params) throws Exception {
         Session session = new Session(parameterTypes, params);
         Queue<Task> queue = new ConcurrentLinkedQueue<>(tasks);
@@ -93,7 +101,6 @@ public final class Pipeline implements Executable {
                 }
             }
         }
-
 
         if (model.tasks == null || model.tasks.length == 0) {
             throw new IllegalArgumentException("No tasks in this pipeline.");

@@ -31,8 +31,6 @@ public final class ActionOption {
         this.valueSeparator = opt.valueSeparator();
         this.defaultValue = convert(opt.defaultValue());
 
-
-
     }
 
     public Field getField() {

@@ -5,13 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActionForward {
-    String command();
-
-    ActionOptionSetting[] options() default {};
-
-    boolean async() default false;
-
+public @interface ActionParameter {
+    String value();
 }

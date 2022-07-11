@@ -1,25 +1,42 @@
 package soya.framework.action.dispatch;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import org.reflections.Reflections;
+import soya.framework.action.Action;
 import soya.framework.action.ActionContext;
 import soya.framework.action.ActionExecutor;
-import soya.framework.action.ActionOption;
 import soya.framework.action.ActionResult;
+import soya.framework.action.actions.SimpleDispatcher;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class ActionDispatchController {
 
+    private static ActionDispatchController INSTANCE;
     private static ActionContext context;
 
     private static Map<Class<?>, Object> dispatchers = new ConcurrentHashMap<>();
     private static Map<RegisterName, DispatchMethod> dispatchMethods = new ConcurrentHashMap<>();
 
+    private Map<Class<?>, Object> proxies = new HashMap<>();
+
     static {
         context = ActionContext.getInstance();
+    }
+
+    private ActionDispatchController() {
+        Reflections reflections = new Reflections();
+        Set<Class<?>> set = reflections.getTypesAnnotatedWith(ActionDispatch.class);
+        set.forEach(e -> {
+            proxies.put(e, proxy(e));
+        });
     }
 
     public static Object dispatch(Class<?> dispatcher, String methodName, Object[] args) throws ActionDispatchException {
@@ -34,7 +51,6 @@ public final class ActionDispatchController {
             dispatchers.put(dispatcher, disp);
 
         }
-
 
         return null;
     }
@@ -57,7 +73,26 @@ public final class ActionDispatchController {
     }
 
     private static Object proxy(Class<?> dispatcher) {
-        return null;
+
+        Enhancer enhancer = new Enhancer();
+        enhancer.setInterfaces(new Class[]{dispatcher});
+        enhancer.setCallback((MethodInterceptor) (obj, method, args, proxy) -> {
+            if (method.getAnnotation(ActionForward.class) != null) {
+                DispatchMethod dispatchMethod = new DispatchMethod(method);
+                return dispatchMethod.execute(args);
+
+            } else if (method.getAnnotation(ActionPipeline.class) != null) {
+
+            }
+
+            if (method.getDeclaringClass() != Object.class && method.getReturnType() == String.class) {
+                return "Hello Tom!";
+            } else {
+                return proxy.invokeSuper(obj, args);
+            }
+        });
+
+        return enhancer.create();
     }
 
     private static final class RegisterName {
@@ -84,11 +119,39 @@ public final class ActionDispatchController {
     }
 
     private static class DispatchMethod {
+
         private RegisterName registerName;
         private ActionExecutor actionExecutor;
 
         private Class<?> returnType;
         private boolean async;
+
+        private DispatchMethod(Method method) {
+            this.registerName = new RegisterName(method.getDeclaringClass(), method.getName());
+            if (method.getAnnotation(ActionForward.class) != null) {
+                ActionForward actionForward = method.getAnnotation(ActionForward.class);
+                ActionExecutor.Builder builder = ActionExecutor.builder(actionForward.command());
+                if (actionForward.options().length > 0) {
+                    for (ActionOptionSetting setting : actionForward.options()) {
+                        if (!setting.value().isEmpty()) {
+                            builder.setOptionDefaultValue(setting.option(), setting.value());
+
+                        } else if (setting.index() >= 0) {
+                            builder.defineParameter(setting.option());
+
+                        } else if (!setting.property().isEmpty()) {
+                            builder.setOptionDefaultValue(setting.option(), ActionContext.getInstance().getProperty(setting.property()));
+
+                        } else {
+
+                        }
+                    }
+                }
+                this.actionExecutor = builder.create();
+                this.returnType = method.getReturnType();
+                this.async = actionForward.async();
+            }
+        }
 
         private DispatchMethod(Class<?> dispatcher, String methodName) {
             this.registerName = new RegisterName(dispatcher, methodName);
@@ -97,15 +160,15 @@ public final class ActionDispatchController {
                 if (method.getName().equals(methodName) && method.getAnnotation(ActionForward.class) != null) {
                     ActionForward actionForward = method.getAnnotation(ActionForward.class);
                     ActionExecutor.Builder builder = ActionExecutor.builder(actionForward.command());
-                    if(actionForward.options().length > 0) {
-                        for (ActionOptionSetting setting: actionForward.options()) {
-                            if(!setting.value().isEmpty()) {
+                    if (actionForward.options().length > 0) {
+                        for (ActionOptionSetting setting : actionForward.options()) {
+                            if (!setting.value().isEmpty()) {
                                 builder.setOptionDefaultValue(setting.option(), setting.value());
 
-                            } else if(setting.index() >= 0) {
+                            } else if (setting.index() >= 0) {
                                 builder.defineParameter(setting.option());
 
-                            } else if(!setting.property().isEmpty()) {
+                            } else if (!setting.property().isEmpty()) {
                                 builder.setOptionDefaultValue(setting.option(), ActionContext.getInstance().getProperty(setting.property()));
 
                             } else {
@@ -126,7 +189,6 @@ public final class ActionDispatchController {
         }
 
         Object execute(Object[] args) throws ActionDispatchException {
-
             try {
                 ActionResult actionResult = actionExecutor.execute(args);
                 return convert(actionResult.result(), returnType);
@@ -137,8 +199,36 @@ public final class ActionDispatchController {
         }
 
         private Object convert(Object o, Class<?> t) {
+            if(t.isInstance(o)) {
+                return o;
+            }
             return null;
         }
     }
+
+    public static ActionDispatchController getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ActionDispatchController();
+        }
+
+        return INSTANCE;
+    }
+
+    public Class<?>[] dispatcherInterfaces() {
+        return proxies.keySet().toArray(new Class[proxies.size()]);
+    }
+
+    public <T> T getProxy(Class<T> dispatcherType) {
+        return (T) proxies.get(dispatcherType);
+    }
+
+    public static void main(String[] args) {
+
+        SimpleDispatcher dispatcher = ActionDispatchController.getInstance().getProxy(SimpleDispatcher.class);
+
+        System.out.println("==================");
+        System.out.println(dispatcher.hello("Hello World!"));
+    }
+
 
 }

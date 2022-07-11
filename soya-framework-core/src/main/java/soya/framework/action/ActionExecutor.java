@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.*;
 import java.util.concurrent.Future;
 
@@ -225,6 +224,14 @@ public final class ActionExecutor implements Executable {
     }
 
     public static void main(String[] args) throws Exception {
+        URI u = URI.create("text-util://Qun.Wen@base64-encode:1000?s=arg(0)&c=val(utf-8)#async().version(2.0)");
+
+        System.out.println(u.getUserInfo() + ": " + u.getFragment());
+
+        ActionCommandLine cl = ActionCommandLine.builder("text-util://Qun.Wen@base64-encode:1000?s=arg(0)&c=val(utf-8)").create();
+        System.out.println(cl.toURI());
+
+        System.out.println(URIParser.toURI("text-util://base64-encode -s arg(0) -c utf-8").toString());
 
         String commandline = "text-util://base64-encode -s [1] -c utf-8";
         URI uri = URI.create("text-util://base64-decode?s=[1]&c=[3]");

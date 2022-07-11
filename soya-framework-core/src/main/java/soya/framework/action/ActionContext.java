@@ -23,7 +23,6 @@ public abstract class ActionContext {
     protected Properties properties;
     protected Map<String, GroupDescription> groupDescriptions = new HashMap<>();
     protected Map<ActionName, Class<? extends ActionCallable>> commands = new HashMap<>();
-    protected ProxyCache proxyCache = new ProxyCache();
 
     protected ActionContext(Properties properties,
                             ExecutorService executorService,
@@ -41,8 +40,6 @@ public abstract class ActionContext {
             scan(ReflectionAction.class.getPackage().getName());
 
         }
-
-        proxyCache = new ProxyCache();
 
         INSTANCE = this;
     }
@@ -64,14 +61,6 @@ public abstract class ActionContext {
             Command command = e.getAnnotation(Command.class);
             if (command != null) {
                 commands.put(ActionName.fromClass((Class<? extends ActionCallable>) e), (Class<? extends ActionCallable>) e);
-            }
-        });
-
-        Set<Class<?>> dispatchClasses = scanner.getTypesAnnotatedWith(ActionDispatch.class);
-        dispatchClasses.forEach(e -> {
-            if(e.isInterface()) {
-                proxyCache.add(e);
-
             }
         });
 
@@ -100,10 +89,6 @@ public abstract class ActionContext {
 
     public <T> T getService(Class<T> type) {
         return serviceLocator.getService(type);
-    }
-
-    public <T> T getProxy(Class<T> type) {
-        return proxyCache.get(type);
     }
 
     protected ServiceLocator getServiceLocator() {
@@ -399,19 +384,6 @@ public abstract class ActionContext {
         public static boolean isApplicationContext(Object applicationContext) {
             return cls.isInstance(applicationContext);
         }
-    }
-
-    static class ProxyCache {
-        private Map<Class<?>, Object> proxies = new HashMap<>();
-
-        void add(Class<?> cls) {
-            System.out.println("===================== " + cls.getName());
-        }
-
-        <T> T get(Class<T> type) {
-            return (T) proxies.get(type);
-        }
-
     }
 
 }

@@ -59,6 +59,12 @@
             <artifactId>reflections</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+
     </dependencies>
 
 </project>

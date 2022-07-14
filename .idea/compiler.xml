@@ -27,9 +27,11 @@
         <module name="soya-framework-tasks-kafka" />
         <module name="soya-framework-tool" />
         <module name="soya-framework-starter" />
+        <module name="soya-framework-action" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="SOYA" target="1.8" />
       <module name="soya-framework-commons" target="8" />
       <module name="soya-framework-erm" target="8" />
       <module name="soya-framework-openbank" target="8" />

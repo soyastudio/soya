@@ -1,9 +1,12 @@
 package soya.framework.action;
 
+import com.google.common.base.CaseFormat;
+
 import java.lang.reflect.Field;
 import java.util.Objects;
 
 public final class ActionOption {
+
     private final Field field;
 
     private final String option;
@@ -12,7 +15,6 @@ public final class ActionOption {
     private final boolean required;
     private final Class<?> type;
     private final char valueSeparator;
-
     private Object defaultValue;
 
     public ActionOption(Field field) {

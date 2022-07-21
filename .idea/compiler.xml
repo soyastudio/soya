@@ -26,9 +26,9 @@
         <module name="soya-framework-tool" />
         <module name="soya-framework-starter" />
         <module name="soya-framework-action" />
-        <module name="soya-framework-actions-ant" />
         <module name="soya-framework-actions-document" />
         <module name="soya-framework-actions-quartz" />
+        <module name="soya-framework-actions-ant" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -36,6 +36,15 @@
       <module name="soya-framework-erm" target="8" />
       <module name="soya-framework-openbank" target="8" />
       <module name="soya-framework-quartz" target="1.8" />
+      <module name="soya-framework-tasks" target="8" />
+      <module name="soya-framework-tasks-ant" target="8" />
+      <module name="soya-framework-tasks-document" target="8" />
+      <module name="soya-framework-tasks-dropbox" target="8" />
+      <module name="soya-framework-tasks-git" target="8" />
+      <module name="soya-framework-tasks-javacodegen" target="8" />
+      <module name="soya-framework-tasks-kafka" target="8" />
+      <module name="soya-framework-tasks-maven" target="8" />
+      <module name="soya-framework-tasks-quartz" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -9,7 +9,7 @@ import soya.framework.action.Pipeline;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-public abstract class PipelineAction<T> extends Action<T> {
+public abstract class PipelineDispatchAction<T> extends Action<T> {
 
     private Pipeline pipeline;
     private Map<String, Object> paramValues;

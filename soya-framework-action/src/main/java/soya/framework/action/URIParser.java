@@ -45,7 +45,7 @@ public final class URIParser {
     public static Map<String, List<String>> splitQuery(String query) {
         Map<String, List<String>> params = new HashMap<>();
         try {
-            params =  splitQuery(query, "UTF-8");
+            params = splitQuery(query, "UTF-8");
 
         } catch (UnsupportedEncodingException e) {
 
@@ -55,15 +55,17 @@ public final class URIParser {
 
     public static Map<String, List<String>> splitQuery(String query, String encoding) throws UnsupportedEncodingException {
         final Map<String, List<String>> query_pairs = new LinkedHashMap<String, List<String>>();
-        final String[] pairs = query.split("&");
-        for (String pair : pairs) {
-            final int idx = pair.indexOf("=");
-            final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), encoding) : pair;
-            if (!query_pairs.containsKey(key)) {
-                query_pairs.put(key, new LinkedList<String>());
+        if (query != null && !query.isEmpty()) {
+            final String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                final int idx = pair.indexOf("=");
+                final String key = idx > 0 ? URLDecoder.decode(pair.substring(0, idx), encoding) : pair;
+                if (!query_pairs.containsKey(key)) {
+                    query_pairs.put(key, new LinkedList<String>());
+                }
+                final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
+                query_pairs.get(key).add(value);
             }
-            final String value = idx > 0 && pair.length() > idx + 1 ? URLDecoder.decode(pair.substring(idx + 1), "UTF-8") : null;
-            query_pairs.get(key).add(value);
         }
         return query_pairs;
     }

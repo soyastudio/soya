@@ -7,27 +7,28 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="soya-framework-tasks-git" />
         <module name="soya-framework-alberta" />
-        <module name="soya-framework-tasks-quartz" />
-        <module name="soya-framework-tasks-maven" />
         <module name="soya-application-albertsons" />
-        <module name="soya-framework-tasks-document" />
+        <module name="soya-framework-actions-maven" />
+        <module name="soya-framework-actions-javacodegen" />
         <module name="soya-framework-boot" />
-        <module name="soya-framework-tasks-ant" />
-        <module name="soya-framework-tasks-javacodegen" />
+        <module name="soya-framework-actions-dropbox" />
+        <module name="soya-framework-actions-git" />
         <module name="soya-framework-openapi" />
         <module name="soya-framework-servlet" />
         <module name="soya-framework-ams" />
         <module name="soya-framework-jersey-starter" />
-        <module name="soya-framework-tasks-dropbox" />
-        <module name="soya-framework-tasks" />
         <module name="soya-application-openbank" />
         <module name="soya-framework-core" />
-        <module name="soya-framework-tasks-kafka" />
+        <module name="soya-framework-actions-kafka" />
+        <module name="soya-framework-server" />
+        <module name="soya-framework-actions" />
         <module name="soya-framework-tool" />
         <module name="soya-framework-starter" />
         <module name="soya-framework-action" />
+        <module name="soya-framework-actions-ant" />
+        <module name="soya-framework-actions-document" />
+        <module name="soya-framework-actions-quartz" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-core</artifactId>
+            <artifactId>soya-framework-action</artifactId>
             <version>${project.version}</version>
         </dependency>
 

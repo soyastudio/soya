@@ -31,7 +31,7 @@ public class SoyaAutoConfiguration {
     private Environment environment;
 
     @Bean
-    ServletRegistrationBean dispatchServletBean(ApplicationContext applicationContext) throws BeansException {
+    ServletRegistrationBean actionServletBean(ApplicationContext applicationContext) throws BeansException {
 
         ExecutorService executorService = Executors.newFixedThreadPool(properties.getExecutorThreadPoolSize());
 

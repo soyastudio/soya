@@ -191,9 +191,9 @@ public class ActionServlet extends HttpServlet {
 
         if (group != null && command != null) {
             String uri = group + "://" + command;
-            Class<? extends ActionCallable> cls = context.getActionType(ActionName.fromURI(uri));
-            ActionCallable task = cls.newInstance();
-            Field[] fields = ActionParser.getOptionFields(cls);
+            ActionClass actionClass = ActionClass.get(ActionName.fromURI(uri));
+            ActionCallable task = actionClass.newInstance();
+            Field[] fields = actionClass.getActionFields();
             int pathIndex = 0;
             for (Field field : fields) {
                 CommandOption option = field.getAnnotation(CommandOption.class);

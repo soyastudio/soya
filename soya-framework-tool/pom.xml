@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>soya.framework</groupId>
+            <artifactId>soya-framework-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>soya.framework</groupId>
             <artifactId>soya-framework-core</artifactId>
             <version>${project.version}</version>
         </dependency>

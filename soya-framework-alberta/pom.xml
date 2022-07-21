@@ -22,13 +22,13 @@
     <dependencies>
         <dependency>
             <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-core</artifactId>
+            <artifactId>soya-framework-action</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-tasks-kafka</artifactId>
+            <artifactId>soya-framework-actions-kafka</artifactId>
             <version>${project.version}</version>
         </dependency>
 

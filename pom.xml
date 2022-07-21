@@ -250,20 +250,25 @@
     </dependencyManagement>
 
     <modules>
+        <module>soya-framework-action</module>
         <module>soya-framework-core</module>
         <module>soya-framework-openapi</module>
         <module>soya-framework-servlet</module>
+        <module>soya-framework-server</module>
 
         <module>soya-framework-starter</module>
 
-        <module>soya-framework-tool</module>
-        <module>soya-framework-tasks-ant</module>
-        <module>soya-framework-tasks-document</module>
-        <module>soya-framework-tasks-dropbox</module>
-        <module>soya-framework-tasks-git</module>
-        <module>soya-framework-tasks-kafka</module>
+        <module>soya-framework-actions-ant</module>
+        <module>soya-framework-actions-git</module>
+        <module>soya-framework-actions-kafka</module>
+        <module>soya-framework-actions-document</module>
+        <module>soya-framework-actions-dropbox</module>
+        <module>soya-framework-actions-javacodegen</module>
+        <module>soya-framework-actions-maven</module>
+        <module>soya-framework-actions-quartz</module>
 
-        <module>soya-framework-tasks</module>
+
+        <module>soya-framework-actions</module>
         <module>soya-framework-boot</module>
 
         <module>soya-framework-jersey-starter</module>
@@ -274,12 +279,12 @@
         <module>soya-application-openbank</module>
 
         <module>soya-framework-alberta</module>
-        <module>soya-framework-tasks-javacodegen</module>
-        <module>soya-framework-tasks-quartz</module>
-        <module>soya-framework-tasks-maven</module>
-        <module>soya-framework-action</module>
-        <!--<module>soya-framework-quartz</module>
-        <module>soya-framework-erm</module>-->
+        <module>soya-framework-tool</module>
+
+        <!--
+        <module>soya-framework-quartz</module>
+        <module>soya-framework-erm</module>
+        -->
     </modules>
 
 </project>

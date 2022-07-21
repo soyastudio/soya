@@ -9,7 +9,7 @@ public final class ActionName implements Serializable, Comparable<ActionName> {
     private final String group;
     private final String name;
 
-    public ActionName(String group, String name) {
+    private ActionName(String group, String name) {
         this.group = group;
         this.name = name;
 

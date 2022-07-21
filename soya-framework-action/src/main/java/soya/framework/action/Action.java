@@ -2,6 +2,9 @@ package soya.framework.action;
 
 public abstract class Action<T> implements ActionCallable {
 
+    protected Action() {
+    }
+
     @Override
     public ActionResult call() {
         try {
@@ -39,15 +42,12 @@ public abstract class Action<T> implements ActionCallable {
     }
 
     static class DefaultActionResult implements ActionResult {
-        private transient final ActionCallable action;
-
         private final ActionName name;
 
         private final boolean successful;
         private final Object result;
 
         DefaultActionResult(ActionCallable action, Object result, boolean successful) {
-            this.action = action;
             if (action.getClass().getAnnotation(Command.class) == null) {
                 throw new IllegalArgumentException();
             }

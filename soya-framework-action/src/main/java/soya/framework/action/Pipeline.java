@@ -1,6 +1,10 @@
 package soya.framework.action;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -8,16 +12,23 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public final class Pipeline implements Executable {
+public final class Pipeline {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    private LinkedHashMap<String, Class<?>> parameterTypes;
-    private List<Task> tasks;
+    private final ActionName name;
+    private final LinkedHashMap<String, Class<?>> parameterTypes;
+    private final List<Task> tasks;
     private String result;
 
-    private Pipeline(LinkedHashMap<String, Class<?>> parameterTypes, List<Task> tasks, String result) {
+    private Pipeline(ActionName name, LinkedHashMap<String, Class<?>> parameterTypes, List<Task> tasks, String result) {
+        this.name = name;
         this.parameterTypes = parameterTypes;
         this.tasks = tasks;
         this.result = result;
+    }
+
+    public ActionName getName() {
+        return name;
     }
 
     public String[] parameterNames() {
@@ -36,10 +47,37 @@ public final class Pipeline implements Executable {
             if (!(new Worker(session, task).execute()) && task.stopOnFailure) {
                 break;
             }
-
         }
 
         return session.get(result != null ? result : session.cursor);
+    }
+
+    public static Pipeline fromJson(String json) {
+        PipelineModel model = GSON.fromJson(json, PipelineModel.class);
+        Pipeline.Builder builder = Pipeline.builder();
+        builder.name(model.id.getGroup() + "://" + model.id.getName());
+
+        model.parameters.forEach(p -> {
+            try {
+                builder.addParameter(p.name, Class.forName(p.type));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+        model.tasks.forEach(t -> {
+            Pipeline.TaskBuilder taskBuilder = builder.createTask(t.uri);
+            t.options.forEach(o -> {
+                taskBuilder.setParameter(o.option, ActionPropertyType.valueOf(o.type), o.expression);
+            });
+
+            taskBuilder.add(t.name, t.stopOnFailure);
+
+        });
+
+        builder.setResult(model.result);
+
+        return builder.create();
     }
 
     public static Builder builder() {
@@ -47,11 +85,17 @@ public final class Pipeline implements Executable {
     }
 
     public static class Builder {
+        private ActionName actionName;
         private LinkedHashMap<String, Class<?>> parameterTypes = new LinkedHashMap<>();
         private List<Task> tasks = new ArrayList<>();
         private String result;
 
         private Builder() {
+        }
+
+        public Builder name(String uri) {
+            this.actionName = ActionName.fromURI(uri);
+            return this;
         }
 
         public Builder addParameter(String name, Class<?> type) {
@@ -73,7 +117,7 @@ public final class Pipeline implements Executable {
         }
 
         public Pipeline create() {
-            return new Pipeline(parameterTypes, tasks, result);
+            return new Pipeline(actionName, parameterTypes, tasks, result);
         }
     }
 
@@ -91,28 +135,8 @@ public final class Pipeline implements Executable {
             this.signatureBuilder = ActionSignature.builder(uri);
         }
 
-        public TaskBuilder addArgumentOption(String option, String value) {
-            signatureBuilder.addArgumentOption(option, value);
-            return this;
-        }
-
-        public TaskBuilder addPropertyOption(String option, String propertyName) {
-            signatureBuilder.addPropertyOption(option, propertyName);
-            return this;
-        }
-
-        public TaskBuilder addReferenceOption(String option, String propertyName) {
-            signatureBuilder.addReferenceOption(option, propertyName);
-            return this;
-        }
-
-        public TaskBuilder addResourceOption(String option, String propertyName) {
-            signatureBuilder.addResourceOption(option, propertyName);
-            return this;
-        }
-
-        public TaskBuilder addValueOption(String option, String propertyName) {
-            signatureBuilder.addValueOption(option, propertyName);
+        public TaskBuilder setParameter(String option, ActionPropertyType type, String exp) {
+            signatureBuilder.set(option, type, exp);
             return this;
         }
 
@@ -154,22 +178,22 @@ public final class Pipeline implements Executable {
             Field[] fields = actionClass.getActionFields();
             for (Field field : fields) {
                 Object value = null;
-                ActionParameter actionParameter = task.signature.option(field.getName());
-                ActionParameter.Function function = ActionParameter.Function.valueOf(actionParameter.getFunction());
-                if (function.equals(ActionParameter.Function.arg)) {
-                    value = session.parameterValues.get(actionParameter.getExpression());
+                ActionProperty actionProperty = task.signature.getParameter(field.getName());
+                ActionPropertyType actionPropertyType = actionProperty.getType();
+                if (actionPropertyType.equals(ActionPropertyType.arg)) {
+                    value = session.parameterValues.get(actionProperty.getExpression());
 
-                } else if (function.equals(ActionParameter.Function.prop)) {
-                    value = ActionContext.getInstance().getProperty(actionParameter.getExpression());
+                } else if (actionPropertyType.equals(ActionPropertyType.prop)) {
+                    value = ActionContext.getInstance().getProperty(actionProperty.getExpression());
 
-                } else if (function.equals(ActionParameter.Function.ref)) {
-                    value = session.evaluate(actionParameter.getExpression());
+                } else if (actionPropertyType.equals(ActionPropertyType.ref)) {
+                    value = session.evaluate(actionProperty.getExpression());
 
-                } else if (function.equals(ActionParameter.Function.res)) {
-                    Resource resource = Resource.create(actionParameter.getExpression());
+                } else if (actionPropertyType.equals(ActionPropertyType.res)) {
+                    Resource resource = Resource.create(actionProperty.getExpression());
 
-                } else if (function.equals(ActionParameter.Function.val)) {
-                    value = actionParameter.getExpression();
+                } else if (actionPropertyType.equals(ActionPropertyType.val)) {
+                    value = actionProperty.getExpression();
 
                 }
 
@@ -185,8 +209,8 @@ public final class Pipeline implements Executable {
 
             return result.successful();
 
-        }}
-
+        }
+    }
 
     static class Session {
         private LinkedHashMap<String, Object> parameterValues;
@@ -227,8 +251,9 @@ public final class Pipeline implements Executable {
     }
 
     static class PipelineModel {
-        ParameterModel[] parameters;
-        TaskModel[] tasks;
+        ActionName id;
+        List<ParameterModel> parameters = new ArrayList<>();
+        List<TaskModel> tasks = new ArrayList<>();
         String result;
     }
 
@@ -241,15 +266,20 @@ public final class Pipeline implements Executable {
     static class TaskModel {
         private String name;
         private String uri;
-        private OptionModel[] options;
+        private List<OptionModel> options = new ArrayList<>();
         private boolean stopOnFailure = true;
     }
 
     static class OptionModel {
         private String option;
-        private String value;
-        private String parameter;
-        private String property;
+        private String type;
         private String expression;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        FileReader reader = new FileReader(new File("C:/github/Soya/pipeline.json"));
+        PipelineModel model = gson.fromJson(reader, PipelineModel.class);
+        System.out.println(gson.toJson(model));
     }
 }

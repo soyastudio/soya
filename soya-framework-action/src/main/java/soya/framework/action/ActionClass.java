@@ -1,8 +1,8 @@
 package soya.framework.action;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,7 +13,7 @@ public final class ActionClass {
 
     private final Class<? extends ActionCallable> actionType;
     private final ActionName actionName;
-    private final Map<String, Field> actionFields;
+    private final Field[] actionFields;
 
     private ActionClass(Class<? extends ActionCallable> actionType) {
         this.actionType = actionType;
@@ -27,7 +27,6 @@ public final class ActionClass {
         }
         this.actionName = ActionName.fromClass(actionType);
 
-        actionFields = new LinkedHashMap<>();
         List<Field> list = new ArrayList<>();
         Class superClass = actionType;
         while (!Object.class.equals(superClass)) {
@@ -41,9 +40,7 @@ public final class ActionClass {
             superClass = superClass.getSuperclass();
         }
         Collections.sort(list, new CommandFieldComparator());
-        list.forEach(e -> {
-            actionFields.put(e.getName(), e);
-        });
+        this.actionFields = list.toArray(new Field[list.size()]);
     }
 
     public Class<? extends ActionCallable> getActionType() {
@@ -54,16 +51,19 @@ public final class ActionClass {
         return actionName;
     }
 
-    public String[] getActionFieldNames() {
-        return actionFields.keySet().toArray(new String[actionFields.size()]);
-    }
-
     public Field[] getActionFields() {
-        return actionFields.values().toArray(new Field[actionFields.size()]);
+        return actionFields;
     }
 
-    public Field getActionField(String name) {
-        return actionFields.get(name);
+    public ActionCallable newInstance() {
+        try {
+            Constructor constructor = actionType.getConstructor(new Class[0]);
+            constructor.setAccessible(true);
+            return (ActionCallable) constructor.newInstance(new Object[0]);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ActionClass get(ActionName actionName) {
@@ -112,6 +112,5 @@ public final class ActionClass {
             }
         }
     }
-
 
 }

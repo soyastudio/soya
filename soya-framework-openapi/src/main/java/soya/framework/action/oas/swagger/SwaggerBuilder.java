@@ -34,20 +34,22 @@ public class SwaggerBuilder {
 
         for (String group : groups) {
             context.getCommands(group).forEach(e -> {
-                buildPath(context.getActionType(e), context, builder);
+                buildPath(e, builder);
             });
         }
 
         return builder.build();
     }
 
-    private static void buildPath(Class<? extends ActionCallable> cls, ActionContext context, Swagger.SwaggerBuilder builder) {
+    private static void buildPath(ActionName actionName, Swagger.SwaggerBuilder builder) {
+        ActionClass actionClass = ActionClass.get(actionName);
+        Class<? extends ActionCallable> cls = actionClass.getActionType();
 
         Command command = cls.getAnnotation(Command.class);
-        ActionContext.GroupDescription groupDescription = context.groupDescription(command.group());
+        ActionContext.GroupDescription groupDescription = ActionContext.getInstance().groupDescription(command.group());
         String tag = groupDescription == null ? command.group() : groupDescription.getTitle();
 
-        Field[] fields = ActionParser.getOptionFields(cls);
+        Field[] fields = actionClass.getActionFields();
         String path = "/" + command.group() + "/" + command.name();
 
         for (Field field : fields) {

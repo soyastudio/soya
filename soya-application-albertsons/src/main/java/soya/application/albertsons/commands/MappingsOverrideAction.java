@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
+
 import soya.framework.action.Command;
 import soya.framework.action.CommandOption;
-import soya.framework.action.Resources;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class MappingsOverrideAction extends MappingsRenderAction {
 
     @Override
     protected void annotate() throws Exception {
-        if(override != null) {
-            String contents = Resources.getResourceAsString(override);
+        if (override != null) {
+            String contents = override;
             try {
                 BufferedReader reader = new BufferedReader(new StringReader(contents));
                 String line = reader.readLine();

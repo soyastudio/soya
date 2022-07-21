@@ -2,7 +2,6 @@ package soya.application.albertsons.commands;
 
 import soya.framework.action.Command;
 import soya.framework.action.CommandOption;
-import soya.framework.action.Resources;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -19,7 +18,7 @@ public class EsqlValidateAction extends XPathMappingsAction {
 
     @Override
     protected void annotate() throws Exception {
-        BufferedReader reader = new BufferedReader(new StringReader(Resources.getResourceAsString(code)));
+        BufferedReader reader = new BufferedReader(new StringReader(code));
         String line = reader.readLine();
         while (line != null) {
             String token = line.trim();

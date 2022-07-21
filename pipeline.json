@@ -1,4 +1,8 @@
 {
+  "id": {
+    "group": "abc",
+    "name": "base64-example"
+  },
   "parameters": [
     {
       "name": "text",
@@ -12,7 +16,8 @@
       "options": [
         {
           "option": "s",
-          "parameter": "text"
+          "type": "arg",
+          "expression": "encode"
         }
       ],
       "stopOnFailure": true
@@ -23,6 +28,7 @@
       "options": [
         {
           "option": "s",
+          "type": "ref",
           "expression": "encode"
         }
       ],

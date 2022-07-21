@@ -34,15 +34,15 @@ public final class ActionDispatchController {
 
     private ActionDispatchController() {
         Reflections reflections = new Reflections();
-        Set<Class<?>> set = reflections.getTypesAnnotatedWith(ActionDispatch.class);
+        Set<Class<?>> set = reflections.getTypesAnnotatedWith(ActionProxy.class);
         set.forEach(e -> {
             proxies.put(e, proxy(e));
         });
     }
 
     public static Object dispatch(Class<?> dispatcher, String methodName, Object[] args) throws ActionDispatchException {
-        ActionDispatch actionDispatch = dispatcher.getAnnotation(ActionDispatch.class);
-        if (actionDispatch == null) {
+        ActionProxy actionProxy = dispatcher.getAnnotation(ActionProxy.class);
+        if (actionProxy == null) {
             throw new ActionDispatchException("Class is not annotated as 'ActionDispatch': " + dispatcher.getName());
         }
 
@@ -78,7 +78,7 @@ public final class ActionDispatchController {
         Enhancer enhancer = new Enhancer();
         enhancer.setInterfaces(new Class[]{dispatcher});
         enhancer.setCallback((MethodInterceptor) (obj, method, args, proxy) -> {
-            if (method.getAnnotation(ActionForward.class) != null) {
+            if (method.getAnnotation(ActionDispatch.class) != null) {
                 DispatchMethod dispatchMethod = new DispatchMethod(method);
                 return dispatchMethod.execute(args);
 
@@ -135,9 +135,9 @@ public final class ActionDispatchController {
                 String paramName = parameter.getAnnotation(ActionParameter.class).value();
             }
 
-            if (method.getAnnotation(ActionForward.class) != null) {
-                ActionForward actionForward = method.getAnnotation(ActionForward.class);
-                ActionSignature.Builder builder = ActionSignature.builder(actionForward.command());
+            if (method.getAnnotation(ActionDispatch.class) != null) {
+                ActionDispatch actionDispatch = method.getAnnotation(ActionDispatch.class);
+                ActionSignature.Builder builder = ActionSignature.builder(actionDispatch.command());
                 /*if (actionForward.options().length > 0) {
                     for (ActionOptionSetting setting : actionForward.options()) {
                         if (!setting.value().isEmpty()) {
@@ -157,7 +157,7 @@ public final class ActionDispatchController {
 
                 this.actionSignature = builder.create();
                 this.returnType = method.getReturnType();
-                this.async = actionForward.async();
+                this.async = actionDispatch.async();
             }
         }
 

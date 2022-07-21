@@ -59,43 +59,49 @@
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-ant</artifactId>
+			<artifactId>soya-framework-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-document</artifactId>
+			<artifactId>soya-framework-actions-ant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-git</artifactId>
+			<artifactId>soya-framework-actions-document</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-javacodegen</artifactId>
+			<artifactId>soya-framework-actions-git</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-kafka</artifactId>
+			<artifactId>soya-framework-actions-javacodegen</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tasks-quartz</artifactId>
+			<artifactId>soya-framework-actions-kafka</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>soya.framework</groupId>
-			<artifactId>soya-framework-tool</artifactId>
+			<artifactId>soya-framework-actions-quartz</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>soya.framework</groupId>
+			<artifactId>soya-framework-actions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

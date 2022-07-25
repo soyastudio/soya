@@ -3,7 +3,6 @@ package soya.framework.commons.eventbus;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,12 +28,13 @@ public final class Event extends EventObject {
         this.type = uri.getScheme() + "://" + uri.getHost();
 
         String query = uri.getRawQuery();
-        if(query == null) {
+        if (query == null) {
             this.params = Collections.emptyMap();
         } else {
             this.params = Arrays.stream(query.split("&"))
                     .map(this::splitQueryParameter)
                     .collect(Collectors.groupingBy(AbstractMap.SimpleImmutableEntry::getKey, LinkedHashMap::new, mapping(Map.Entry::getValue, toList())));
+
         }
 
     }
@@ -55,6 +55,17 @@ public final class Event extends EventObject {
 
     public String getType() {
         return type;
+    }
+
+    public String toURI() {
+        StringBuilder builder = new StringBuilder(type).append("?");
+        params.entrySet().forEach(e -> {
+            e.getValue().forEach(v -> {
+                builder.append(e.getKey()).append("=").append(v).append("&");
+            });
+        });
+
+        return builder.deleteCharAt(builder.length() - 1).toString();
     }
 
     public Set<String> parameterNames() {

@@ -1,8 +1,6 @@
 package com.albertsons.specright.component;
 
-import com.albertsons.specright.service.HttpClientService;
 import com.albertsons.specright.service.Specright;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import soya.framework.commons.eventbus.Event;
 
@@ -17,8 +15,6 @@ public class ApiScanner extends SpecrightComponent {
     @Override
     public void onEvent(Event event) {
         logger.info("Start api scan by fetching auth-token...");
-
-        System.out.println("================= ApiScanner: " + event.getSource().getClass().getName());
         String token = fetchToken();
 
         Specright.getInstance().reset();
@@ -45,16 +41,18 @@ public class ApiScanner extends SpecrightComponent {
         }
     }
 
-    protected void invokeApi(Event event, String api, String token) {
+    protected void invokeApi(Event event, String scanner, String token) {
 
         for (int i = 0; i < 3; i++) {
+            Event evt = Event.builder(URI.create("specright://api-invoker"), event)
+                    .addParameter(SCANNER, scanner)
+                    .addParameter(TOKEN, token)
+                    .addParameter(SKIP, "" + 50 * i)
+                    .create();
 
-            System.out.println("================ " + api + "-" + i);
-
-            Event.builder(URI.create("specright://api-invoker"), event).addParameter("scanner", api).setPayload(token).create();
         }
 
-        Specright.getInstance().complete(api);
+        Specright.getInstance().complete(scanner);
     }
 
 

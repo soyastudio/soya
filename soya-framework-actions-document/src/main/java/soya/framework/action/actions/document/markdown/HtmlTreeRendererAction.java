@@ -2,7 +2,7 @@ package soya.framework.action.actions.document.markdown;
 
 import soya.framework.util.CodeBuilder;
 import soya.framework.action.Command;
-import soya.framework.knowledge.KnowledgeTreeNode;
+import soya.framework.commons.knowledge.KnowledgeTreeNode;
 
 @Command(group = "markdown", name = "html-tree", httpMethod = Command.HttpMethod.POST, httpResponseTypes = Command.MediaType.APPLICATION_XML)
 public class HtmlTreeRendererAction extends MarkdownAction {

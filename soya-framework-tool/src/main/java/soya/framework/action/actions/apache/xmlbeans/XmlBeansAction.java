@@ -8,7 +8,7 @@ import soya.framework.action.actions.apache.xmlbeans.xs.XsKnowledgeSystem;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsNode;
 import soya.framework.action.CommandOption;
 import soya.framework.action.Resource;
-import soya.framework.knowledge.KnowledgeTree;
+import soya.framework.commons.knowledge.KnowledgeTree;
 
 import java.io.File;
 import java.net.URI;

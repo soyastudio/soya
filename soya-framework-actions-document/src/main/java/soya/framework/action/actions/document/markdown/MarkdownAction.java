@@ -4,7 +4,7 @@ import org.commonmark.node.*;
 import soya.framework.action.CommandGroup;
 import soya.framework.action.CommandOption;
 import soya.framework.action.Action;
-import soya.framework.knowledge.KnowledgeTree;
+import soya.framework.commons.knowledge.KnowledgeTree;
 
 @CommandGroup(group = "markdown",
         title = "Markdown Tool",

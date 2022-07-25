@@ -3,7 +3,7 @@ package soya.framework.action.actions.apache.xmlbeans;
 import soya.framework.util.CodeBuilder;
 import soya.framework.action.Command;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsNode;
-import soya.framework.knowledge.KnowledgeTreeNode;
+import soya.framework.commons.knowledge.KnowledgeTreeNode;
 
 @Command(group = "transform", name = "xmlbeans-schema-reader", httpRequestTypes = Command.MediaType.TEXT_PLAIN)
 public class SchemaReader extends XmlBeansAction {

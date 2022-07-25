@@ -2,11 +2,11 @@ package soya.framework.action.actions.document.markdown;
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
-import soya.framework.knowledge.KnowledgeBuildException;
-import soya.framework.knowledge.KnowledgeTree;
-import soya.framework.knowledge.KnowledgeTreeNode;
-import soya.framework.knowledge.generic.GenericKnowledgeSystem;
-import soya.framework.knowledge.generic.GenericKnowledgeTree;
+import soya.framework.commons.knowledge.KnowledgeBuildException;
+import soya.framework.commons.knowledge.KnowledgeTree;
+import soya.framework.commons.knowledge.KnowledgeTreeNode;
+import soya.framework.commons.knowledge.generic.GenericKnowledgeSystem;
+import soya.framework.commons.knowledge.generic.GenericKnowledgeTree;
 
 import java.io.IOException;
 import java.io.InputStream;

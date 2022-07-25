@@ -30,6 +30,10 @@ public final class ActionName implements Serializable, Comparable<ActionName> {
         return name;
     }
 
+    public URI toURI() {
+        return URI.create(toString());
+    }
+
     @Override
     public String toString() {
         return group + "://" + name;

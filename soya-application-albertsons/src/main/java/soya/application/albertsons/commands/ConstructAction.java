@@ -3,7 +3,7 @@ package soya.application.albertsons.commands;
 import com.google.common.base.CaseFormat;
 import soya.framework.action.CommandOption;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsNode;
-import soya.framework.knowledge.KnowledgeTreeNode;
+import soya.framework.commons.knowledge.KnowledgeTreeNode;
 
 import java.io.BufferedReader;
 import java.io.File;

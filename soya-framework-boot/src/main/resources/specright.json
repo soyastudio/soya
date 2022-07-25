@@ -1,0 +1,16 @@
+{
+  "kafka": {},
+  "scheduler": {
+    "delay": 10000,
+    "period": 10000
+  },
+  "scanners": [
+    {
+      "name": "Find-Suppliers",
+      "urlTemplate": "url-template",
+      "kafkaTopic": "kafka-topic",
+      "scanning": true,
+      "enabled": true
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import org.apache.xmlbeans.SchemaTypeSystem;
 import soya.framework.action.CommandOption;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsKnowledgeSystem;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsNode;
-import soya.framework.knowledge.KnowledgeTree;
+import soya.framework.commons.knowledge.KnowledgeTree;
 
 import java.io.BufferedReader;
 import java.io.File;

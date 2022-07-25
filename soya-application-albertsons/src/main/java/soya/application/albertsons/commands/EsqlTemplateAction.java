@@ -4,7 +4,7 @@ import com.google.common.base.CaseFormat;
 import soya.framework.util.CodeBuilder;
 import soya.framework.action.Command;
 import soya.framework.action.actions.apache.xmlbeans.xs.XsNode;
-import soya.framework.knowledge.KnowledgeTreeNode;
+import soya.framework.commons.knowledge.KnowledgeTreeNode;
 
 @Command(group = "business-object-development", name = "esql-template",
         httpMethod = Command.HttpMethod.GET, httpResponseTypes = Command.MediaType.TEXT_PLAIN)

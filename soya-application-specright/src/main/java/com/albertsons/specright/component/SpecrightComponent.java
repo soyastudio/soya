@@ -1,14 +1,15 @@
 package com.albertsons.specright.component;
 
+import com.albertsons.specright.eventbus.Event;
+import com.albertsons.specright.eventbus.EventBus;
 import com.albertsons.specright.service.HttpClientService;
 import com.albertsons.specright.service.KafkaService;
 import com.albertsons.specright.service.Specright;
-import soya.framework.commons.eventbus.Event;
-import soya.framework.commons.eventbus.Subscriber;
+import com.albertsons.specright.service.SpecrightEvent;
 
 import java.net.URI;
 
-public abstract class SpecrightComponent implements Subscriber {
+public abstract class SpecrightComponent implements EventBus.Subscriber {
 
     public static final String SCANNER = "scanner";
     public static final String TOKEN = "token";
@@ -27,4 +28,6 @@ public abstract class SpecrightComponent implements Subscriber {
                 .setPayload(exception)
                 .create();
     }
+
+    public abstract SpecrightEvent[] listenTo();
 }

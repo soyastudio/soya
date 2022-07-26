@@ -2,17 +2,17 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="soya-framework-alberta" />
-        <module name="soya-application-albertsons" />
         <module name="soya-framework-actions-maven" />
+        <module name="soya-application-albertsons" />
         <module name="soya-framework-actions-javacodegen" />
-        <module name="soya-framework-boot" />
+        <module name="soya-application-specright" />
         <module name="soya-framework-actions-dropbox" />
+        <module name="soya-framework-boot" />
         <module name="soya-framework-actions-git" />
         <module name="soya-framework-openapi" />
         <module name="soya-framework-servlet" />
@@ -25,36 +25,21 @@
         <module name="soya-framework-actions" />
         <module name="soya-framework-tool" />
         <module name="soya-framework-starter" />
-        <module name="soya-framework-action" />
-        <module name="soya-framework-actions-document" />
         <module name="soya-framework-actions-quartz" />
         <module name="soya-framework-actions-ant" />
+        <module name="soya-framework-action" />
+        <module name="soya-framework-actions-document" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="soya-framework-commons" target="8" />
-      <module name="soya-framework-erm" target="8" />
-      <module name="soya-framework-openbank" target="8" />
-      <module name="soya-framework-quartz" target="1.8" />
-      <module name="soya-framework-tasks" target="8" />
-      <module name="soya-framework-tasks-ant" target="8" />
-      <module name="soya-framework-tasks-document" target="8" />
-      <module name="soya-framework-tasks-dropbox" target="8" />
-      <module name="soya-framework-tasks-git" target="8" />
-      <module name="soya-framework-tasks-javacodegen" target="8" />
-      <module name="soya-framework-tasks-kafka" target="8" />
-      <module name="soya-framework-tasks-maven" target="8" />
-      <module name="soya-framework-tasks-quartz" target="8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="soya-application-albertsons" options="-parameters" />
       <module name="soya-application-openbank" options="-parameters" />
+      <module name="soya-application-specright" options="-parameters" />
       <module name="soya-framework-alberta" options="-parameters" />
       <module name="soya-framework-boot" options="-parameters" />
       <module name="soya-framework-jersey-starter" options="-parameters" />
-      <module name="soya-framework-quartz" options="-parameters" />
       <module name="soya-framework-starter" options="-parameters" />
     </option>
   </component>

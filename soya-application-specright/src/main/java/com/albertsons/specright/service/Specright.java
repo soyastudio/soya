@@ -1,18 +1,15 @@
 package com.albertsons.specright.service;
 
 import com.google.gson.Gson;
-import soya.framework.commons.eventbus.Event;
 
-import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Specright {
-
-    public static final String SCHEMA = "specright://";
     private static Specright me;
 
     private Configuration configuration;
@@ -22,10 +19,15 @@ public abstract class Specright {
 
     private Map<String, Scanner> scannerMap = new ConcurrentHashMap<>();
 
-    protected Specright(InputStream inputStream) {
+    protected Specright() {
         if (me != null) {
             throw new IllegalStateException("Instance already exist");
         }
+
+        me = this;
+    }
+
+    protected void configure(InputStream inputStream) {
         this.configuration = new Gson().fromJson(new InputStreamReader(inputStream), Configuration.class);
         configuration.scanners.forEach(scanner -> {
             scannerMap.put(scanner.name, scanner);
@@ -33,13 +35,14 @@ public abstract class Specright {
 
         httpClientService = new HttpClientService();
         kafkaService = new KafkaService();
-
-        me = this;
     }
 
-    @PostConstruct
-    public void init() {
-        new Timer("SPECRIGHT-HEARTBEAT").schedule(new HeartbeatTask(), configuration.scheduler.delay, configuration.scheduler.period);
+    protected long heartbeatDelay() {
+        return configuration.scheduler.delay;
+    }
+
+    protected long heartbeatPeriod() {
+        return configuration.scheduler.period;
     }
 
     public Set<String> scanners() {
@@ -121,15 +124,4 @@ public abstract class Specright {
 
     }
 
-    static class HeartbeatTask extends TimerTask {
-        private int sequence;
-
-        HeartbeatTask() {
-        }
-
-        @Override
-        public void run() {
-            Event.builder(URI.create(SCHEMA + "api-scanner"), "heartbeat-" + ++sequence).create();
-        }
-    }
 }

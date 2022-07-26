@@ -1,14 +1,15 @@
 package com.albertsons.specright.component;
 
+import com.albertsons.specright.eventbus.Event;
 import com.albertsons.specright.service.Specright;
+import com.albertsons.specright.service.SpecrightEvent;
 import org.springframework.stereotype.Component;
-import soya.framework.commons.eventbus.Event;
 
 import java.net.URI;
 import java.util.Random;
 import java.util.logging.Logger;
 
-@Component("api-scanner")
+@Component
 public class ApiScanner extends SpecrightComponent {
     static final Logger logger = Logger.getLogger(ApiScanner.class.getName());
 
@@ -44,16 +45,18 @@ public class ApiScanner extends SpecrightComponent {
     protected void invokeApi(Event event, String scanner, String token) {
 
         for (int i = 0; i < 3; i++) {
-            Event evt = Event.builder(URI.create("specright://api-invoker"), event)
+            Event evt = Event.builder(URI.create(SpecrightEvent.API_INVOKE_EVENT.getUri()), event)
                     .addParameter(SCANNER, scanner)
                     .addParameter(TOKEN, token)
                     .addParameter(SKIP, "" + 50 * i)
                     .create();
-
         }
 
         Specright.getInstance().complete(scanner);
     }
 
-
+    @Override
+    public SpecrightEvent[] listenTo() {
+        return new SpecrightEvent[] {SpecrightEvent.HEARTBEAT_EVENT};
+    }
 }

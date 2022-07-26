@@ -280,6 +280,7 @@
 
         <module>soya-framework-alberta</module>
         <module>soya-framework-tool</module>
+        <module>soya-application-specright</module>
 
         <!--
         <module>soya-framework-quartz</module>

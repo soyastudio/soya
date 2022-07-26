@@ -36,8 +36,8 @@ public class SpecrightApplication extends Specright {
         ApplicationContext applicationContext = event.getApplicationContext();
         applicationContext.getBeansOfType(SpecrightComponent.class).entrySet().forEach(e -> {
             SpecrightComponent component = e.getValue();
-            for(SpecrightEvent evt : component.listenTo()) {
-                EventBus.getInstance().addSubscriber(evt.getUri(), "test", component);
+            for (SpecrightEvent evt : component.listenTo()) {
+                EventBus.getInstance().addSubscriber(evt.getUri(), component);
             }
         });
 

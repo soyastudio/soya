@@ -24,9 +24,18 @@ public abstract class SpecrightComponent implements EventBus.Subscriber {
     }
 
     protected void handleException(Event event, Exception exception) {
-        Event.builder(URI.create("specright://exception-handler"), event)
+        eventBuilder(SpecrightEvent.Exception_HANDLE_EVENT, event)
                 .setPayload(exception)
                 .create();
+    }
+
+    protected Event.Builder eventBuilder(SpecrightEvent specrightEvent, Event event) {
+        Event.Builder builder = Event.builder(URI.create(specrightEvent.getUri()), event);
+        if (event.getParameter(SCANNER) != null) {
+            builder.addParameter(SCANNER, event.getParameter(SCANNER));
+        }
+
+        return builder;
     }
 
     public abstract SpecrightEvent[] listenTo();

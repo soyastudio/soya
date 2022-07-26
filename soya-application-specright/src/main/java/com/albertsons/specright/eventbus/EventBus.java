@@ -31,39 +31,24 @@ public abstract class EventBus {
         });
     }
 
-    public URI addSubscriber(String uri, String name, Subscriber subscriber) {
-        registrations.add(new Registration(uri, name, subscriber));
-        return URI.create(uri + "/" + name);
+    public URI addSubscriber(String uri, Subscriber subscriber) {
+        registrations.add(new Registration(uri, subscriber));
+        return URI.create(uri);
     }
 
     protected abstract void dispatch(Event event, Subscriber subscriber);
 
     static class Registration {
         private final String eventType;
-        private final String name;
         private final Subscriber subscriber;
 
-        Registration(String eventType, String name, Subscriber subscriber) {
+        Registration(String eventType, Subscriber subscriber) {
             this.eventType = eventType;
-            this.name = name;
             this.subscriber = subscriber;
         }
 
         public String toString() {
-            return eventType + "/" + name;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Registration)) return false;
-            Registration that = (Registration) o;
-            return Objects.equals(eventType, that.eventType) && Objects.equals(name, that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(eventType, name);
+            return eventType;
         }
     }
 
@@ -105,7 +90,7 @@ public abstract class EventBus {
             Set<String> set = new HashSet<>();
             registrations.forEach(e -> {
                 if(e.eventType.equals(channel)) {
-                    set.add(e.name);
+                    set.add(e.getClass().getName());
                 }
             });
             List<String> list = new ArrayList<>(set);

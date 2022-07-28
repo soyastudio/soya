@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public abstract class EventBus {
-    protected static EventBus instance;
+    private static EventBus instance;
 
     protected Set<Registration> registrations = new HashSet<>();
 
@@ -14,43 +14,51 @@ public abstract class EventBus {
         if (instance != null) {
             throw new IllegalStateException("EventBus has already been created.");
         }
+
+        instance = this;
     }
 
-    public static EventBus getInstance() {
+    private static EventBus getInstance() {
         if (instance == null) {
             instance = new DefaultEventBus();
         }
         return instance;
     }
 
-    void post(Event event) {
+    static void publish(Event event) {
+        getInstance().post(event);
+    }
+
+    public static URI subscribe(String uri, Subscriber subscriber) {
+        return getInstance().addSubscriber(uri, subscriber);
+    }
+
+    public static EventChannelManager channelManager() {
+        return (getInstance() instanceof EventChannelManager) ? (EventChannelManager) instance : null;
+    }
+
+    private void post(Event event) {
         registrations.forEach(e -> {
-            if (event.getType().equals(e.eventType)) {
+            if (event.getAddress().equals(e.uri)) {
                 dispatch(event, e.subscriber);
             }
         });
     }
 
-    public URI addSubscriber(String uri, String name, Subscriber subscriber) {
-        registrations.add(new Registration(uri, name, subscriber));
-        return URI.create(uri + "/" + name);
+    private URI addSubscriber(String uri, Subscriber subscriber) {
+        registrations.add(new Registration(uri, subscriber));
+        return URI.create(uri);
     }
 
     protected abstract void dispatch(Event event, Subscriber subscriber);
 
     static class Registration {
-        private final String eventType;
-        private final String name;
+        private final String uri;
         private final Subscriber subscriber;
 
-        Registration(String eventType, String name, Subscriber subscriber) {
-            this.eventType = eventType;
-            this.name = name;
+        Registration(String eventType, Subscriber subscriber) {
+            this.uri = eventType;
             this.subscriber = subscriber;
-        }
-
-        public String toString() {
-            return eventType + "/" + name;
         }
 
         @Override
@@ -58,20 +66,23 @@ public abstract class EventBus {
             if (this == o) return true;
             if (!(o instanceof Registration)) return false;
             Registration that = (Registration) o;
-            return Objects.equals(eventType, that.eventType) && Objects.equals(name, that.name);
+            return Objects.equals(uri, that.uri)
+                    && Objects.equals(subscriber.getClass().getName(), that.subscriber.getClass().getName());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(eventType, name);
+            return Objects.hash(uri, subscriber.getClass().getName());
+        }
+
+        public String toString() {
+            return uri + "/" + subscriber.getClass().getName();
         }
     }
 
     public interface EventChannelManager {
         String[] channels();
-
         String[] subscribers(String channel);
-
     }
 
     static class DefaultEventBus extends EventBus implements EventChannelManager {
@@ -93,7 +104,7 @@ public abstract class EventBus {
         public String[] channels() {
             Set<String> set = new HashSet<>();
             registrations.forEach(e -> {
-                set.add(e.eventType);
+                set.add(e.uri);
             });
             List<String> list = new ArrayList<>(set);
             Collections.sort(list);
@@ -104,8 +115,8 @@ public abstract class EventBus {
         public String[] subscribers(String channel) {
             Set<String> set = new HashSet<>();
             registrations.forEach(e -> {
-                if(e.eventType.equals(channel)) {
-                    set.add(e.name);
+                if (e.uri.equals(channel)) {
+                    set.add(e.getClass().getName());
                 }
             });
             List<String> list = new ArrayList<>(set);
@@ -113,5 +124,4 @@ public abstract class EventBus {
             return list.toArray(new String[list.size()]);
         }
     }
-
 }

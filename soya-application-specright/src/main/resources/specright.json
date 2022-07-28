@@ -2,7 +2,7 @@
   "kafka": {},
   "scheduler": {
     "delay": 3000,
-    "period": 10000
+    "period": 30000
   },
   "scanners": [
     {

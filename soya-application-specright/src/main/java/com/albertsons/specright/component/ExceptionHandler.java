@@ -1,0 +1,19 @@
+package com.albertsons.specright.component;
+
+import com.albertsons.specright.eventbus.Event;
+import com.albertsons.specright.eventbus.Subscriber;
+import com.albertsons.specright.service.Specright;
+import org.springframework.stereotype.Component;
+
+import java.util.logging.Logger;
+
+@Component
+@Subscriber.ListenTo(Specright.EVENT_Exception_HANDLE)
+public class ExceptionHandler extends SpecrightComponent {
+
+    static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());
+
+    @Override
+    protected void process(Event event) throws Exception {
+    }
+}

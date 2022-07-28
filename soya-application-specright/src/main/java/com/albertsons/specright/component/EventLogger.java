@@ -5,15 +5,15 @@ import com.albertsons.specright.eventbus.Subscriber;
 import com.albertsons.specright.service.Specright;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Component
-@Subscriber.ListenTo(Specright.EVENT_KAFKA_PRODUCE)
-public class KafkaProducer extends SpecrightComponent {
+@Subscriber.ListenTo({Specright.EVENT_API_INVOKE, Specright.EVENT_KAFKA_PRODUCE, Specright.EVENT_Exception_HANDLE})
+public class EventLogger extends SpecrightComponent {
+    private static Logger logger = Logger.getLogger(EventLogger.class.getName());
+
     @Override
     protected void process(Event event) throws Exception {
-
-    }
-
-    private void produceMessage() {
-        Specright.getInstance().getKafkaService().produce(null, null);
+        logger.info(event.toURI());
     }
 }

@@ -1,21 +1,18 @@
 package com.albertsons.specright.component;
 
 import com.albertsons.specright.eventbus.Event;
+import com.albertsons.specright.eventbus.Subscriber;
 import com.albertsons.specright.service.Specright;
-import com.albertsons.specright.service.SpecrightEvent;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-@Component("api-invoker")
+@Component
+@Subscriber.ListenTo(Specright.EVENT_API_INVOKE)
 public class ApiInvoker extends SpecrightComponent {
-    static final Logger logger = Logger.getLogger(ApiInvoker.class.getName());
-
     @Override
-    public void onEvent(Event event) {
-        logger.info(event.toURI());
+    protected void process(Event event) throws Exception {
 
         for (int i = 0; i < 5; i++) {
             try {
@@ -25,7 +22,7 @@ public class ApiInvoker extends SpecrightComponent {
             }
 
             String msg = invoke();
-            Event.builder(URI.create(SpecrightEvent.KAFKA_PRODUCE_EVENT.getUri()), event)
+            Event.builder(URI.create(Specright.EVENT_KAFKA_PRODUCE), event)
                     .addParameter(SCANNER, event.getParameter(SCANNER))
                     .setPayload(msg)
                     .create();
@@ -34,10 +31,5 @@ public class ApiInvoker extends SpecrightComponent {
 
     private String invoke() {
         return UUID.randomUUID().toString();
-    }
-
-    @Override
-    public SpecrightEvent[] listenTo() {
-        return new SpecrightEvent[] {SpecrightEvent.API_INVOKE_EVENT};
     }
 }

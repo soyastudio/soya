@@ -10,6 +10,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class Specright {
+
+    public static final String EVENT_HEARTBEAT = "specright://heartbeat";
+    public static final String EVENT_API_INVOKE = "specright://api-invoker";
+    public static final String EVENT_KAFKA_PRODUCE = "specright://kafka-producer";
+    public static final String EVENT_Exception_HANDLE = "specright://exception-handler";
+
     private static Specright me;
 
     private Configuration configuration;

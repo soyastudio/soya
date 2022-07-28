@@ -10,23 +10,22 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 public final class Event extends EventObject {
-    private final URI uri;
     private final String id;
     private final long timestamp;
-    private final Object payload;
+    private final String parentId;
 
-    private final String type;
+    private final String address;
     private final Map<String, List<String>> params;
+    private final Object payload;
 
     private Event(Object source, URI uri, Object payload) {
         super(source);
-        this.uri = uri;
         this.id = UUID.randomUUID().toString();
         this.timestamp = System.currentTimeMillis();
         this.payload = payload;
+        this.parentId = (source instanceof Event) ? ((Event) source).id : null;
 
-        this.type = uri.getScheme() + "://" + uri.getHost();
-
+        this.address = uri.getScheme() + "://" + uri.getHost();
         String query = uri.getRawQuery();
         if (query == null) {
             this.params = Collections.emptyMap();
@@ -51,12 +50,20 @@ public final class Event extends EventObject {
         }
     }
 
-    public String getType() {
-        return type;
+    public String getAddress() {
+        return address;
     }
 
     public String toURI() {
-        StringBuilder builder = new StringBuilder(type).append("?");
+        StringBuilder builder = new StringBuilder(address);
+
+        if (parentId != null) {
+            builder.append("/").append(parentId);
+
+        }
+
+        builder.append("/").append(id).append("?");
+
         params.entrySet().forEach(e -> {
             e.getValue().forEach(v -> {
                 builder.append(e.getKey()).append("=").append(v).append("&");
@@ -77,10 +84,6 @@ public final class Event extends EventObject {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public URI getUri() {
-        return uri;
     }
 
     public String getId() {
@@ -121,7 +124,7 @@ public final class Event extends EventObject {
 
         public Event create() {
             Event event = new Event(source, URI.create(uriBuilder.deleteCharAt(uriBuilder.length() - 1).toString()), payload);
-            EventBus.getInstance().post(event);
+            EventBus.publish(event);
             return event;
         }
     }

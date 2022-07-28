@@ -5,6 +5,8 @@ import soya.framework.action.CommandGroup;
 import soya.framework.action.CommandOption;
 import soya.framework.commons.eventbus.EventBus;
 
+import java.lang.reflect.Field;
+
 @CommandGroup(group = "eventbus", title = "Event Bus", description = "Commands for eventbus actions.")
 public abstract class EventBusAction<T> extends Action<T> {
 
@@ -12,6 +14,6 @@ public abstract class EventBusAction<T> extends Action<T> {
     protected String uri;
 
     protected EventBus.EventChannelManager eventChannelManager() {
-        return (EventBus.EventChannelManager) EventBus.getInstance();
+        return EventBus.channelManager();
     }
 }

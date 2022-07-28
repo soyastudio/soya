@@ -1,4 +1,4 @@
-package soya.framework.commons.eventbus;
+package com.albertsons.specright.eventbus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

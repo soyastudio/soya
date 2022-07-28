@@ -29,6 +29,6 @@ public class SubscribeAction extends EventBusAction<String> {
         Class<? extends Subscriber> cls = (Class<? extends Subscriber>) Class.forName(type);
         subscriber = cls.newInstance();
 
-        return EventBus.getInstance().addSubscriber(uri, name, subscriber).toString();
+        return EventBus.subscribe(uri, subscriber).toString();
     }
 }

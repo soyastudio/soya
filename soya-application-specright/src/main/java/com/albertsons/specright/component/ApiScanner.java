@@ -1,51 +1,48 @@
 package com.albertsons.specright.component;
 
 import com.albertsons.specright.eventbus.Event;
+import com.albertsons.specright.eventbus.Subscriber;
 import com.albertsons.specright.service.Specright;
-import com.albertsons.specright.service.SpecrightEvent;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.util.Random;
-import java.util.logging.Logger;
 
 @Component
+@Subscriber.ListenTo(Specright.EVENT_HEARTBEAT)
 public class ApiScanner extends SpecrightComponent {
-    static final Logger logger = Logger.getLogger(ApiScanner.class.getName());
 
     @Override
-    public void onEvent(Event event) {
-        logger.info("Start api scan by fetching auth-token...");
+    protected void process(Event event) throws Exception {
         String token = fetchToken();
 
         Specright.getInstance().reset();
-        Specright.getInstance().scanners().forEach(e -> {
-            scan(event, e, token, new Random().nextInt(10));
+        Specright.getInstance().scanners().forEach(scanner -> {
+            try {
+                Thread.sleep(new Random().nextInt(10000));
+
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            scan(scanner, token, event);
+
         });
-
-
     }
 
-    protected String fetchToken() {
+    protected String fetchToken() throws Exception {
         return "AUTH-TOKEN";
     }
 
-    protected void scan(Event event, String api, String token, int delay) {
-        try {
-            Thread.sleep(delay);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        while (Specright.getInstance().readyToWork(api)) {
-            invokeApi(event, api, token);
+    protected void scan(String scanner, String token, Event event) {
+        while (Specright.getInstance().readyToWork(scanner)) {
+            invokeApi(event, scanner, token);
         }
     }
 
     protected void invokeApi(Event event, String scanner, String token) {
-
         for (int i = 0; i < 3; i++) {
-            Event evt = Event.builder(URI.create(SpecrightEvent.API_INVOKE_EVENT.getUri()), event)
+            Event evt = Event.builder(URI.create(Specright.EVENT_API_INVOKE), event)
                     .addParameter(SCANNER, scanner)
                     .addParameter(TOKEN, token)
                     .addParameter(SKIP, "" + 50 * i)
@@ -53,10 +50,5 @@ public class ApiScanner extends SpecrightComponent {
         }
 
         Specright.getInstance().complete(scanner);
-    }
-
-    @Override
-    public SpecrightEvent[] listenTo() {
-        return new SpecrightEvent[] {SpecrightEvent.HEARTBEAT_EVENT};
     }
 }

@@ -5,15 +5,14 @@ import com.albertsons.specright.service.eventbus.Subscriber;
 import com.albertsons.specright.service.Specright;
 import org.springframework.stereotype.Component;
 
-import java.util.logging.Logger;
-
 @Component
-@Subscriber.ListenTo(Specright.EVENT_Exception_HANDLE)
-public class ExceptionHandler extends SpecrightComponent {
-
-    static final Logger logger = Logger.getLogger(ExceptionHandler.class.getName());
-
+@Subscriber.ListenTo(Specright.EVENT_RESULT_EXPORT)
+public class ScanResultExporter extends SpecrightComponent {
     @Override
     protected void process(Event event) throws Exception {
+        byte[] contents = (byte[]) event.getPayload();
+
+        System.out.println("============= " + new String(contents));
+
     }
 }

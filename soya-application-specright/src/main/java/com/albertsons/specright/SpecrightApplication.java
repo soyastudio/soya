@@ -1,23 +1,18 @@
 package com.albertsons.specright;
 
 import com.albertsons.specright.component.SpecrightComponent;
-import com.albertsons.specright.eventbus.Event;
-import com.albertsons.specright.eventbus.EventBus;
-import com.albertsons.specright.eventbus.Subscriber;
 import com.albertsons.specright.service.Specright;
-import io.swagger.jaxrs.config.BeanConfig;
-import io.swagger.models.Swagger;
-import org.glassfish.jersey.server.ResourceConfig;
+import com.albertsons.specright.service.eventbus.Event;
+import com.albertsons.specright.service.eventbus.EventBus;
+import com.albertsons.specright.service.eventbus.Subscriber;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import javax.ws.rs.ApplicationPath;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,7 +28,13 @@ public class SpecrightApplication extends Specright {
 
     @PostConstruct
     protected void configure() {
-        configure(getClass().getClassLoader().getResourceAsStream("specright.json"));
+        PostmanEnvironment environment = GSON.fromJson(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream("specright_postman_environment.json")),
+                PostmanEnvironment.class);
+
+        PostmanCollection collection = PostmanCollection.fromInputStream(getClass().getClassLoader().getResourceAsStream("specright_postman_collection.json"));
+
+        configure(environment, collection);
     }
 
     @EventListener(classes = {ApplicationReadyEvent.class})
@@ -54,14 +55,9 @@ public class SpecrightApplication extends Specright {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Event.builder(URI.create(EVENT_HEARTBEAT), "heartbeat-" + ++sequence).create();
+                Event e = Event.builder(URI.create(EVENT_HEARTBEAT), "heartbeat-" + ++sequence).create();
             }
-        }, heartbeatDelay(), heartbeatPeriod());
-    }
-
-    @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
+        }, heartbeatDelay, heartbeatPeriod);
     }
 
 

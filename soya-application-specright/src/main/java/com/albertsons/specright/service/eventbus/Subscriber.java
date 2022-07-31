@@ -1,4 +1,4 @@
-package com.albertsons.specright.eventbus;
+package com.albertsons.specright.service.eventbus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

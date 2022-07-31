@@ -1,4 +1,4 @@
-package com.albertsons.specright.eventbus;
+package com.albertsons.specright.service.eventbus;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

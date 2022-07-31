@@ -15,23 +15,21 @@ import javax.ws.rs.ApplicationPath;
 public class JerseyConfiguration extends ResourceConfig {
 
     public JerseyConfiguration() {
-        register(GsonMessageBodyHandler.class);
         register(MultiPartFeature.class);
         register(SpecrightRestAPI.class);
 
         swaggerConfig();
     }
 
-
     private Swagger swaggerConfig() {
         this.register(ApiListingResource.class);
         this.register(SwaggerSerializers.class);
 
         BeanConfig swaggerConfigBean = new BeanConfig();
-        swaggerConfigBean.setConfigId("Workshop");
-        swaggerConfigBean.setTitle("Workshop Server");
+        swaggerConfigBean.setConfigId("Specright");
+        swaggerConfigBean.setTitle("Specright API Scan Service");
         //swaggerConfigBean.setVersion("v1");
-        swaggerConfigBean.setSchemes(new String[]{"http"});
+        swaggerConfigBean.setSchemes(new String[]{"http", "https"});
         swaggerConfigBean.setBasePath("/api");
         swaggerConfigBean.setResourcePackage(SpecrightRestAPI.class.getPackage().getName());
         swaggerConfigBean.setPrettyPrint(true);

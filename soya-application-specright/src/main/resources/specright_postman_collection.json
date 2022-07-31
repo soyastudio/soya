@@ -1,0 +1,596 @@
+{
+	"info": {
+		"_postman_id": "22449c57-ce47-43f1-aff7-1e9f4299c5d0",
+		"name": "Specright",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5405689"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Request Specright API Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refresh_token);"
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"grant_type\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{authHost}}/token",
+							"host": [
+								"{{authHost}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Specright API Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded",
+								"disabled": true
+							},
+							{
+								"key": "userId",
+								"value": "albertsons+admin@specright.com.qa",
+								"type": "text"
+							},
+							{
+								"key": "username",
+								"value": "rajan.govindarajan@albertsons.com",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "bMlOszj2KfbBjcynbEXoG76IbJnVxWbxOkB2CRQYZoiRS8QXdrLGPhuhDweJg2aiW",
+								"type": "text"
+							},
+							{
+								"key": "accessToken",
+								"value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJkZWVwYS5zYW5rYXJhbkBhbGJlcnRzb25zLmNvbSIsImF1ZCI6Imh0dHBzOlwvXC9sb2dpbi5zcGVjcmlnaHQuY29tIiwidHlwZSI6ImFjY2Vzc190b2tlbiIsImV4cCI6MTY0MDY0NzA0MiwiaWF0IjoxNjQwNjQzNDQyfQ.qPVA672Ax4aMKendiQNBStdT86jK43BHdRTMz5p_QGodO7n9TBML7DNzo_drJK9FW-vYKJk8PEdAUD_n45zf7vyjOFkWyPRTAGSMh4PYvyK_FWpjxOidqMfxmWaL3b7336YuOiHc40vvLdONi22JRLKBJcBDfQ54jw7GrXoMq_aNdcBkiFEO3FIhxDhGUnYMz31QsxxiRd3ke8L1OsUvAw4f8dfjbP0PyG4XyRB8eEH7q9YKyqIYCGtIWpg7nr2UoWPxj_rtPaSX5FDt2D1nTjex21PuoAAdGsfrhTm4weJqT6HuPIPnac795QVQ5ewRrJOzQ2qzyh0_WEoUadnhHL8dz4Kr41VQS0o9iF0nyGzr6pdUZuBLgivNdc2UiYS_Lqw-yNLPmuldGDu4hn9jD6qutkvuik7TDChBloWitiFmeTA1n_srvjtZZj9STp0mnFk0JQXycSlJBhn7lZlZLEQycEhw_bM4h2gP7A6t8dbx-yCKLMKrMWKC-kaGK0Bpg81DW4WYQF2wKI-aosJFv2ETiaDfUUQIfHnN9mqahtDBmsZ4nXK1EmjmnDezX9X53NkUfNruHXXSHU44JpZTqUOR9WAYYSFHu3w30fmihewD1XvQTOtCHyGBcR7J0JeQ_RrzS1tahKX48XnH2qmmD8gPm7OlSDpsWehC3cnj068",
+								"type": "text"
+							},
+							{
+								"key": "refreshToken",
+								"value": "eyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.pWdetSWMiVz2xakLKtHMv4B5qF8IOtH-qJgrDga07rPlPp_CAwXOOlHpCipn5hL1viQRlII3Q04yF2aEZWDRDaFSKL00dr1AyweX5ZyMYYKbRlGx_upRbTaw08CdhAEiT_N8vq3PqS4ihqnSAitkiTSF0sg2dRz1Iw5rdkryvy6NjkTUItz5Dj_192UB6Y1CKRffHQNLGuIZqtjwoht6KQPEADoAjUUIaPl-BOAZNC2SEm4N-gwVJGdYtxh0_9c0F9aN4raHz_O7YEtVzlxEyRBuK0ZeDLPyRbjlSK94fskBBsG1jk-9DMV5lA4FCZviv6_rCLr8litIx1ZqAh-2jArGAx70xA3efOcO9mR3eMEpPGYgELVVaoJCqH0rNH818yJutLYX13CZg9_Q5vTfYxDHuM93qrfLuhTfCKN7wJAhE-LpXG4R7CGkOU7X9komoCxFQ9yG9O0RUk8MN_Z3dnPkR5POYECBxj8GR7RD8F5_JaA0la5kRZk0C7BHWbOTGK63zTqHUPnBehFVCj0lyeZRhhtUMAVRg0ZLLw9eGQzyRbXfYRRbnnl6rJujyTOfNwe1xQjPnan6UDXeWf803N52Lzyjw-MlfY5qV3-TJxqmKLVoH0yfuXzUJy0z-DI6ML9AWdb3AZvW6EwzLQtXkyTub__C5cFfY1tia7_vIds.mfhbLuG4MxG9HIeu.cCG42k7AI5Clg9r6ETZ7AbEYT9aMIhsqKT7MT8YIIaR57HOE2qUlR4URZtlzRUDqITuNA3jtKM0xbzvG0IqsRCsvnqJ5OaDvq8CEfXC2S7-uzODBaJHRxCRCibMlTeuZ2tHrWa-M2Wt5e6EyL1R6GXjFQsjeNVeKQJDFZaTC7QlSYFIy3io.repdKe6D7Fwlsx9mUVPz3g",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"grant_type\": \"refresh_token\",\n\t\"refresh_token\": \"eyJlbmMiOiJBMTI4R0NNIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.SAmFnIy-cWBX9lNivMszk-dNX0dc5tZrZHbX-m3Ve7qCF-8k1roVwkG8xDerbLdrhsGqY3A8C-PwRioSPHwpzrKdbHNGSPGE1rqHgKhHy0XhR4oq8tAwkqXKsu-H7WDoiXITFeWoGYcToLLlaiYS5Pn009HaHbYpV-K5KPY74JoZ-2vddOVnB6HwfQ-fR7VDx1c08mkoyh7IKJYGZH7SaXswy1F7kJsO-dchdAAbQx4qAgdyUrtYb4LT0dhC8ui0Or-IEgh-RA7uzCqYUAV_8zWJfi7P24PO9CMZYgRlC3Ve19DSmpasjpJI1aRRhHmOnKrsNxwHSWpwynvc0EDoT_LET3YKoLr8q9DpRjysyp9RSAKKnWe1qQg8BCz1fVs3Nk1_T7JMJ6ngmRykZdlNpkss_BbPan9tOjiMX5VMkakki8_ULqQ3ZwPc9Xj0CGhLa7P6bLAyRTwOfzfEgA142KlbAJek46MPwBJ0byDKNQP577SIuCpON65N5qw_KgylLptwEmcS4I3yysMYyCFBfHJ1tZqlLhWbCZNEa-fSX0Ivsd9hgJyI6bSILENuzFReXSWWTHSEpFN6yWLX2lUYp6FEQ-5MmxSP6a9jbXAIL5wKq44RYcdb6NiVP2I8Fs79RcOVFJiX0jttOeM9VCrdJb4ulE7me-jTLEBl8pUzKTY.LT7DezbqzCtA30Vk.oqc8GF0Fi-jKBvcDkzhGQL7miRxyR0QzeaxNnXEIadB7qUAdpqTF4n8zTBcg-KQ5kZGM6qa859SqoKmY3s-tyEUvGEfltVP6eE4kyxWZbQeWe0VaPuK8mnJvLvYiCSybe8l7puaKissyEr4V7KApYOAOEj3yiguQguB4ZQ.HmRM-TXG7-6Ecvd41XLd2A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://test.specright.com/token",
+							"protocol": "https",
+							"host": [
+								"test",
+								"specright",
+								"com"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", jsonData.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", jsonData.refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "bMlOszj2KfbBjcynbEXoG76IbJnVxWbxOkB2CRQYZoiRS8QXdrLGPhuhDweJg2aiW",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "rajan.govindarajan@albertsons.com",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"grant_type\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://test.specright.com/token",
+							"protocol": "https",
+							"host": [
+								"test",
+								"specright",
+								"com"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Suppliers",
+			"item": [
+				{
+					"name": "Get Query Job Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "{{userId}}"
+							},
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{apiKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bulkjob/123/status?isQuery=true",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bulkjob",
+								"123",
+								"status"
+							],
+							"query": [
+								{
+									"key": "isQuery",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Query Job Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "{{userId}}"
+							},
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{apiKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bulkjob/75004000002rACLAA2/details?isQuery=true&includeLabels=false",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bulkjob",
+								"75004000002rACLAA2",
+								"details"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "Name:asc",
+									"disabled": true
+								},
+								{
+									"key": "isQuery",
+									"value": "true"
+								},
+								{
+									"key": "includeLabels",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Query Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Account/bulkjob?fields=Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted&operation=query",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Families",
+			"item": [
+				{
+					"name": "Get Query Job Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "{{userId}}"
+							},
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{apiKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bulkjob/123/status?isQuery=true",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bulkjob",
+								"123",
+								"status"
+							],
+							"query": [
+								{
+									"key": "isQuery",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Query Job Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-user-id",
+								"type": "text",
+								"value": "{{userId}}"
+							},
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{apiKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/bulkjob/75004000002rACLAA2/details?isQuery=true&includeLabels=false",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"bulkjob",
+								"75004000002rACLAA2",
+								"details"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "Name:asc",
+									"disabled": true
+								},
+								{
+									"key": "isQuery",
+									"value": "true"
+								},
+								{
+									"key": "includeLabels",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Query Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Account/bulkjob?fields=Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted&operation=query",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bulk Jobs",
+			"item": [
+				{
+					"name": "Suppliers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Account/bulkjob?fields=Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted&operation=query",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

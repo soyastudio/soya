@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.TimeoutException;
 
 public abstract class Specright {
 
@@ -18,8 +17,6 @@ public abstract class Specright {
     public static final String EVENT_RESULT_EXPORT = "specright://export";
     public static final String EVENT_Exception_HANDLE = "specright://exception-handler";
 
-    private static Specright me;
-
     private PostmanEnvironment environment;
     private PostmanCollection collection;
 
@@ -27,11 +24,7 @@ public abstract class Specright {
     protected long heartbeatPeriod = 10000l;
 
     protected Specright() {
-        if (me != null) {
-            throw new IllegalStateException("Instance already exist");
-        }
 
-        me = this;
     }
 
     protected void configure(PostmanEnvironment environment, PostmanCollection collection) {
@@ -57,7 +50,7 @@ public abstract class Specright {
     }
 
     // OkHttp Call
-    public Token fetchToken() throws IOException {
+    public Token fetchToken() throws SpecrightException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new BasicAuthInterceptor(environment.get("username"), environment.get("password")))
                 .build();
@@ -67,17 +60,14 @@ public abstract class Specright {
 
         Request request = new Request.Builder()
                 .url(environment.get("authHost") + "/token")
-                .addHeader("Authorization", Credentials.basic("username", "password"))
                 .post(body)
                 .build();
 
-        Call call = client.newCall(request);
-        Response response = call.execute();
-
+        Response response = execute(client.newCall(request));
         return GSON.fromJson(response.body().charStream(), Token.class);
     }
 
-    public String bulkJob(String scanner, Token token) throws IOException {
+    public String bulkJob(String scanner, String token) throws SpecrightException {
 
         PostmanCollection.Request model = collection.requests.get(scanner);
 
@@ -87,7 +77,7 @@ public abstract class Specright {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + token.getAccessToken())
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
                     return chain.proceed(newRequest);
                 })
@@ -102,50 +92,13 @@ public abstract class Specright {
                 .post(body)
                 .build();
 
-        Call call = client.newCall(request);
+        Response response = execute(client.newCall(request));
 
-        Response response = call.execute();
-
-        if (response.code() == 202) {
-            return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("job-id").getAsString();
-
-        } else {
-            throw new RuntimeException();
-        }
+        return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("job-id").getAsString();
 
     }
 
-    public byte[] trackJob(String jobId, String token) throws IOException, TimeoutException {
-        long timestamp = System.currentTimeMillis();
-        do {
-            if(System.currentTimeMillis() - timestamp > 30000l) {
-                throw new TimeoutException("Job cannot complete in 30 sec: " + jobId);
-            }
-
-            try {
-                Thread.sleep(1500l);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        } while ("COMPLETE".equalsIgnoreCase(jobStatus(jobId, token)));
-
-
-        Request getDetails = new Request.Builder()
-                .url(getJobDetailsUrl(jobId))
-                .addHeader("x-api-key", environment.get("apiKey"))
-                .addHeader("x-user-id", environment.get("userId"))
-                .get()
-                .build();
-
-
-        Response response = authClient(token).newCall(getDetails).execute();
-
-        return response.body().bytes();
-
-    }
-
-    public String jobStatus(String jobId, String token) throws IOException {
+    public String jobStatus(String jobId, String token) throws SpecrightException {
 
         Request getStatus = new Request.Builder()
                 .url(getJobStatusUrl(jobId))
@@ -154,14 +107,27 @@ public abstract class Specright {
                 .get()
                 .build();
 
-        Response response = authClient(token).newCall(getStatus).execute();
-        if (response.code() / 100 == 2) {
-            return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("status").getAsString();
+        Response response = execute(authClient(token).newCall(getStatus));
+        return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("status").getAsString();
 
-        } else {
-            throw new RuntimeException();
+    }
+
+    public byte[] jobDetails(String jobId, String token) throws SpecrightException {
+        Request getDetails = new Request.Builder()
+                .url(getJobDetailsUrl(jobId))
+                .addHeader("x-api-key", environment.get("apiKey"))
+                .addHeader("x-user-id", environment.get("userId"))
+                .get()
+                .build();
+
+
+        Response response = execute(authClient(token).newCall(getDetails));
+
+        try {
+            return response.body().bytes();
+        } catch (IOException e) {
+            throw new SpecrightException(e);
         }
-
     }
 
     private OkHttpClient authClient(String token) {
@@ -192,8 +158,19 @@ public abstract class Specright {
                 .toString();
     }
 
-    public static Specright getInstance() {
-        return me;
+    private Response execute(Call call) throws SpecrightException {
+        Response response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            throw new SpecrightException(e);
+        }
+
+        if (response.code() / 100 != 2) {
+            throw new SpecrightException("Unexpected response: " + response.code());
+        }
+
+        return response;
     }
 
     static class BasicAuthInterceptor implements Interceptor {
@@ -287,7 +264,6 @@ public abstract class Specright {
         static class Request {
             private URL url;
             private String method;
-
 
         }
 

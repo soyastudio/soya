@@ -1,11 +1,12 @@
 package com.albertsons.specright.component;
 
+import com.albertsons.specright.service.Specright;
 import com.albertsons.specright.service.eventbus.Event;
 import com.albertsons.specright.service.eventbus.Subscriber;
-import com.albertsons.specright.service.Specright;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import okhttp3.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URI;
 
@@ -17,6 +18,9 @@ public abstract class SpecrightComponent implements Subscriber {
     public static final String SCANNER = "scanner";
     public static final String TOKEN = "token";
     public static final String JOB_ID = "job-id";
+
+    @Autowired
+    protected Specright specright;
 
     public void onEvent(Event event) {
         try {
@@ -38,6 +42,10 @@ public abstract class SpecrightComponent implements Subscriber {
         }
 
         return builder;
+    }
+
+    protected boolean debug() {
+        return specright.debug();
     }
 
 

@@ -55,7 +55,7 @@ public class SpecrightApplication extends Specright {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Event e = Event.builder(URI.create(EVENT_HEARTBEAT), "heartbeat-" + ++sequence).create();
+                Event.builder(URI.create(EVENT_HEARTBEAT), "heartbeat-" + ++sequence).create();
             }
         }, heartbeatDelay, heartbeatPeriod);
     }

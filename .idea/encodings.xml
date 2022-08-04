@@ -7,6 +7,8 @@
     <file url="file://$PROJECT_DIR$/soya-framework-alberta/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/soya-framework-boot/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/soya-framework-jersey-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/soya-framework-quartz/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/soya-framework-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/soya-framework-starter/src/main/resources" charset="UTF-8" />
   </component>
 </project>

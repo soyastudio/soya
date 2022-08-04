@@ -10,9 +10,10 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 public final class Event extends EventObject {
+
     private final String id;
     private final long timestamp;
-    private final String parentId;
+    private final String rootId;
 
     private final String address;
     private final Map<String, List<String>> params;
@@ -23,7 +24,7 @@ public final class Event extends EventObject {
         this.id = UUID.randomUUID().toString();
         this.timestamp = System.currentTimeMillis();
         this.payload = payload;
-        this.parentId = (source instanceof Event) ? ((Event) source).id : null;
+        this.rootId = (source instanceof Event) ? ((Event) source).rootId : id;
 
         this.address = uri.getScheme() + "://" + uri.getHost();
         String query = uri.getRawQuery();
@@ -56,11 +57,6 @@ public final class Event extends EventObject {
 
     public String toURI() {
         StringBuilder builder = new StringBuilder(address);
-
-        if (parentId != null) {
-            builder.append("/").append(parentId);
-
-        }
 
         builder.append("/").append(id).append("?");
 

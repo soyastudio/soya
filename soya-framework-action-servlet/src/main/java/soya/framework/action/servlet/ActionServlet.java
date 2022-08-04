@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 
 public class ActionServlet extends HttpServlet {
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().setDateFormat("yyyy-MM-dd HH:mm:ss.SSS").create();
-
     private ActionContext context;
     private Swagger swagger;
 

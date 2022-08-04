@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>soya-framework-servlet</artifactId>
+    <artifactId>soya-framework-action-servlet</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

@@ -2,6 +2,11 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://artifactory.albertsons.com/artifactory/SafewayPublicGroup/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="SafewayPublicGroup" />
       <option name="name" value="SafewayPublicGroup" />
       <option name="url" value="http://nexus.safeway.com/repository/SafewayPublicGroup/" />
@@ -20,6 +25,11 @@
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
       <option name="url" value="http://nexus.safeway.com/repository/SafewayPublicGroup/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="SafewayPublicGroup" />
+      <option name="name" value="SafewayPublicGroup" />
+      <option name="url" value="https://artifactory.albertsons.com/artifactory/SafewayPublicGroup/" />
     </remote-repository>
   </component>
 </project>

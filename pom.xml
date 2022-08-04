@@ -253,7 +253,7 @@
         <module>soya-framework-action</module>
         <module>soya-framework-core</module>
         <module>soya-framework-openapi</module>
-        <module>soya-framework-servlet</module>
+        <module>soya-framework-action-servlet</module>
         <module>soya-framework-server</module>
 
         <module>soya-framework-starter</module>

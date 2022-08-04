@@ -52,7 +52,7 @@
 
         <dependency>
             <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-servlet</artifactId>
+            <artifactId>soya-framework-action-servlet</artifactId>
             <version>${project.version}</version>
         </dependency>
 

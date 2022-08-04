@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="soya-framework-alberta" />
+        <module name="soya-framework-action-servlet" />
         <module name="soya-application-albertsons" />
         <module name="soya-framework-actions-maven" />
         <module name="soya-framework-actions-javacodegen" />
@@ -15,7 +16,6 @@
         <module name="soya-framework-actions-dropbox" />
         <module name="soya-framework-actions-git" />
         <module name="soya-framework-openapi" />
-        <module name="soya-framework-servlet" />
         <module name="soya-framework-ams" />
         <module name="soya-framework-jersey-starter" />
         <module name="soya-application-openbank" />

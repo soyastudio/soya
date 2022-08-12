@@ -17,6 +17,7 @@
         <module name="soya-framework-actions-dropbox" />
         <module name="soya-framework-actions-git" />
         <module name="soya-framework-openapi" />
+        <module name="soya-framework-actions-azure" />
         <module name="soya-framework-ams" />
         <module name="soya-framework-jersey-starter" />
         <module name="soya-application-openbank" />

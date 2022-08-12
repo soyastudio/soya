@@ -1,5 +1,7 @@
 package com.albertsons.specright.component;
 
+import com.albertsons.specright.service.AzureService;
+import com.albertsons.specright.service.Configuration;
 import com.albertsons.specright.service.Specright;
 import com.albertsons.specright.service.eventbus.Event;
 import com.albertsons.specright.service.eventbus.Subscriber;
@@ -16,11 +18,15 @@ public abstract class SpecrightComponent implements Subscriber {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static final String SCANNER = "scanner";
+    public static final String REFRESH = "refresh";
     public static final String TOKEN = "token";
     public static final String JOB_ID = "job-id";
 
     @Autowired
     protected Specright specright;
+
+    @Autowired
+    protected AzureService azureService;
 
     public void onEvent(Event event) {
         try {
@@ -45,7 +51,7 @@ public abstract class SpecrightComponent implements Subscriber {
     }
 
     protected boolean debug() {
-        return specright.debug();
+        return Configuration.get(Configuration.DEDUG) != null && Configuration.get(Configuration.DEDUG).equalsIgnoreCase("TRUE");
     }
 
 

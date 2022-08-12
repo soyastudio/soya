@@ -10,9 +10,10 @@ import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
 
 public final class Event extends EventObject {
+
     private final String id;
+    private final String rootId;
     private final long timestamp;
-    private final String parentId;
 
     private final String address;
     private final Map<String, List<String>> params;
@@ -23,7 +24,7 @@ public final class Event extends EventObject {
         this.id = UUID.randomUUID().toString();
         this.timestamp = System.currentTimeMillis();
         this.payload = payload;
-        this.parentId = (source instanceof Event) ? ((Event) source).id : null;
+        this.rootId = (source instanceof Event) ? ((Event) source).rootId : id;
 
         this.address = uri.getScheme() + "://" + uri.getHost();
         String query = uri.getRawQuery();
@@ -54,15 +55,28 @@ public final class Event extends EventObject {
         return address;
     }
 
+    public String[] getPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add(id);
+
+        Object src = this.source;
+        while(src instanceof Event) {
+            Event event = (Event) src;
+            paths.add(0, event.id);
+            src = event.getSource();
+        }
+
+        return paths.toArray(new String[paths.size()]);
+    }
+
     public String toURI() {
         StringBuilder builder = new StringBuilder(address);
 
-        if (parentId != null) {
-            builder.append("/").append(parentId);
-
+        for (String path: getPath()) {
+            builder.append("/").append(path);
         }
 
-        builder.append("/").append(id).append("?");
+        builder.append("?");
 
         params.entrySet().forEach(e -> {
             e.getValue().forEach(v -> {

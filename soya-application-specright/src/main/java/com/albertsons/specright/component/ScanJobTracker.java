@@ -15,25 +15,43 @@ public class ScanJobTracker extends SpecrightComponent {
 
     @Override
     protected void process(Event event) throws Exception {
-        if(debug()) {
-            logger.info("Tracking scan result for: " + event.getParameter(SCANNER) + "; id: " + event.getParameter(JOB_ID));
+        String scanner = event.getParameter(SCANNER);
+        String refresh = event.getParameter(REFRESH);
+        String jobId = event.getParameter(JOB_ID);
+
+        if (debug()) {
+            logger.info("Tracking scan result for: " + scanner + "; id: " + jobId);
         }
 
         try {
-            Thread.sleep(5000l);
+            Thread.sleep(2000l);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         byte[] results = specright.jobDetails(event.getParameter(JOB_ID), event.getParameter(TOKEN));
-        if(debug()) {
-            logger.info("Scan result size of " + event.getParameter(SCANNER) + ": " + results.length);
+        results = specright.csvFilter(scanner, results);
+
+        if(refresh != null && "false".equalsIgnoreCase(refresh)) {
+            results = specright.filterByLastUpdated(scanner, results);
         }
 
-        Event.builder(URI.create(Specright.EVENT_RESULT_EXPORT), event)
-                .addParameter(SCANNER, event.getParameter(SCANNER))
-                .setPayload(results)
-                .create();
+        if(results.length > 0) {
+            results = specright.gzip(results);
+
+            if (debug()) {
+                logger.info("Scan result size of " + scanner + ": " + results.length);
+            }
+
+            Event.builder(URI.create(Specright.EVENT_RESULT_EXPORT), event)
+                    .addParameter(SCANNER, event.getParameter(SCANNER))
+                    .setPayload(results)
+                    .create();
+        } else {
+            if (debug()) {
+                logger.info("No new changed data found for: " + scanner);
+            }
+        }
 
     }
 

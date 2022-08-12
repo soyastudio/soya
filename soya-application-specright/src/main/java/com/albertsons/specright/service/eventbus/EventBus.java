@@ -9,12 +9,14 @@ public abstract class EventBus {
     private static EventBus instance;
 
     protected Set<Registration> registrations = new HashSet<>();
+    protected EventSelector selector;
 
-    protected EventBus() {
+    protected EventBus(EventSelector selector) {
         if (instance != null) {
             throw new IllegalStateException("EventBus has already been created.");
         }
 
+        this.selector = selector;
         instance = this;
     }
 
@@ -22,6 +24,7 @@ public abstract class EventBus {
         if (instance == null) {
             instance = new DefaultEventBus();
         }
+
         return instance;
     }
 
@@ -29,8 +32,8 @@ public abstract class EventBus {
         getInstance().post(event);
     }
 
-    public static URI subscribe(String uri, Subscriber subscriber) {
-        return getInstance().addSubscriber(uri, subscriber);
+    public static void subscribe(String uri, Subscriber subscriber) {
+       getInstance().addSubscriber(uri, subscriber);
     }
 
     public static EventChannelManager channelManager() {
@@ -38,16 +41,20 @@ public abstract class EventBus {
     }
 
     private void post(Event event) {
+        Set<Subscriber> matched = new HashSet<>();
         registrations.forEach(e -> {
-            if (event.getAddress().equals(e.uri)) {
-                dispatch(event, e.subscriber);
+            if (selector.match(event.getAddress(), e.uri)) {
+                matched.add(e.subscriber);
             }
+        });
+
+        matched.forEach(s -> {
+            dispatch(event, s);
         });
     }
 
-    private URI addSubscriber(String uri, Subscriber subscriber) {
+    private void addSubscriber(String uri, Subscriber subscriber) {
         registrations.add(new Registration(uri, subscriber));
-        return URI.create(uri);
     }
 
     protected abstract void dispatch(Event event, Subscriber subscriber);
@@ -80,8 +87,13 @@ public abstract class EventBus {
         }
     }
 
+    public interface EventSelector {
+        boolean match(String address, String pattern);
+    }
+
     public interface EventChannelManager {
         String[] channels();
+
         String[] subscribers(String channel);
     }
 
@@ -89,7 +101,31 @@ public abstract class EventBus {
         private ExecutorService executorService;
 
         protected DefaultEventBus() {
-            super();
+            super((address, pattern) -> {
+                if (address.equalsIgnoreCase(pattern)) {
+                    return true;
+
+                } else if (pattern.equals("*")) {
+                    return true;
+
+                } else if(pattern.contains("://")) {
+                    URI uri = URI.create(address);
+
+                    int index = pattern.indexOf("://");
+                    String schemaPart = pattern.substring(0, index);
+                    String hostPart = pattern.substring(index + 3);
+
+                    if(!schemaPart.equals("*") && !schemaPart.equals(uri.getScheme())) {
+                        return false;
+
+                    } else {
+                        return hostPart.equals("*") || hostPart.equals(uri.getHost());
+                    }
+
+                } else {
+                    return false;
+                }
+            });
             executorService = Executors.newFixedThreadPool(10);
         }
 

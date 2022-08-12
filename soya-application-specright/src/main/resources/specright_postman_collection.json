@@ -541,7 +541,7 @@
 			"name": "Bulk Jobs",
 			"item": [
 				{
-					"name": "Suppliers",
+					"name": "Supplier",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -567,7 +567,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/objects/Account/bulkjob?fields=Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted&operation=query",
+							"raw": "{{host}}/objects/Account/bulkjob?operation=query&fields=Supplier_ID__c,Name,Record_Type_for_Rule__c,Status__c,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,IsDeleted",
 							"host": [
 								"{{host}}"
 							],
@@ -579,7 +579,7 @@
 							"query": [
 								{
 									"key": "fields",
-									"value": "Supplier_ID__c,Name,RecordTypeId,specright__Status__c,Status__c,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,isDeleted"
+									"value": "Supplier_ID__c,Name,Record_Type_for_Rule__c,Status__c,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry,SSIMS_Vendor_Id__c,SSIMS_Vendor_Description__c,LastModifiedDate,IsDeleted"
 								},
 								{
 									"key": "operation",

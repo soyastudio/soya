@@ -16,7 +16,7 @@ public class JerseyConfiguration extends ResourceConfig {
 
     public JerseyConfiguration() {
         register(MultiPartFeature.class);
-        register(SpecrightRestAPI.class);
+        packages(SpecrightController.class.getPackage().getName());
 
         swaggerConfig();
     }
@@ -31,7 +31,7 @@ public class JerseyConfiguration extends ResourceConfig {
         //swaggerConfigBean.setVersion("v1");
         swaggerConfigBean.setSchemes(new String[]{"http", "https"});
         swaggerConfigBean.setBasePath("/api");
-        swaggerConfigBean.setResourcePackage(SpecrightRestAPI.class.getPackage().getName());
+        swaggerConfigBean.setResourcePackage(SpecrightController.class.getPackage().getName());
         swaggerConfigBean.setPrettyPrint(true);
         swaggerConfigBean.setScan(true);
 

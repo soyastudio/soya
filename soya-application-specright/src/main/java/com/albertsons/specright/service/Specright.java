@@ -3,76 +3,79 @@ package com.albertsons.specright.service;
 import com.google.gson.*;
 import okhttp3.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.GZIPOutputStream;
 
 public abstract class Specright {
 
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+    public static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").setPrettyPrinting().create();
 
     public static final String EVENT_HEARTBEAT = "specright://heartbeat";
     public static final String EVENT_JOB_TRACKING = "specright://job-tracking";
     public static final String EVENT_RESULT_EXPORT = "specright://export";
     public static final String EVENT_Exception_HANDLE = "specright://exception-handler";
 
-    private PostmanEnvironment environment;
-    private PostmanCollection collection;
-
-    protected long heartbeatDelay = 10000l;
-    protected long heartbeatPeriod = 10000l;
+    protected PostmanCollection collection;
+    protected int sequence;
+    protected Map<String, Long> lastScannedTimestamps = new LinkedHashMap<>();
 
     protected Specright() {
-
     }
 
-    protected void configure(PostmanEnvironment environment, PostmanCollection collection) {
-        this.environment = environment;
+    protected void configure(PostmanCollection collection) {
         this.collection = collection;
-
-        if (environment.get("heartbeatDelay") != null) {
-            this.heartbeatPeriod = Long.parseLong(environment.get("heartbeatDelay"));
-        }
-
-        if (environment.get("heartbeatPeriod") != null) {
-            this.heartbeatPeriod = Long.parseLong(environment.get("heartbeatPeriod"));
-        }
-
     }
 
     public Set<String> scanners() {
         return collection.requests.keySet();
     }
 
-    public boolean debug() {
-        return environment.get("debug") == null ? false : Boolean.parseBoolean(environment.get("debug"));
+    public int getSequence() {
+        return sequence;
     }
 
-    // OkHttp Call
-    public Token fetchToken() throws SpecrightException {
+    public void scanned(String scanner) {
+        lastScannedTimestamps.put(scanner, System.currentTimeMillis());
+    }
+
+    public Long getLastScannedTimestamp(String scanner) {
+        return lastScannedTimestamps.get(scanner);
+    }
+
+    // ===================================== OkHttp Call
+    public String authenticate() throws SpecrightException {
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new BasicAuthInterceptor(environment.get("username"), environment.get("password")))
+                .addInterceptor(new BasicAuthInterceptor(Configuration.get(Configuration.SPECRIGHT_USERNAME), Configuration.get(Configuration.SPECRIGHT_PASSWORD)))
                 .build();
 
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"), "{\"grant_type\": \"password\"}");
 
         Request request = new Request.Builder()
-                .url(environment.get("authHost") + "/token")
+                .url(Configuration.get(Configuration.SPECRIGHT_AUTH_HOST) + "/token")
                 .post(body)
                 .build();
 
-        Response response = execute(client.newCall(request));
-        return GSON.fromJson(response.body().charStream(), Token.class);
+        return toJson(execute(client.newCall(request)));
     }
 
-    public String bulkJob(String scanner, String token) throws SpecrightException {
+    public String fetchToken() throws SpecrightException {
+        return getProperty("access_token", authenticate());
+    }
+
+    public String scan(String scanner, String token) throws SpecrightException {
 
         PostmanCollection.Request model = collection.requests.get(scanner);
 
         String url = model.url.raw;
-        url = url.replace("{{host}}", environment.get("host"));
+        url = url.replace("{{host}}", Configuration.get(Configuration.SPECRIGHT_HOST));
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
@@ -87,14 +90,41 @@ public abstract class Specright {
 
         Request request = new Request.Builder()
                 .url(url)
-                .addHeader("x-api-key", environment.get("apiKey"))
-                .addHeader("x-user-id", environment.get("userId"))
+                .addHeader("x-api-key", Configuration.get(Configuration.SPECRIGHT_API_KEY))
+                .addHeader("x-user-id", Configuration.get(Configuration.SPECRIGHT_USER_ID))
                 .post(body)
                 .build();
 
-        Response response = execute(client.newCall(request));
+        return getProperty("job-id", bulkJob(scanner, token));
 
-        return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("job-id").getAsString();
+    }
+
+    public String bulkJob(String scanner, String token) throws SpecrightException {
+
+        PostmanCollection.Request model = collection.requests.get(scanner);
+
+        String url = model.url.raw;
+        url = url.replace("{{host}}", Configuration.get(Configuration.SPECRIGHT_HOST));
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    Request newRequest = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token)
+                            .build();
+                    return chain.proceed(newRequest);
+                })
+                .build();
+
+        RequestBody body = RequestBody.create(null, new byte[]{});
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("x-api-key", Configuration.get(Configuration.SPECRIGHT_API_KEY))
+                .addHeader("x-user-id", Configuration.get(Configuration.SPECRIGHT_USER_ID))
+                .post(body)
+                .build();
+
+        return toJson(execute(client.newCall(request)));
 
     }
 
@@ -102,21 +132,20 @@ public abstract class Specright {
 
         Request getStatus = new Request.Builder()
                 .url(getJobStatusUrl(jobId))
-                .addHeader("x-api-key", environment.get("apiKey"))
-                .addHeader("x-user-id", environment.get("userId"))
+                .addHeader("x-api-key", Configuration.get(Configuration.SPECRIGHT_API_KEY))
+                .addHeader("x-user-id", Configuration.get(Configuration.SPECRIGHT_USER_ID))
                 .get()
                 .build();
 
-        Response response = execute(authClient(token).newCall(getStatus));
-        return JsonParser.parseReader(response.body().charStream()).getAsJsonObject().get("status").getAsString();
+        return toJson(execute(authClient(token).newCall(getStatus)));
 
     }
 
     public byte[] jobDetails(String jobId, String token) throws SpecrightException {
         Request getDetails = new Request.Builder()
                 .url(getJobDetailsUrl(jobId))
-                .addHeader("x-api-key", environment.get("apiKey"))
-                .addHeader("x-user-id", environment.get("userId"))
+                .addHeader("x-api-key", Configuration.get(Configuration.SPECRIGHT_API_KEY))
+                .addHeader("x-user-id", Configuration.get(Configuration.SPECRIGHT_USER_ID))
                 .get()
                 .build();
 
@@ -128,6 +157,43 @@ public abstract class Specright {
         } catch (IOException e) {
             throw new SpecrightException(e);
         }
+    }
+
+    public byte[] gzip(byte[] data) throws SpecrightException {
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
+                gzipOutputStream.write(data);
+            }
+
+            return byteArrayOutputStream.toByteArray();
+
+        } catch (IOException e) {
+            throw new SpecrightException(e);
+        }
+    }
+
+    public byte[] csvFilter(String scanner, byte[] data) {
+        if ("Supplier".equalsIgnoreCase(scanner)) {
+            CsvDynaClass csv = new CsvDynaClass(scanner, data);
+            csv.include(bean -> {
+                if ("Supplier".equalsIgnoreCase((String) bean.get("Record_Type_for_Rule__c"))) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            return csv.toCSV().getBytes(StandardCharsets.UTF_8);
+        }
+
+
+        return data;
+    }
+
+    public byte[] filterByLastUpdated(String scanner, byte[] data) {
+        System.out.println("================= filterByLastUpdated...");
+
+        return new byte[0];
     }
 
     private OkHttpClient authClient(String token) {
@@ -143,7 +209,7 @@ public abstract class Specright {
     }
 
     private String getJobStatusUrl(String jobId) {
-        return new StringBuilder(environment.get("host"))
+        return new StringBuilder(Configuration.get(Configuration.SPECRIGHT_HOST))
                 .append("/bulkjob/")
                 .append(jobId)
                 .append("/status?isQuery=true")
@@ -151,7 +217,7 @@ public abstract class Specright {
     }
 
     private String getJobDetailsUrl(String jobId) {
-        return new StringBuilder(environment.get("host"))
+        return new StringBuilder(Configuration.get(Configuration.SPECRIGHT_HOST))
                 .append("/bulkjob/")
                 .append(jobId)
                 .append("/details?isQuery=true&includeLabels=false")
@@ -171,6 +237,14 @@ public abstract class Specright {
         }
 
         return response;
+    }
+
+    private String toJson(Response response) {
+        return GSON.toJson(JsonParser.parseReader(response.body().charStream()));
+    }
+
+    private String getProperty(String propName, String json) {
+        return JsonParser.parseString(json).getAsJsonObject().get(propName).getAsString();
     }
 
     static class BasicAuthInterceptor implements Interceptor {
@@ -216,6 +290,10 @@ public abstract class Specright {
 
     public static class PostmanEnvironment {
         private Set<AbstractMap.SimpleEntry<String, String>> values = new HashSet();
+
+        public Set<? extends Map.Entry<String, String>> entrySet() {
+            return values;
+        }
 
         public String get(String key) {
             Iterator<AbstractMap.SimpleEntry<String, String>> iterator = values.iterator();

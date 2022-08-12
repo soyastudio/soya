@@ -12,8 +12,8 @@ import static java.util.stream.Collectors.toList;
 public final class Event extends EventObject {
 
     private final String id;
-    private final long timestamp;
     private final String rootId;
+    private final long timestamp;
 
     private final String address;
     private final Map<String, List<String>> params;
@@ -55,10 +55,28 @@ public final class Event extends EventObject {
         return address;
     }
 
+    public String[] getPath() {
+        List<String> paths = new ArrayList<>();
+        paths.add(id);
+
+        Object src = this.source;
+        while(src instanceof Event) {
+            Event event = (Event) src;
+            paths.add(0, event.id);
+            src = event.getSource();
+        }
+
+        return paths.toArray(new String[paths.size()]);
+    }
+
     public String toURI() {
         StringBuilder builder = new StringBuilder(address);
 
-        builder.append("/").append(id).append("?");
+        for (String path: getPath()) {
+            builder.append("/").append(path);
+        }
+
+        builder.append("?");
 
         params.entrySet().forEach(e -> {
             e.getValue().forEach(v -> {

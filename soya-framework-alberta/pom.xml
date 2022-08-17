@@ -28,6 +28,12 @@
 
         <dependency>
             <groupId>soya.framework</groupId>
+            <artifactId>soya-framework-action-servlet</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>soya.framework</groupId>
             <artifactId>soya-framework-actions-kafka</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -35,12 +41,6 @@
         <dependency>
             <groupId>soya.framework</groupId>
             <artifactId>soya-framework-tool</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>soya.framework</groupId>
-            <artifactId>soya-framework-servlet</artifactId>
             <version>${project.version}</version>
         </dependency>
 

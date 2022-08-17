@@ -14,8 +14,8 @@ import java.util.zip.GZIPOutputStream;
 
 public abstract class Specright {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-    public static final Gson GSON = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").setPrettyPrinting().create();
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static final String EVENT_HEARTBEAT = "specright://heartbeat";
     public static final String EVENT_JOB_TRACKING = "specright://job-tracking";
@@ -173,6 +173,10 @@ public abstract class Specright {
     }
 
     public byte[] csvFilter(String scanner, byte[] data) {
+        if(data == null && data.length == 0) {
+            return new byte[0];
+        }
+
         if ("Supplier".equalsIgnoreCase(scanner)) {
             CsvDynaClass csv = new CsvDynaClass(scanner, data);
             csv.include(bean -> {
@@ -184,6 +188,19 @@ public abstract class Specright {
             });
 
             return csv.toCSV().getBytes(StandardCharsets.UTF_8);
+
+        } else if("Facility".equalsIgnoreCase(scanner)) {
+            CsvDynaClass csv = new CsvDynaClass(scanner, data);
+            csv.include(bean -> {
+                if ("Manufacturing Facility".equalsIgnoreCase((String) bean.get("Record_Type_for_Rule__c"))) {
+                    return true;
+                }
+
+                return false;
+            });
+
+            return csv.toCSV().getBytes(StandardCharsets.UTF_8);
+
         }
 
 
@@ -193,7 +210,7 @@ public abstract class Specright {
     public byte[] filterByLastUpdated(String scanner, byte[] data) {
         System.out.println("================= filterByLastUpdated...");
 
-        return new byte[0];
+        return data;
     }
 
     private OkHttpClient authClient(String token) {

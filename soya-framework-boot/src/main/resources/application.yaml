@@ -15,6 +15,14 @@ spring:
   h2:
     console.enabled: true
 
+  cloud:
+    azure:
+      storage:
+        blob:
+          account-name: absitdsdevwusseddw001
+          account-key: yYF0293O1dHvHwfwKektJa3ptAMgH219Pp7886kyqQ/1EHivjCL4L9Dy+W/mx1JyjM+BEVqHC3xvSKkzKrbz7g==
+          endpoint: https://absitdsdevwusseddw001.blob.core.windows.net
+
 workspace:
   home: D:/github/Workshop/AppBuild
 

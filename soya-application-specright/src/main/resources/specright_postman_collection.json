@@ -589,6 +589,256 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Facility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Account/bulkjob?operation=query&fields=Facility_ID__c,Facility_Name__c,Description,Record_Type_for_Rule__c,Status__c,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry,STN__c,Type,Facility_QA_Contact__c,Facility_Recall_Contact__c,LastModifiedDate,IsDeleted",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Facility_ID__c,Facility_Name__c,Description,Record_Type_for_Rule__c,Status__c,BillingStreet,BillingCity,BillingState,BillingPostalCode,BillingCountry,STN__c,Type,Facility_QA_Contact__c,Facility_Recall_Contact__c,LastModifiedDate,IsDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SupplierFacility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Supplier_Facility_Connection__c/bulkjob?operation=query&fields=Supplier_ID__c,Facility_ID__c,LastModifiedDate,IsDeleted",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Supplier_ID__c,Facility_ID__c,LastModifiedDate,IsDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SupplierUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/AccountContactRelation/bulkjob?operation=query&fields=Account.Supplier_ID__c,Contact.User_Code__c,Contact.FirstName,Contact.LastName,Contact.Title,Contact.Email,Contact.Phone,Contact.MobilePhone,Contact.Is_User_Primary__c,Contact.Responsibilities__c,Contact.Roles__c,Contact.LastModifiedDate,Contact.IsDeleted",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Account.Supplier_ID__c,Contact.User_Code__c,Contact.FirstName,Contact.LastName,Contact.Title,Contact.Email,Contact.Phone,Contact.MobilePhone,Contact.Is_User_Primary__c,Contact.Responsibilities__c,Contact.Roles__c,Contact.LastModifiedDate,Contact.IsDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SupplierContact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Supplier_Contact_Connection__c/bulkjob?operation=query&fields=Supplier__r.Supplier_ID__c,Contact__r.Name,Contact__r.First_Name__c,Contact__r.Last_Name__c,Contact__r.Title__c,Contact__r.Email__c,Contact__r.Phone__c,Contact__r.Mobile_Phone__c,Supplier__r.specright__Primary_Contact__c,Contact__r.Responsibilities__c,Contact__r.Role__c,Contact__r.LastModifiedDate,Contact__r.IsDeleted",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Supplier__r.Supplier_ID__c,Contact__r.Name,Contact__r.First_Name__c,Contact__r.Last_Name__c,Contact__r.Title__c,Contact__r.Email__c,Contact__r.Phone__c,Contact__r.Mobile_Phone__c,Supplier__r.specright__Primary_Contact__c,Contact__r.Responsibilities__c,Contact__r.Role__c,Contact__r.LastModifiedDate,Contact__r.IsDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "default"
+							},
+							{
+								"key": "x-user-id",
+								"value": "{{userId}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/objects/Item_Master__c/bulkjob?operation=query&fields=Name,Department_ID__c,Department_Section_ID__c,Group__c,Category__c,UPC__c,UPC_Description__c,Brand_Code__c,National_Brand_Equivalent_Size_Qty__c,Status__c,UPC_Type__c,POD__c,Corp_Controlled_All_Divs_exld_UNITED__c,Class__c,Brand__c,Report_Group__c,How_to_Recycle_Status__c,Date_Approved__c,Denver_Supplier__r.Supplier_ID__c,Denver_Status__c,Denver_Distributor__c,Denver_Distributor_Status__c,Intermountain_Supplier__r.Supplier_ID__c,Intermountain_Status__c,Intermountain_Distributor__c,Intermountain_Distributor_Status__c,Jewel_Osco_Supplier__r.Supplier_ID__c,Jewel_Osco_Status__c,Jewel_Osco_Distributor__c,Jewel_osco_Distributor_Status__c,MidAtlantic_Supplier__r.Supplier_ID__c,MidAtlantic_Status__c,MidAtlantic_Distributor__c,MidAtlantic_Distributor_Status__c,Nor_California_Supplier__r.Supplier_ID__c,Nor_California_Status__c,Northern_California_Distributor__c,No_California_Distributor_Status__c,Phoenix_Supplier__r.Supplier_ID__c,Phoenix_Status__c,Phoenix_Distributor__c,Phoenix_Distributor_Status__c,Portland_Supplier__r.Supplier_ID__c,Portland_Status__c,Portland_Distributor__c,Portland_Distributor_Status__c,Seattle_Supplier__r.Supplier_ID__c,Seattle_Status__c,Seattle_Distributor__c,Seattle_Distributor_Status__c,Shaws_Supplier__r.Supplier_ID__c,Shaws_Status__c,Shaws_Distributor__c,Shaws_Distributor_Status__c,Sou_California_Supplier__r.Supplier_ID__c,So_California_Status__c,Souther_California_Distributor__c,So_California_Distributor_Status__c,Southern_Supplier__r.Supplier_ID__c,Southern_Status__c,Southern_Distributor__c,Southern_Distributor_Status__c,Southwest_Supplier__r.Supplier_ID__c,Southwest_Status__c,Southwest_Distributor__c,Southwest_Distributor_Status__c,United_Supplier__r.Supplier_ID__c,United_Status__c,United_Distributor__c,United_Distributor_Status__c,LastModifiedDate,IsDeleted",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"objects",
+								"Account",
+								"bulkjob"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "Name,Department_ID__c,Department_Section_ID__c,Group__c,Category__c,UPC__c,UPC_Description__c,Brand_Code__c,National_Brand_Equivalent_Size_Qty__c,Status__c,UPC_Type__c,POD__c,Corp_Controlled_All_Divs_exld_UNITED__c,Class__c,Brand__c,Report_Group__c,How_to_Recycle_Status__c,Date_Approved__c,Denver_Supplier__r.Supplier_ID__c,Denver_Status__c,Denver_Distributor__c,Denver_Distributor_Status__c,Intermountain_Supplier__r.Supplier_ID__c,Intermountain_Status__c,Intermountain_Distributor__c,Intermountain_Distributor_Status__c,Jewel_Osco_Supplier__r.Supplier_ID__c,Jewel_Osco_Status__c,Jewel_Osco_Distributor__c,Jewel_osco_Distributor_Status__c,MidAtlantic_Supplier__r.Supplier_ID__c,MidAtlantic_Status__c,MidAtlantic_Distributor__c,MidAtlantic_Distributor_Status__c,Nor_California_Supplier__r.Supplier_ID__c,Nor_California_Status__c,Northern_California_Distributor__c,No_California_Distributor_Status__c,Phoenix_Supplier__r.Supplier_ID__c,Phoenix_Status__c,Phoenix_Distributor__c,Phoenix_Distributor_Status__c,Portland_Supplier__r.Supplier_ID__c,Portland_Status__c,Portland_Distributor__c,Portland_Distributor_Status__c,Seattle_Supplier__r.Supplier_ID__c,Seattle_Status__c,Seattle_Distributor__c,Seattle_Distributor_Status__c,Shaws_Supplier__r.Supplier_ID__c,Shaws_Status__c,Shaws_Distributor__c,Shaws_Distributor_Status__c,Sou_California_Supplier__r.Supplier_ID__c,So_California_Status__c,Souther_California_Distributor__c,So_California_Distributor_Status__c,Southern_Supplier__r.Supplier_ID__c,Southern_Status__c,Southern_Distributor__c,Southern_Distributor_Status__c,Southwest_Supplier__r.Supplier_ID__c,Southwest_Status__c,Southwest_Distributor__c,Southwest_Distributor_Status__c,United_Supplier__r.Supplier_ID__c,United_Status__c,United_Distributor__c,United_Distributor_Status__c,LastModifiedDate,IsDeleted"
+								},
+								{
+									"key": "operation",
+									"value": "query"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

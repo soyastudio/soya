@@ -30,7 +30,7 @@ public @interface Command {
     }
 
     enum MediaType {
-        TEXT_PLAIN, APPLICATION_JSON, APPLICATION_XML, TEXT_HTML;
+        TEXT_PLAIN, APPLICATION_JSON, APPLICATION_XML, TEXT_HTML, APPLICATION_OCTET_STREAM;
     }
 
 }

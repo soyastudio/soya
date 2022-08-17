@@ -1,14 +1,9 @@
 package com.albertsons.specright.component;
 
-import com.albertsons.specright.service.Configuration;
-import com.albertsons.specright.service.Specright;
-import com.albertsons.specright.service.SpecrightException;
-import com.albertsons.specright.service.eventbus.Event;
-import com.albertsons.specright.service.eventbus.Subscriber;
+import com.albertsons.specright.service.*;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
-import java.util.Random;
 import java.util.logging.Logger;
 
 @Component
@@ -23,7 +18,7 @@ public class ScanTrigger extends SpecrightComponent {
 
         for (String scanner : specright.scanners()) {
             try {
-                Thread.sleep(new Random().nextInt(10000));
+                Thread.sleep(10000l);
 
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);

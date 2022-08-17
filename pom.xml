@@ -262,6 +262,8 @@
         <module>soya-framework-actions-git</module>
         <module>soya-framework-actions-kafka</module>
         <module>soya-framework-actions-document</module>
+
+        <module>soya-framework-actions-azure</module>
         <module>soya-framework-actions-dropbox</module>
         <module>soya-framework-actions-javacodegen</module>
         <module>soya-framework-actions-maven</module>
@@ -281,12 +283,8 @@
         <module>soya-framework-alberta</module>
         <module>soya-framework-tool</module>
         <module>soya-application-specright</module>
-        <module>soya-framework-action-azure</module>
+        <module>soya-framework-actions-google</module>
 
-        <!--
-        <module>soya-framework-quartz</module>
-        <module>soya-framework-erm</module>
-        -->
     </modules>
 
 </project>

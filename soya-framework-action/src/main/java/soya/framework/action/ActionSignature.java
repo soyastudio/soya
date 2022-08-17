@@ -92,7 +92,10 @@ public final class ActionSignature {
         Map<String, Object> values = new Hashtable<>();
         String[] argNames = argumentNames();
         for (int i = 0; i < argNames.length; i++) {
-            values.put(arguments.get(argNames[i]), args[i]);
+            if(args[i] != null) {
+                values.put(arguments.get(argNames[i]), args[i]);
+
+            }
 
         }
 

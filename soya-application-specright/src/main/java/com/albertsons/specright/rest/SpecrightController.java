@@ -39,7 +39,7 @@ public class SpecrightController {
             JsonObject scanner = new JsonObject();
             scanner.addProperty("name", e);
             if(specright.getLastScannedTimestamp(e) != null) {
-                scanner.addProperty("lastScannedTime", Specright.DATE_FORMAT.format(new Date(specright.getLastScannedTimestamp(e)).toString()));
+                scanner.addProperty("lastScannedTime", Specright.DATE_FORMAT.format(new Date(specright.getLastScannedTimestamp(e))));
             }
 
             array.add(scanner);

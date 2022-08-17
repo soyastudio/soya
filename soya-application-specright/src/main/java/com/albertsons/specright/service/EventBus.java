@@ -1,4 +1,4 @@
-package com.albertsons.specright.service.eventbus;
+package com.albertsons.specright.service;
 
 import java.net.URI;
 import java.util.*;

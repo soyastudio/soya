@@ -1,8 +1,8 @@
 package com.albertsons.specright.component;
 
+import com.albertsons.specright.service.Event;
 import com.albertsons.specright.service.Specright;
-import com.albertsons.specright.service.eventbus.Event;
-import com.albertsons.specright.service.eventbus.Subscriber;
+import com.albertsons.specright.service.Subscriber;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -19,14 +19,14 @@ public class ScanJobTracker extends SpecrightComponent {
         String refresh = event.getParameter(REFRESH);
         String jobId = event.getParameter(JOB_ID);
 
-        if (debug()) {
-            logger.info("Tracking scan result for: " + scanner + "; id: " + jobId);
-        }
-
         try {
-            Thread.sleep(2000l);
+            Thread.sleep(15000l);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if (debug()) {
+            logger.info("Tracking scan result for: " + scanner + "; id: " + jobId);
         }
 
         byte[] results = specright.jobDetails(event.getParameter(JOB_ID), event.getParameter(TOKEN));

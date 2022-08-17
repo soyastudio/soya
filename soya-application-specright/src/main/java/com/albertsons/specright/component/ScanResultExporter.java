@@ -1,9 +1,9 @@
 package com.albertsons.specright.component;
 
 import com.albertsons.specright.service.Configuration;
+import com.albertsons.specright.service.Event;
 import com.albertsons.specright.service.Specright;
-import com.albertsons.specright.service.eventbus.Event;
-import com.albertsons.specright.service.eventbus.Subscriber;
+import com.albertsons.specright.service.Subscriber;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;

@@ -32,10 +32,19 @@ public class AzureService {
         return list;
     }
 
+    public void createContainer(String containerName) {
+        blobServiceClient.createBlobContainerIfNotExists(containerName);
+    }
+
+    public void deleteContainer(String containerName) {
+        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
+        containerClient.deleteIfExists();
+    }
+
     public List<String> listBlobs(String container, String prefix) {
         List<String> list = new ArrayList<>();
         BlobContainerClient containerClient = getBlobContainerClient(container);
-        if(prefix == null || prefix.isEmpty()) {
+        if (prefix == null || prefix.isEmpty()) {
             containerClient.listBlobs().forEach(e -> {
                 list.add(e.getName());
             });
@@ -54,7 +63,7 @@ public class AzureService {
         try {
             BlobContainerClient containerClient = getBlobContainerClient(container);
             BlockBlobClient blob = containerClient.getBlobClient(fileName).getBlockBlobClient();
-            InputStream input =  blob.openInputStream();
+            InputStream input = blob.openInputStream();
 
             return StreamUtils.copyToByteArray(input);
         } catch (IOException e) {
@@ -69,6 +78,20 @@ public class AzureService {
         blockBlobClient.upload(inputStream, data.length, true);
 
         return blockBlobClient.exists();
+    }
+
+    public boolean deleteBlobFile(String container, String fileName) {
+        BlobContainerClient containerClient = getBlobContainerClient(container);
+        BlockBlobClient blockBlobClient = containerClient.getBlobClient(fileName).getBlockBlobClient();
+        return blockBlobClient.deleteIfExists();
+    }
+
+    public void deleteAll(String container, String prefix) {
+        BlobContainerClient containerClient = getBlobContainerClient(container);
+
+        containerClient.listBlobs(new ListBlobsOptions().setPrefix(prefix), null).forEach(e -> {
+            containerClient.getBlobClient(e.getName()).getBlockBlobClient().deleteIfExists();
+        });
     }
 
     private BlobContainerClient getBlobContainerClient(String containerName) {

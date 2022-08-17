@@ -17,7 +17,6 @@ public class JerseyConfiguration extends ResourceConfig {
     public JerseyConfiguration() {
         register(MultiPartFeature.class);
         packages(SpecrightController.class.getPackage().getName());
-
         swaggerConfig();
     }
 

@@ -108,6 +108,10 @@ public class SwaggerBuilder {
 
             } else if (Command.MediaType.TEXT_PLAIN.equals(t)){
                 pathBuilder.produces("text/plain");
+
+            } else if (Command.MediaType.APPLICATION_OCTET_STREAM.equals(t)) {
+                pathBuilder.produces("application/octet-stream");
+
             }
         }
 

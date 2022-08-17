@@ -21,7 +21,9 @@ public class ActionExecutor {
 
     public ActionResult execute() throws Exception {
         ActionSignature signature = signatureBuilder.create();
-        ActionCallable action = signature.create(new Object[0]);
+        String[] paramNames = signature.argumentNames();
+
+        ActionCallable action = signature.create(new Object[paramNames.length]);
 
         Future<ActionResult> future = context.getExecutorService().submit(action);
         while (future.isDone()) {

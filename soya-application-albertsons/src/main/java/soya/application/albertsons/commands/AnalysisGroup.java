@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 
-@CommandGroup(group = "business-object-analysis", title = "Business Object Analysis")
+@Domain(group = "business-object-analysis", title = "Business Object Analysis")
 public interface AnalysisGroup {
 
 }

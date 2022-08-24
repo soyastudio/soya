@@ -1,6 +1,5 @@
 package soya.framework.action.actions.http.okhttp;
 
-import okhttp3.HttpUrl;
 import okhttp3.Response;
 import soya.framework.action.Command;
 

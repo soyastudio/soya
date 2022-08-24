@@ -8,7 +8,7 @@ import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 import soya.framework.action.CommandOption;
 import soya.framework.action.Resource;
 import soya.framework.action.Action;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-@CommandGroup(group = "kafka",
+@Domain(group = "kafka",
         title = "Kafka Commands",
         description = "Kafka toolkit for executing kafka commands in multiple kafka environments.")
 public abstract class KafkaAction<T> extends Action<T> {

@@ -1,13 +1,12 @@
 package soya.framework.action.actions.ant;
 
 import soya.framework.action.Action;
-import soya.framework.action.ActionResult;
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 import soya.framework.action.CommandOption;
 
 import java.io.File;
 
-@CommandGroup(group = "apache-ant", title = "Apache Ant", description = "Toolkit for apache ant task and script.")
+@Domain(group = "apache-ant", title = "Apache Ant", description = "Toolkit for apache ant task and script.")
 public abstract class AntAction extends Action<Object> {
 
     @CommandOption(option = "h", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.ant.home")

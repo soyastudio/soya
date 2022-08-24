@@ -3,8 +3,6 @@ package soya.framework.action.actions.eventbus;
 import soya.framework.action.Command;
 import soya.framework.action.CommandOption;
 
-import java.net.URI;
-
 @Command(group = "eventbus", name = "create-subscriber", httpMethod = Command.HttpMethod.POST)
 public class CreateSubscriberAction extends EventBusAction<String> {
 

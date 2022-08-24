@@ -2,9 +2,6 @@ package soya.framework.action.actions.reflect;
 
 import soya.framework.action.*;
 
-import java.net.URI;
-import java.security.Signature;
-
 @Command(group = "reflect", name = "signature", httpMethod = Command.HttpMethod.GET)
 public class ActionSignatureAction extends ReflectionAction<String> {
 

@@ -5,10 +5,6 @@ import com.azure.storage.blob.models.ListBlobsOptions;
 import soya.framework.action.Command;
 import soya.framework.action.CommandOption;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 @Command(group = "azure-blob-storage", name = "delete-all-blobs", httpMethod = Command.HttpMethod.DELETE)
 public class AzureBlobDeleteAllBlobsAction extends AzureBlobAction<Integer> {
 

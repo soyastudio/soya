@@ -49,10 +49,10 @@ public abstract class ActionContext {
                 .forPackages(packageName)
                 .setScanners(Scanners.TypesAnnotated, Scanners.MethodsAnnotated));
 
-        scanner.getTypesAnnotatedWith(CommandGroup.class).forEach(e -> {
-            CommandGroup commandGroup = e.getAnnotation(CommandGroup.class);
-            if (commandGroup != null) {
-                GroupDescription groupDescription = new GroupDescription(commandGroup.group(), commandGroup.title(), commandGroup.description());
+        scanner.getTypesAnnotatedWith(Domain.class).forEach(e -> {
+            Domain domain = e.getAnnotation(Domain.class);
+            if (domain != null) {
+                GroupDescription groupDescription = new GroupDescription(domain.group(), domain.title(), domain.description());
                 groupDescriptions.put(groupDescription.getGroup(), groupDescription);
             }
         });

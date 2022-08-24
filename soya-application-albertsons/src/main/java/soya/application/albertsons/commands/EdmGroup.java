@@ -1,8 +1,8 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 
-@CommandGroup(group = "business-object-edm", title = "EDM Development")
+@Domain(group = "business-object-edm", title = "EDM Development")
 public interface EdmGroup {
 
 }

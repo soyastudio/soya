@@ -7,7 +7,7 @@ import soya.framework.action.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandGroup(group = "git", title = "Git Tasks", description = "Toolkit for git commands, based on eclipse jgit project.")
+@Domain(group = "git", title = "Git Tasks", description = "Toolkit for git commands, based on eclipse jgit project.")
 public abstract class GitAction<T extends GitCommand> implements ActionCallable {
 
     @CommandOption(option = "h", paramType = CommandOption.ParamType.ReferenceParam, referenceKey = "soya.git.home")

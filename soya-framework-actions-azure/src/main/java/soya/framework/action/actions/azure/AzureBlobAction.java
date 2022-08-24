@@ -4,13 +4,13 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import soya.framework.action.Action;
 import soya.framework.action.ActionContext;
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
 
-@CommandGroup(group = "azure-blob-storage", title = "Azure Blob Storage Service", description = "Azure Blob Storage Service")
+@Domain(group = "azure-blob-storage", title = "Azure Blob Storage Service", description = "Azure Blob Storage Service")
 public abstract class AzureBlobAction<T> extends Action<T> {
 
     protected BlobServiceClient blobServiceClient() {

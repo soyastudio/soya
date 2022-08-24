@@ -1,5 +1,5 @@
 server:
-  port: 7833
+  port: 7878
 
 workspace:
   home: C:/github/Workshop/AppBuild

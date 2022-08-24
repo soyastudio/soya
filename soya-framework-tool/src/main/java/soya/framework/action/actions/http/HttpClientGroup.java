@@ -1,8 +1,8 @@
 package soya.framework.action.actions.http;
 
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 
-@CommandGroup(group = "http-client", title = "Http Client", description = "")
+@Domain(group = "http-client", title = "Http Client", description = "")
 public interface HttpClientGroup {
 
 }

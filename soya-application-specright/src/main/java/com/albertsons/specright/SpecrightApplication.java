@@ -51,7 +51,6 @@ public class SpecrightApplication extends Specright {
                 for (String evt : listenTo.value()) {
                     EventBus.subscribe(evt, component);
                 }
-
             }
         });
 

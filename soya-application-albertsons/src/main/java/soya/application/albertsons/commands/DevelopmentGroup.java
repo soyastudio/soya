@@ -1,7 +1,7 @@
 package soya.application.albertsons.commands;
 
-import soya.framework.action.CommandGroup;
+import soya.framework.action.Domain;
 
-@CommandGroup(group = "business-object-development", title = "Business Object Development")
+@Domain(group = "business-object-development", title = "Business Object Development")
 public interface DevelopmentGroup {
 }

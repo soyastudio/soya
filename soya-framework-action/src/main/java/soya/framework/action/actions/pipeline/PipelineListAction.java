@@ -3,7 +3,6 @@ package soya.framework.action.actions.pipeline;
 import com.google.gson.GsonBuilder;
 import soya.framework.action.ActionName;
 import soya.framework.action.Command;
-import soya.framework.action.actions.reflect.ReflectionAction;
 
 import java.util.ArrayList;
 import java.util.Collections;

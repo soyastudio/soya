@@ -38,7 +38,7 @@ public class QuartzSchedulerConfiguration {
         factory.setOverwriteExistingJobs(true);
         //factory.setDataSource(dataSource);
         factory.setQuartzProperties(properties);
-        factory.setJobFactory(jobFactory);
+        //factory.setJobFactory(jobFactory);
         return factory;
     }
 
